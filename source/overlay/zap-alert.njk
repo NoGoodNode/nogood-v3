@@ -1,0 +1,228 @@
+---
+layout: overlay
+title: NoGood Radio — Zap Alert
+permalink: /overlay/zap-alert/
+eleventyExcludeFromCollections: true
+---
+
+<style>
+  @font-face {
+    font-family: 'Offbit-Bold';
+    src: url('/assets/fonts/OffBit-Bold.woff2') format('woff2'),
+         url('/assets/fonts/OffBit-Bold.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+  }
+
+  #sidebar {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 55px;
+    height: 1080px;
+    overflow: hidden;
+    background: #f8c228;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+  }
+
+  #ticker-track {
+    writing-mode: vertical-rl;
+    text-orientation: sideways;
+    white-space: nowrap;
+    font-family: 'Offbit-Bold', monospace;
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: rgb(28, 28, 28);
+    line-height: 55px;
+  }
+
+  @keyframes scrollDown {
+    from { transform: translateY(-50%); }
+    to   { transform: translateY(0); }
+  }
+
+  .zap-amount {
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+    background-image: linear-gradient(
+      to bottom,
+      rgb(28, 28, 28) 0%,
+      rgb(28, 28, 28) 35%,
+      rgb(255, 105, 55) 50%,
+      rgb(28, 28, 28) 65%,
+      rgb(28, 28, 28) 100%
+    );
+    background-size: 100% 400%;
+    animation: shimmer 3s linear infinite;
+  }
+
+  @keyframes shimmer {
+    from { background-position: 0 0; }
+    to   { background-position: 0 100%; }
+  }
+
+  #test-btn {
+    display: none;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: rgb(28, 28, 28);
+    color: rgb(216, 255, 124);
+    border: none;
+    padding: 8px 14px;
+    font-family: monospace;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    opacity: 0.4;
+    transition: opacity 0.2s;
+    z-index: 10;
+  }
+
+  #test-btn:hover { opacity: 1; }
+
+</style>
+
+<button id="test-btn" onclick="testZap()">⚡ Test zap</button>
+
+<div id="sidebar">
+  <div id="ticker-track"></div>
+</div>
+
+<script>
+  const sidebar = document.getElementById('sidebar');
+  const track   = document.getElementById('ticker-track');
+  let hideTimer = null;
+  let isShowing = false;
+  const queue   = [];
+
+  function displayZap(sats, name, message) {
+    isShowing = true;
+
+    // Build the label for this zap
+    const amount = '⚡ ' + sats.toLocaleString() + ' sats ⚡';
+    let tail = ' ' + name;
+    if (message) tail += ' ⚡ ' + message;
+    tail += '   ';
+    const plainLabel = amount + tail;
+    const styledLabel = '<span class="zap-amount">' + amount + '</span>' + tail;
+
+    // Measure one copy using plain text for accuracy
+    track.style.animation = 'none';
+    track.textContent = plainLabel;
+    void track.offsetHeight;
+    const singleH = Math.max(track.scrollHeight, track.offsetHeight, 100);
+
+    // Repeat enough to fill 2× sidebar height for seamless loop
+    const reps = Math.max(4, Math.ceil(2160 / singleH) * 2);
+    track.innerHTML = styledLabel.repeat(reps);
+
+    // 30px/s consistent speed — animation travels half the total height
+    const duration = Math.max(8, (singleH * reps / 2) / 30).toFixed(1);
+
+    void track.offsetHeight;
+    track.style.animation = `scrollDown ${duration}s linear infinite`;
+
+    // Show sidebar, hide after 10s then process queue
+    sidebar.style.opacity = '1';
+    if (hideTimer) clearTimeout(hideTimer);
+    hideTimer = setTimeout(() => {
+      sidebar.style.opacity = '0';
+      setTimeout(() => {
+        isShowing = false;
+        if (queue.length > 0) {
+          const next = queue.shift();
+          displayZap(next.sats, next.name, next.message);
+        }
+      }, 800);
+    }, 20000);
+  }
+
+  function showZap(sats, name, message) {
+    if (isShowing) {
+      queue.push({ sats, name, message });
+    } else {
+      displayZap(sats, name, message);
+    }
+  }
+
+  const TEST_NAMES   = ['satoshi', 'nogoodvibes', 'plebfan', 'lightning_larry'];
+  const TEST_AMOUNTS = [21, 100, 500, 1000, 2100, 5000];
+  const TEST_MESSAGES = ['', '', 'great stream!', 'LFG', ''];
+
+  window.testZap = function() {
+    const sats = TEST_AMOUNTS[Math.floor(Math.random() * TEST_AMOUNTS.length)];
+    const name = TEST_NAMES[Math.floor(Math.random() * TEST_NAMES.length)];
+    const msg  = TEST_MESSAGES[Math.floor(Math.random() * TEST_MESSAGES.length)];
+    showZap(sats, name, msg);
+  };
+
+</script>
+
+<script type="module">
+  import { SimplePool } from '/assets/js/vendor/nostr-pool.js';
+  import * as nip19   from '/assets/js/vendor/nostr-nip19.js';
+
+  const NADDR  = 'naddr1qqjr2vehvyenvdtr94nrzetr956rgctr94skvvfs95eryep3x3snwve389nxyqgwwaehxw309ahx7uewd3hkctczyr85tf46zd366lkjzws83ecs6fq3ttnjrjd500g7haz936h0knp22qcyqqq8vecjrlda8';
+  const RELAYS = ['wss://relay.primal.net', 'wss://nos.lol', 'wss://relay.damus.io'];
+
+  const decoded    = nip19.decode(NADDR);
+  const { pubkey, identifier, kind } = decoded.data;
+  const streamATag = `${kind}:${pubkey}:${identifier}`;
+
+  function decodeBolt11Amount(bolt11) {
+    const match = bolt11.toLowerCase().match(/^lnbc(\d+)([munp])/);
+    if (!match) return 0;
+    const multipliers = { m: 100000, u: 100, n: 0.1, p: 0.0001 };
+    return Math.round(parseInt(match[1]) * (multipliers[match[2]] || 0));
+  }
+
+  const profileCache = {};
+  async function fetchName(pk) {
+    if (!pk) return 'anon';
+    if (profileCache[pk]) return profileCache[pk];
+    const event = await pool.get(RELAYS, { kinds: [0], authors: [pk] });
+    if (event) {
+      try {
+        const p = JSON.parse(event.content);
+        return profileCache[pk] = p.display_name || p.name || 'anon';
+      } catch {}
+    }
+    return profileCache[pk] = 'anon';
+  }
+
+  const pool = new SimplePool();
+  console.log('[zap-alert] Subscribing to', RELAYS, 'for stream', streamATag);
+  pool.subscribeMany(
+    RELAYS,
+    { kinds: [9735], '#a': [streamATag], since: Math.floor(Date.now() / 1000) },
+    {
+      onevent(event) {
+        console.log('[zap-alert] Got zap event', event);
+        const bolt11Tag = event.tags.find(t => t[0] === 'bolt11');
+        const descTag   = event.tags.find(t => t[0] === 'description');
+        if (!bolt11Tag) return;
+
+        const sats = decodeBolt11Amount(bolt11Tag[1]);
+        if (sats <= 0) return;
+
+        let senderPubkey = null;
+        let message = '';
+        if (descTag) {
+          try {
+            const desc = JSON.parse(descTag[1]);
+            senderPubkey = desc.pubkey || null;
+            message = desc.content || '';
+          } catch {}
+        }
+
+        fetchName(senderPubkey).then(name => showZap(sats, name, message));
+      }
+    }
+  );
+</script>

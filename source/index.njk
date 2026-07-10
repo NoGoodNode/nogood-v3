@@ -1,0 +1,283 @@
+---
+layout: base.njk
+title: Home
+description: Illustration inspired by retro tech and fuelled by the open-source movement
+bodyColor: bg-highlight
+---
+
+{# HEADER #}
+<div id="home-header" class="section medium-grid bg-highlight">
+    <div class="section-column">
+        <div class="header-featured-image bg-muted">
+            {% imageFast "source/assets/img/featured/novision-02.png", "Illustration of beaten down character" %}
+            {# BADGE #}
+            <div class="header-badge flex-center no-blend hide-small fade-in">
+                {% image "source/assets/img/nogood_sign.png", "NoGood sign" %}
+                <svg class="header-badge-text" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <path id="circle-path" d="M 50,50 m -35,0 a 35,35 0 1,1 70,0 a 35,35 0 1,1 -70,0"/>
+                    </defs>
+                    <text>
+                        <textPath href="#circle-path" class="uppercase pixel-font">UP TO NOGOOD ⚡ UP TO NOGOOD ⚡</textPath>
+                    </text>
+                </svg>
+            </div>
+        </div>
+    </div>
+    {# INTRO #}
+    <div class="section-column sticky-two-rows">
+        <div class="sticky-wrapper">
+            <div class="sticky">
+                <div class="header-introduction">
+                    <h1 class="header">
+                        I'm a freelance illustrator inspired by retro tech and fuelled by the open-source movement.
+                    </h1>
+                </div>
+            </div>
+        </div>
+                        
+        {# CONTACT #}
+        <div class="place-bottom">
+            <div class="spacer-large"></div>
+            <span class="tag pixel-font self-center {% if status.available %}tag-available{% else %}tag-unavailable{% endif %}">
+                {% if status.available %}{{ status.availability_label }}{% else %}{{ status.unavailability_label }}{% endif %}
+            </span>
+            <div class="spacer-small"></div>
+            <p>
+                Get in touch: <a href="mailto:{{ settings.metadata.site_email }}">{{ settings.metadata.site_email }}</a><br>
+                Based in Amsterdam, The Netherlands — working worldwide.
+            </p>
+        </div>
+    </div>
+    {# STATUS #}
+    <div class="section-column hide-small hide-medium sticky-two-rows">
+        <div class="sticky-wrapper">
+            <div
+                class="sticky">
+                {# NOW #}
+                <div class="now">
+                    <h5 class="uppercase pixel-font">Now</h5>
+                    <p>
+                        <a href="/the-nogood-book/">The NoGood Book</a>
+                        is done and out now! I can't wait to start shipping pre-orders and put it out into the world!
+                    </p>
+                    <div class="spacer-small"></div>
+                    <a href="/now/">Read more</a>
+                </div>
+                <div class="spacer-large line"></div>
+                {# LATEST PRODUCT #}
+                <div class="latest-product">
+                    <h5 class="uppercase pixel-font">
+                        <a href="/shop/">Shop</a>
+                        > Latest addition</h5>
+                    <div class="spacer-small"></div>
+                    {% for post in collections.product | reverse %}
+                        {% if loop.index0 < 1 %}
+                            {# IMAGE #}
+                            <div class="shop-featured-image zoom bg-{{ post.data.site.background_color }} {% if
+                                    post.data.site.override_blend_mode === true %}no-blend{% endif %}">
+                                <a href="{{ post.url }} ">
+                                    {% image post.data.site.featured_image_url, post.data.title %}
+                                </a>
+                            </div>
+                            <div class="spacer-small"></div>
+                            <div>
+                                <a href="{{ post.url }}">{{ post.data.title }}</a>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="spacer-large line"></div>
+            </div>
+        </div>
+        {# RECENT ZAPS #}
+        <div class="place-bottom">
+            <h5 class="uppercase pixel-font">Recent supporters</h5>
+            <div class="spacer-small"></div>
+            <div id="home-zap-feed" class="zap-feed animate-in"></div>
+        </div>
+    </div>
+</div>
+{# PORTFOLIO #}
+<div id="portfolio" class="section bg-dark text-light">
+    <div class="section-column pixel-font uppercase">
+        <h3>featured work / <a href="/work/">all work</a></h3>
+        <div class="spacer-large"></div>
+    </div>
+    {# CAROUSEL #}
+    <div class="section-column portfolio-carousel">
+        <div class="portfolio-carousel-track">
+            {% for item in featuredimg.items %}
+                <div class="inner-column portfolio-item">
+                    <div class="portfolio-featured-img bg-light">
+                        {% image item.src, item.alt %}
+                    </div>
+                </div>
+            {% endfor %}
+            {% for item in featuredimg.items %}
+                <div class="inner-column portfolio-item" aria-hidden="true">
+                    <div class="portfolio-featured-img">
+                        {% image item.src, item.alt %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{# ABOUT #}
+<div id="background" class="section bg-muted large-grid">
+    <div class="section-column sticky-two-rows">
+        <div class="sticky-wrapper">
+            <div class="sticky">
+                <h1>
+                    My illustrations, through the rickety hardware and clunky modded devices they feature, are informed by notions of ownership and control.
+                </h1>
+            </div>
+        </div>
+        <div class="spacer hide-small"></div>
+        <div class="place-bottom padding-right-small hide-small">
+            <p class="text-large">
+                I established NoGood in 2021.
+                More than a pseudonym, I found that NoGood provided a space to experiment.
+                Since then, my commissioned projects and my personal work started to blend,
+                establishing a throughline that spans multiple years.
+            </p>
+            <div class="spacer-small"></div>
+            <div class="flex-row flex-align-center gap-large">
+                <span class="tag pixel-font self-center {% if status.available %}tag-available{% else %}tag-unavailable{% endif %}">
+                    {% if status.available %}{{ status.availability_label }}{% else %}{{ status.unavailability_label }}{% endif %}
+                </span>
+                <span class="text-small">Get in touch: <a href="mailto:{{ settings.metadata.site_email }}">{{ settings.metadata.site_email }}</a></span>
+            </div>
+        </div>
+    </div>
+    {# SELF PORTRAIT #}
+    <div class="section-column">
+        <div class="image-padding-extralarge bg-dark no-blend">
+            {% image "source/assets/img/NoGood_Selfpotrait_Dark.png", "NoGood self portrait" %}
+        </div>
+    </div>
+    {# MOBILE ONLY #}
+    <div class="section-column hide-medium hide-large">
+        <p class="text-large">
+            I established NoGood in 2021.
+            More than a pseudonym, I found that NoGood provided a space to experiment.
+            Since then, my commissioned projects and my personal work started to blend,
+            establishing a throughline that spans multiple years.
+        </p>
+    </div>
+</div>
+{# RADIO #}
+<div class="section relative">
+    {# VIDEO #}
+    <div class="section-column no-blend">
+        <div class="video-fill">
+            <video src="/assets/img/radio-bg.mp4" autoplay loop muted playsinline></video>
+        </div>
+    </div>
+</div>
+{# SHOP MARQUEE #}
+<div class="section shop-marquee">
+    <div class="marquee pixel-font header-large uppercase">
+        <ul class="marquee-content">
+            <li>Shop NoGood Merch</li>
+            <li>Shop NoGood Merch</li>
+            <li>Shop NoGood Merch</li>
+            <li>Shop NoGood Merch</li>
+        </ul>
+        <ul aria-hidden="true" class="marquee-content">
+            <li>Shop NoGood Merch</li>
+            <li>Shop NoGood Merch</li>
+            <li>Shop NoGood Merch</li>
+            <li>Shop NoGood Merch</li>
+        </ul>
+    </div>
+</div>
+{# SHOP #}
+<div
+    class="section home-shop large-grid">
+    {# INTRO #}
+    <div class="section-column sticky-two-rows">
+        <div class="sticky-wrapper">
+            <div class="sticky">
+                <div class="home-shop-intro">
+                    <h1>
+                        Limited runs, produced locally. Shipped with care from the studio in Amsterdam.
+                    </h1>
+                </div>
+            </div>
+        </div>
+        {# FREEBIES #}
+        <div class="home-torrent-list place-bottom hide-small hide-medium">
+            <div class="spacer line"></div>
+            {% include "source/snippets/downloads.njk" %}
+            <div class="spacer"></div>
+            {# NOTE #}
+            <div class="note bg-offwhite padding-small">
+                <p class="">Rocking the wallpapers? Zap torrent-files on
+                    <a
+                        href="https://dtan.xyz/p/nprofile1qqs9tuz9jpn57djg7nxunhyvuvk69g5zqaxdpvpqt9hwqv7395u9rpg6zq5uw"
+                        target="_blank" rel="noopener"
+                        class="">dtan.xyz</a>
+                </p>
+            </div>
+        </div>
+    </div>
+    {# GRID #}
+    <div class="section-column large-grid">
+        {# BOOK FEATURE #}
+        <div id="shop-header" class="no-blend zoom fade-in">
+            <a href="/the-nogood-book/">
+                {% image "source/assets/img/book/NG_Shoot_Book_Cover_Featured.jpg", "The NoGood Book", [720, 1400, 2000], "100vw" %}
+            </a>
+        </div>
+        <div class="item-info">
+            <h4 class="pixel-font uppercase">
+                <a href="/the-nogood-book/">The NoGood Book — €70</a>
+            </h4>
+            <div class="spacer-small hide-small"></div>
+            <p class="text-large hide-small">A monograph bringing together five years worth of NoGood illustration projects, outlining the backdrop for and context within which my work was created.</p>
+        </div>
+        <div class="inner-column"></div>
+        <div class="grid-span-full border-bottom"></div>
+        {# REGULAR ITEMS #}
+        {% include "source/snippets/product-grid.njk" %}
+    </div>
+</div>
+{# BLOG #}
+<div class="section home-blog medium-grid">
+    <div class="section-column sticky-two-rows">
+        <div class="sticky-wrapper">
+            <div class="sticky">
+                <h1>Studio notes, updates, and behind-the-scenes from ongoing projects.</h1>
+            </div>
+        </div>
+        <div class="spacer-large"></div>
+        <div class="place-bottom hide-small hide-medium">
+            <div class="">
+                <p class="">Follow NoGood on <a href="https://njump.me/npub12hcytyr8fumy3axde8wgeced523gyp6v6zczqktwuqeaztfc2xzsz3rdp4" target="_blank" rel="noopener">Nostr</a> and <a href="https://bsky.app/profile/nogood.studio" target="_blank" rel="noopener">Bluesky</a> for more updates.</p>
+            </div>
+        </div>
+    </div>
+    <div class="section-column">
+        <video autoplay muted loop playsinline poster="/assets/img/book/Book_Promo_Poster.jpg">
+            <source src="/assets/img/book-promo.mp4" type="video/mp4">
+        </video>
+        <h3 class="uppercase pixel-font">Blog</h3>
+        <div class="spacer-large"></div>
+        <div class="list tag-list">
+            {% for post in collections.feedPosts %}
+                {% include "source/snippets/list-tag.njk" %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="section-column">
+        {% set clippingsItems = collections.clippingsHome %}
+        {% include "source/snippets/clippings.njk" %}
+    </div>
+</div>
+<script type="module" src="/assets/js/zap-feed.js"></script>
+<script type="module">
+    import { initNowPlaying } from '/assets/js/radio/lastfm.js';
+    initNowPlaying('home-now-playing');
+</script>

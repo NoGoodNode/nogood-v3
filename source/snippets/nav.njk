@@ -1,0 +1,116 @@
+<nav {% if bodyColor %} class="{{ bodyColor }}" {% endif %}>
+    <div class="logo">
+        <a href="/">
+            <svg class="site-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 57.4" aria-label="NoGood logo">
+                <path d="M84,19.2h-2.4v12h7.2v-12h-4.8Z"/>
+                <path d="M67.2,21.5h-2.4v12h7.2v-12h-4.8Z"/>
+                <path d="M33.6,26.3h-2.4v12h7.2v-12h-4.8Z"/>
+                <path d="M108,0v2.4h-16.8v2.4h-16.8v2.4h-16.8v2.4h-16.8v2.4h-16.8v2.4H7.2v2.4H0v40.7h12v-2.4h16.8v-2.4h16.8v-2.4h16.8v-2.4h16.8v-2.4h16.8v-2.4h16.8v-2.4h7.2V0h-12ZM24,28.7v14.4h-2.4v-4.8h-2.4v-2.4h-2.4v-2.4h-2.4v9.6h-2.4v-16.8h2.4v4.8h2.4v2.4h2.4v2.4h2.4v-9.6h2.4v2.4ZM40.8,28.7v9.6h-2.4v2.4h-7.2v-2.4h-2.4v-12h2.4v-2.4h7.2v2.4h2.4v2.4ZM57.6,26.3h-2.4v-2.4h-7.2v12h7.2v-4.8h-4.8v-2.4h7.2v7.2h-2.4v2.4h-7.2v-2.4h-2.4v-12h2.4v-2.4h7.2v2.4h2.4v2.4ZM74.4,23.9v9.6h-2.4v2.4h-7.2v-2.4h-2.4v-12h2.4v-2.4h7.2v2.4h2.4v2.4ZM91.2,21.5v9.6h-2.4v2.4h-7.2v-2.4h-2.4v-12h2.4v-2.4h7.2v2.4h2.4v2.4ZM108,19.1v9.6h-2.4v2.4h-9.6V14.4h9.6v2.4h2.4v2.4Z"/>
+                <path d="M100.8,16.8h-2.4v12h7.2v-12h-4.8Z"/>
+            </svg>
+        </a>
+    </div>
+    <div id="header-menu">
+        <div class="primary-menu hide-small">
+            <ul>
+                <li>
+                    <a href="/work/">Work</a>
+                </li>
+                <li>
+                    <a href="/sketchbook/">Sketchbook</a>
+                </li>
+                <li>
+                    <a href="/shop/">Shop</a>
+                </li>
+                <li>
+                    <a href="/about/">About</a>
+                </li>
+                <li>
+                    <a href="/now/">Now</a>
+                </li>
+            </ul>
+        </div>
+        <div
+            class="secondary-menu">
+            {# RADIO #}
+            <div class="hide-small flex-center">
+                <a href="/radio/" class="radio-pill pixel-font uppercase" aria-label="NoGood Radio">
+                    <span class="soundbars" aria-hidden="true"><span></span><span></span><span></span></span>
+                    <span class="pill-label">NoGood Radio</span>
+                </a>
+            </div>
+            {# STATUS BAR #}
+            <div class="nav-status-wrap hide-small">
+                <div id="nav-status-bar" class="nav-status-bar">
+                    <span id="nav-status-node" class="" style="display:none;">
+                        <span class="nav-status-cat">
+                            <span class="nav-status-dot"></span>
+                            <span class="nav-status-label pixel-font"></span>
+                        </span>
+                        <span class="nav-status-value"></span>
+                    </span>
+                    <span id="nav-status-btc" class="" style="display:none;">
+                        <span class="nav-status-cat">
+                            <span class="nav-status-dot"></span>
+                            <span class="nav-status-label pixel-font"></span>
+                        </span>
+                        <span class="nav-status-value"></span>
+                    </span>
+                    <span id="nav-status-radio" class="" style="display:none;">
+                        <span class="nav-status-cat">
+                            <span class="nav-status-dot"></span>
+                            <span class="nav-status-label pixel-font"></span>
+                        </span>
+                        <span class="nav-status-value"></span>
+                    </span>
+                </div>
+            </div>
+            {# CART #}
+            <ul>
+                <li class="cart-item">
+                    <a class="snipcart-checkout" aria-label="Open shopping cart">
+                        <span class="pixel-font uppercase">cart</span>
+                        <span class="snipcart-total-price price pixel-font">€0.00</span>
+                    </a>
+                </li>
+            </ul>
+            {# MOBILE MENU #}
+            <div class="mobile-menu-wrapper hide-medium hide-large">
+                <div id="mobile-menu" class="mobile-menu-overlay bg-highlight">
+                    <div
+                        class="mobile-menu-wrapper padding-small">
+                        <button class="closebtn" id="mobile-menu-close" aria-label="Close navigation menu">
+                            <img class="mobile-menu-close-btn" src="/assets/icons/nogood_cross.svg" alt="" aria-hidden="true"/>
+                        </button>
+                        <ul class="mobile-menu-content text-extra-large pixel-font uppercase">
+                            <li>
+                                <a href="/work/">Work</a>
+                            </li>
+                            <li>
+                                <a href="/sketchbook/">Sketchbook</a>
+                            </li>
+                            <li>
+                                <a href="/shop/">Shop</a>
+                            </li>
+                            <li>
+                                <a href="/now/">Now</a>
+                            </li>
+                            <li>
+                                <a href="/about/">About</a>
+                            </li>
+                            <li>
+                                <a href="/radio/">Radio<span class="dot dot-radio dot-pulse nav-live-dot" hidden aria-label="Live" aria-hidden="true"></span>
+                                </a>
+                            </li>
+                        </ul>
+                        <img class="mobile-menu-logo" src="/assets/img/NoGood_Logo.svg" alt="NoGood logo"/>
+                    </div>
+                </div>
+                <button class="mobile-menu-open-btn hide-medium hide-large" id="mobile-menu-open" aria-label="Open navigation menu">
+                    <img class="" src="/assets/icons/nogood_hor-lines.svg" alt="" aria-hidden="true"/>
+                </button>
+                <script defer src="/assets/js/nav.js"></script>
+            </div>
+        </div>
+    </div>
+</nav>

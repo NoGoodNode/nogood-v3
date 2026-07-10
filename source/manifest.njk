@@ -1,0 +1,33 @@
+---
+permalink: /site.webmanifest
+eleventyExcludeFromCollections: true
+---
+{
+    "name": "{{ settings.metadata.site_title }}",
+    "short_name": "{{ settings.metadata.site_title }}",
+    "description": "{{ settings.metadata.site_description }}",
+    "lang": "en",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#fbfaf3",
+    "theme_color": "#1c1c1c",
+    "icons": [
+        {
+            "src": "/favicon.ico",
+            "sizes": "48x48",
+            "type": "image/x-icon"
+        },
+        {
+            "src": "/assets/img/favicon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any"
+        },
+        {
+            "src": "/assets/img/favicon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "maskable"
+        }
+    ]
+}

@@ -1,0 +1,13 @@
+# SITE SETTINGS
+# Site metadata
+metadata:
+  # site_url should match your full production URL
+  site_url: https://www.nogood.studio
+  site_title: NoGood
+  # Home page description, accepts markdown
+  site_description: Illustration inspired by retro-tech and fuelled by the open source movement
+  # footer contact email
+  site_email: hello@nogood.studio
+  # SVG image used for sharing/bookmark icons
+  site_icon_svg: /assets/img/favicon.svg
+

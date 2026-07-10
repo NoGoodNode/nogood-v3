@@ -1,0 +1,143 @@
+---
+layout: base
+---
+
+{# TITLE MARQUEE #}
+<div class="section">
+    <div class="marquee pixel-font header-large uppercase">
+        {% if subtitle === true %}
+        <ul class="marquee-content">
+            <li>{{ short_title }}</li>
+            <li>{{ subtitle_content }}</li>
+            <li>{{ short_title }}</li>
+            <li>{{ subtitle_content }}</li>
+        </ul>
+        <ul aria-hidden="true" class="marquee-content">
+            <li>{{ short_title }}</li>
+            <li>{{ subtitle_content }}</li>
+            <li>{{ short_title }}</li>
+            <li>{{ subtitle_content }}</li>
+        </ul>
+        {% else %}
+        <ul class="marquee-content">
+            <li>{{ short_title }}</li>
+            <li>{{ short_title }}</li>
+            <li>{{ short_title }}</li>
+            <li>{{ short_title }}</li>
+        </ul>
+        <ul aria-hidden="true" class="marquee-content">
+            <li>{{ short_title }}</li>
+            <li>{{ short_title }}</li>
+            <li>{{ short_title }}</li>
+            <li>{{ short_title }}</li>
+        </ul>
+        {% endif %}
+    </div>
+</div>
+
+{# PRODUCT SECTION #}
+<div id="product" class="section large-grid">
+    
+    {# GALLERY #}
+    <div class="section-column product-gallery">
+        {% for item in gallery %}
+        <div
+            class="bg-{{ item.background_color }} {% if item.padding === true %}image-padding{% endif %} {% if item.override_blend_mode === true %}no-blend{% endif %}{% if not loop.first %} fade-in{% endif %}">
+            {% if loop.first %}{% imageFast item.url, item.alt %}{% else %}{% image item.url, item.alt %}{% endif %}
+        </div>
+        {% endfor %}
+    </div>
+
+    {# PRODUCT INFO #}
+    <div class="section-column product-info sticky-two-rows">
+        <div class="sticky-wrapper">
+            <div class="sticky">
+                {# BREADCRUMBS #}
+                {% include "source/snippets/breadcrumbs.njk" %}
+                <div class="spacer-large"></div>
+                {# PRICE #}
+                <h2 class="pixel-font uppercase">€{{ snipcart.price }}{%if site.pre_order === true %} / pre-order {%
+                    endif %}</h2>
+                <div class="spacer"></div>
+                {# DESCRIPTION #}
+                <h1 class="text-extra-large">{{ description }}</h1>
+                <div class="spacer-large"></div>
+                {# ORDER BUTTON #}
+                {% include "source/snippets/order-button.njk" %}
+                <div class="spacer"></div>
+            </div>
+        </div>
+
+        {# SPECS #}
+        <div class="place-bottom bg-offwhite padding-small">
+            <div class="product-specs">
+                <h3 class="uppercase pixel-font">Specs</h3>
+                <div class="spacer"></div>
+                <div class="list two-col-list">
+                    {% for item in specs %}
+                    <div class="uppercase pixel-font">
+                        <p>{{ item.title }}</p>
+                    </div>
+                    <div class="align-right">
+                        <p>{{ item.description }}</p>
+                    </div>
+                    <div class="row-border"></div>
+                    {% endfor %}
+                </div>
+            </div>
+            {# SIZE GUIDE #}
+            {% if shirt_model === "Creator" %}
+            <div class="spacer-extralarge"></div>
+            <div class="product-specs">
+                <h3 class="uppercase pixel-font">Size guide</h3>
+                <div class="spacer"></div>
+                {% include "source/snippets/size-guide-creator.njk" %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{# SIMILAR PRODUCT SECTION #}
+<div id="similar-products" class="section large-grid">
+    <div class="section-column">
+        <h1 class="pixel-font uppercase">
+            Similar products
+        </h1>
+        <div class="spacer-large"></div>
+    </div>
+    <div class="section-column large-grid">
+        {% set count = 0 %}
+        {% for post in collections.product | reverse %}
+        {% if post.data.product_kind === product_kind and post.url !== page.url and count < 2 %}
+
+        <div class="shop-item">
+            {# IMAGE CONTAINER #}
+            <div
+                class="shop-featured-image zoom image-padding bg-{{ post.data.site.background_color }} {% if post.data.site.override_blend_mode === true %}no-blend{% endif %}">
+                {# TAG #}
+                {% if post.data.site.tag === true %}
+                <div class="tag shop-item-tag pixel-font">
+                    {{ post.data.site.tag_content }}
+                </div>
+                {% endif %}
+                {# IMAGE #}
+                <a href="{{ post.url }} ">
+                    {% image post.data.site.featured_image_url, post.data.site.featured_image_alt %}
+                </a>
+            </div>
+            <div class="item-info">
+                <div class="spacer"></div>
+                <div>
+                    <h4 class="pixel-font uppercase">
+                        <a href="{{ post.url }}">{{ post.data.title }}</a>
+                    </h4>
+                </div>
+            </div>
+        </div>
+
+        {% set count = count + 1 %}
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>

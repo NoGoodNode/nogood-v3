@@ -1,0 +1,211 @@
+---
+layout: base
+title: Context
+permalink: /book/context/
+description: "Seven articles published under Creative Commons Share-Alike, as part of The NoGood Book — alongside the illustrations made for each piece."
+intro: >
+  As part of <a href="/the-nogood-book/">The NoGood Book</a>, the Context section gathers writing from people whose
+  work has shaped my own thinking — published here in full under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">Creative Commons Share-Alike</a> license,
+  alongside the illustrations I made for each piece.
+---
+
+<button id="scroll-to-top" class="scroll-to-top-button" aria-label="Scroll to top">
+    <svg viewBox="0 0 9 5" xmlns="http://www.w3.org/2000/svg">
+        <rect x="3" y="2" width="1" height="1"/>
+        <rect x="2" y="2" width="1" height="1"/>
+        <rect x="1" y="2" width="1" height="1"/>
+        <rect y="2" width="1" height="1"/>
+        <rect x="4" y="2" width="1" height="1"/>
+        <rect x="5" y="2" width="1" height="1"/>
+        <rect x="6" y="2" width="1" height="1"/>
+        <rect x="7" y="2" width="1" height="1"/>
+        <rect x="7" y="1" width="1" height="1"/>
+        <rect x="7" y="3" width="1" height="1"/>
+        <rect x="6" y="4" width="1" height="1"/>
+        <rect x="6" width="1" height="1"/>
+        <rect x="8" y="2" width="1" height="1"/>
+    </svg>
+</button>
+
+<div class="section padding-bottom-small">
+    <div class="section-column">
+        <div id="breadcrumbs" class="text-small pixel-font uppercase">
+            <div class="icon small-arrow-right-icon">
+                <a href="/shop/">Shop</a>
+            </div>
+            <div class="icon small-arrow-right-icon">
+                <a href="/the-nogood-book/">The NoGood Book</a>
+            </div>
+            <div>
+                {{ title }}
+            </div>
+        </div>
+        <div class="spacer"></div>
+        {% if intro %}<p class="text-extra-large padding-right-large">{{ intro | safe }}</p>{% endif %}
+        {{ content | safe }}
+    </div>
+</div>
+
+<div id="context-articles" class="section medium-grid">
+    {# NAV #}
+    <div class="section-column sticky-two-rows">
+        <div class="sticky-wrapper">
+            <div class="sticky">
+                <h4 class="uppercase pixel-font">Articles in this section</h4>
+                <div class="spacer-small"></div>
+                <div class="list two-col-list context-article-list">
+                    {% for article in collections.contextArticle %}
+                    <div class="truncate">
+                        <a href="#article-{{ loop.index }}" class="smooth-scroll">{{ article.data.title }}</a>
+                    </div>
+                    <div class="align-right hide-small">
+                        {{ article.data.author }}
+                    </div>
+                    <div class="row-border"></div>
+                    {% endfor %}
+                </div>
+                <div class="spacer-large"></div>
+                <h4 class="uppercase pixel-font">Downloads</h4>
+                <div class="spacer-small"></div>
+                <div class="list two-col-list">
+                    <div>
+                        <p>Illustration package</p>
+                    </div>
+                    <div class="align-right">
+                        <a href="/assets/downloads/nogood-book-context-illustrations.zip" class="icon download-icon">Download</a>
+                    </div>
+                    <div class="row-border"></div>
+                    <div>
+                        <p>The Context Section — ebook</p>
+                    </div>
+                    <div class="align-right">
+                        <a href="/assets/downloads/nogood-book-context-ebook.pdf" class="icon download-icon">Download</a>
+                    </div>
+                    <div class="row-border"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# ARTICLES #}
+    <div class="section-column">
+        {% for article in collections.contextArticle %}
+        <div id="article-{{ loop.index }}">
+            <div class="flex-align-center gap-small">
+                <span class="tag pixel-font uppercase">CC Share-Alike</span>
+                <p class="text-small pixel-font uppercase">
+                    By <a href="{{ article.data.author_url }}" target="_blank" rel="noopener">{{ article.data.author }}</a> — <a href="{{ article.data.original_url }}" target="_blank" rel="noopener">source</a>
+                </p>
+            </div>
+            <div class="spacer-small"></div>
+            <h1 class="padding-right-small">{{ article.data.title }}</h1>
+            <div class="spacer-small"></div>
+            <div class="spacer-large"></div>
+            {{ article.templateContent | safe }}
+            <div class="spacer line"></div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {# BOOK PROMO #}
+    <div class="section-column hide-small">
+        <div class="sticky">
+            <a href="/the-nogood-book/" class="no-blend zoom display-block">
+                {% image "source/assets/img/book/NG_Shoot_Book_Cover_Featured.jpg", "The NoGood Book" %}
+            </a>
+            <div class="spacer-small"></div>
+            <a href="/the-nogood-book/" class="pixel-font uppercase">The NoGood Book</a>
+            <div class="spacer-small"></div>
+            <p>
+                Self-published. Crowdfunded. A monograph bringing together five years of illustration projects, outlining the backdrop for and context within which my work was created.
+            </p>
+            <div class="spacer-small"></div>
+            <div class="button-wrapper">
+                <a href="/the-nogood-book/" class="button pixel-font uppercase">
+                    Buy now
+                </a>
+            </div>
+            <p class="text-small">Limited run of 400 / <span id="book-sales-total-context"></span> in stock</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    const geyserSales = {{ booksales.geyser_sales }};
+    const wordpressSales = {{ booksales.wordpress_sales }};
+    const printRun = {{ booksales.total_print_run }};
+    fetch('https://book-stats.hello-5b9.workers.dev/book-sales')
+        .then(r => r.json())
+        .then(data => {
+            const sold = (data.total ?? 0) + geyserSales + wordpressSales;
+            document.getElementById('book-sales-total-context').textContent = (printRun - sold);
+        })
+        .catch(() => {
+            document.getElementById('book-sales-total-context').textContent = printRun - (geyserSales + wordpressSales);
+        });
+</script>
+
+<script>
+(function () {
+    var DURATION = 1500;
+
+    function easeInOutQuad(t) {
+        return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+    }
+
+    document.querySelectorAll('.smooth-scroll').forEach(function (link) {
+        link.addEventListener('click', function (e) {
+            var target = document.querySelector(link.getAttribute('href'));
+            if (!target) return;
+            e.preventDefault();
+
+            var startY = window.scrollY;
+            var targetY = target.getBoundingClientRect().top + startY;
+            var startTime = null;
+
+            function step(timestamp) {
+                if (startTime === null) startTime = timestamp;
+                var progress = Math.min((timestamp - startTime) / DURATION, 1);
+                window.scrollTo(0, startY + (targetY - startY) * easeInOutQuad(progress));
+                if (progress < 1) requestAnimationFrame(step);
+                else history.pushState(null, '', link.getAttribute('href'));
+            }
+            requestAnimationFrame(step);
+        });
+    });
+})();
+</script>
+
+<script>
+(function () {
+    var btn = document.getElementById('scroll-to-top');
+    var trigger = document.querySelector('#context-articles .sticky-wrapper');
+    if (!btn || !trigger) return;
+
+    function checkVisibility() {
+        var rect = trigger.getBoundingClientRect();
+        btn.classList.toggle('is-visible', rect.top <= 0);
+    }
+
+    window.addEventListener('scroll', checkVisibility, { passive: true });
+    checkVisibility();
+
+    var DURATION = 1500;
+    function easeInOutQuad(t) {
+        return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+    }
+
+    btn.addEventListener('click', function () {
+        var startY = window.scrollY;
+        var startTime = null;
+
+        function step(timestamp) {
+            if (startTime === null) startTime = timestamp;
+            var progress = Math.min((timestamp - startTime) / DURATION, 1);
+            window.scrollTo(0, startY * (1 - easeInOutQuad(progress)));
+            if (progress < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+    });
+})();
+</script>

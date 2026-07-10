@@ -1,0 +1,44 @@
+---
+layout: base.njk
+title: 404
+description: Page not found
+permalink: 404.html
+---
+
+<div class="section medium-grid">
+    <div class="section-column">
+        <div class="inner-column">
+            <h1 class="header-large pixel-font uppercase">404 Error</h1>
+            <div class="spacer"></div>
+            <p class="text-extra-large">This page got lost somewhere in the void. It might have moved, been deleted, or never
+                existed in the first place.</p>
+            <div class="spacer"></div>
+            <div class="inner-column place-bottom">
+                <div class="button-wrapper">
+                    <a href="/" class="button pixel-font uppercase">Back to home</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="section-column">
+        <div class="bg-offwhite image-padding-large ">
+            {% image "source/assets/img/NoGood_Selfpotrait.png", "NoGood self portrait" %}
+        </div>
+    </div>
+    <div class="section-column">
+        <div class="sticky">
+            <div class="updates">
+                <h3 class="uppercase pixel-font">Latest updates</h3>
+                <div class="spacer-large"></div>
+                {# UPDATES LIST #}
+                <div class="list tag-list">
+                    {% for post in collections.post | reverse | withoutTag('product') %}
+                        {% if loop.index0 < 12 %}
+                            {% include "source/snippets/list-tag.njk" %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

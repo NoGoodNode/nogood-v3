@@ -1,0 +1,82 @@
+---
+layout: base.njk
+title: Work
+permalink: /work/
+description: "Illustration projects by NoGood — branding, editorial, and visual identity work."
+---
+
+<div class="section">
+    <div class="section-column">
+        <h1 class="pixel-font uppercase">Selected work</h1>
+        <div class="spacer-large"></div>
+        <div class="hide-small flex-row flex-align-baseline gap-small">
+            <div id="client-list" class="text-small uppercase pixel-font">
+                <span>NoGood x </span><span id="client-rotating" class="rotating-text">{{ clients.items[0] }}</span>
+            </div>
+            <span class="tag pixel-font {% if status.available %}tag-available{% else %}tag-unavailable{% endif %}">
+                {% if status.available %}{{ status.availability_label }}{% else %}{{ status.unavailability_label }}{% endif %}
+            </span>
+            <span class="text-small">Get in touch: <a href="mailto:{{ settings.metadata.site_email }}">{{ settings.metadata.site_email }}</a></span>
+        </div>
+        <script>
+            (function () {
+                const names = {{ clients.items | dump | safe }};
+                let i = 0;
+                const el = document.getElementById('client-rotating');
+                setInterval(function () {
+                    el.classList.add('fade-out');
+                    setTimeout(function () {
+                        i = (i + 1) % names.length;
+                        el.textContent = names[i];
+                        el.style.transition = 'none';
+                        el.style.transform = 'translateY(6px)';
+                        el.style.opacity = '0';
+                        el.classList.remove('fade-out');
+                        el.offsetHeight;
+                        el.style.transition = '';
+                        el.style.transform = '';
+                        el.style.opacity = '';
+                    }, 300);
+                }, 3000);
+            })();
+        </script>        
+    </div>
+</div>
+
+<div class="section section-fullwidth">
+    <div class="masonry">
+        {% for item in work.items %}
+
+        <div class="masonry-item{% if item.span %} masonry-item--wide{% endif %}">
+          <div class="fade-in{% if item.bg %} {{ item.bg }}{% endif %}">
+
+            {# IMAGE #}
+            {% if item.type === "image" %}
+                {% image item.src, item.alt %}
+
+            {# SLIDESHOW #}
+            {% elif item.type === "slideshow" %}
+                <div class="slideshow slideshow-{{ item.slides | length }}">
+                    {% for slide in item.slides %}
+                        {% image slide.src, slide.alt %}
+                    {% endfor %}
+                </div>
+
+            {# VIDEO #}
+            {% elif item.type === "video" %}
+                <video autoplay muted loop playsinline width="100%" height="auto"{% if item.poster %} poster="{{ item.poster }}"{% endif %}>
+                    <source src="{{ item.src }}">
+                </video>
+
+            {# GIF #}
+            {% elif item.type === "gif" %}
+                {% imageGif item.src, item.alt %}
+
+            {% endif %}
+
+          </div>
+        </div>
+
+        {% endfor %}
+    </div>
+</div>

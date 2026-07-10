@@ -1,0 +1,29 @@
+{
+  "name": "nogood-v3",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "clean": "find _build -maxdepth 1 -mindepth 1 -not -name 'assets' -exec rm -rf {} + 2>/dev/null; find _build/assets -maxdepth 1 -mindepth 1 -not -name 'img' -exec rm -rf {} + 2>/dev/null; mkdir -p _build/assets/img",
+    "start": "npm run clean && npx @11ty/eleventy --serve",
+    "build": "npm run clean && npx @11ty/eleventy",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@11ty/eleventy": "^3.1.2",
+    "@11ty/eleventy-img": "^6.0.4",
+    "@11ty/eleventy-plugin-rss": "^2.0.4",
+    "clean-css": "^5.3.3",
+    "gray-matter": "^4.0.3",
+    "yaml": "^2.8.1"
+  },
+  "devDependencies": {
+    "hls.js": "^1.6.15",
+    "nostr-tools": "^2.23.3",
+    "qrcode": "^1.5.4",
+    "terser": "^5.46.1"
+  }
+}

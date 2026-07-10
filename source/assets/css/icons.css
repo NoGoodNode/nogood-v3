@@ -1,0 +1,61 @@
+/* ----------------
+DOWNLOAD LINK
+---------------- */
+a.download-icon::after {
+    background: url("/assets/icons/nogood_download.svg");
+}
+
+/* ----------------
+EXTERNAL LINK
+---------------- */
+a.external-icon::after {
+    background: url("/assets/icons/nogood_external-link.svg");
+}
+
+/* ----------------
+SMALL ARROW
+---------------- */
+div.small-arrow-right-icon::after {
+    background: url("/assets/icons/nogood_small-arrow-right.svg");
+}
+
+/* ----------------
+LINKS
+---------------- */
+a.icon {
+    position: relative;
+    padding-right: 1.4em;
+}
+
+a.icon::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 50%;
+    width: 1rem;
+    height: 0.7rem;
+    transform: translateY(-50%);
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+/* ----------------
+BREADCRUMBS
+---------------- */
+#breadcrumbs div.icon {
+    position: relative;
+    padding-right: 1rem;
+}
+
+#breadcrumbs div.icon::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 50%;
+    width: .4rem;
+    height: .4rem;
+    transform: translateY(-50%);
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin-top: -1px;
+}

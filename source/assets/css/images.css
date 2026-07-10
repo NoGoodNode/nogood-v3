@@ -1,0 +1,132 @@
+img,
+picture {
+    width: 100%;
+    height: auto;
+    display: block;
+    mix-blend-mode: multiply;
+}
+
+video {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* ----------------
+BLEND MODES 
+---------------- */
+.bg-highlight img,
+.bg-highlight picture,
+.bg-process img,
+.bg-process picture {
+    mix-blend-mode: darken;
+}
+
+/* ----------------
+OVERRIDES
+---------------- */
+.no-blend img,
+.no-blend picture {
+    mix-blend-mode: normal;
+}
+
+/* ----------------
+MUTE IMAGES
+---------------- */
+.img-mute img,
+.img-mute picture {
+    opacity: 0.4;
+}
+
+/* ----------------
+ZOOM HOVER
+---------------- */
+.zoom {
+    overflow: hidden;
+    position: relative;
+}
+
+.zoom::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    border: 5px solid var(--highlight);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.zoom:hover::after {
+    opacity: 1;
+}
+
+.zoom img,
+.zoom picture {
+    transition: transform 0.4s ease;
+}
+
+.zoom:hover img,
+.zoom:hover picture {
+    transform: scale(1.01);
+}
+
+/* ----------------
+ADD PADDING
+---------------- */
+.image-padding {
+    padding: 2rem;
+}
+
+.image-padding-large {
+    padding: 4rem;
+}
+
+.image-padding-extralarge {
+    padding: 6rem;
+}
+
+/* ----------------
+CIRCLE THUMBNAILS
+---------------- */
+.circle-thumb-group {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.circle-thumb {
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1px solid var(--border);
+}
+
+.circle-thumb img,
+.circle-thumb picture {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    mix-blend-mode: normal;
+}
+
+/* ----------------
+VIDEO FILL
+---------------- */
+.video-fill {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.video-fill video {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+}

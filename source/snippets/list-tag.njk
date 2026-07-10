@@ -1,0 +1,10 @@
+    <div class="tag pixel-font {{ post.data.cat }} hide-small">
+      {{ post.data.cat }}
+    </div>
+    <div class="">
+      <a href="{{ post.url }}">{% if post.data.number %}<span class="text-tabular">{{ post.data.number }}</span> — {% endif %}{{ post.data.title }}</a>
+    </div>
+    <div class="align-right text-tabular">
+      {{ post.data.date | postDate }}
+    </div>
+    <div class="row-border"></div>

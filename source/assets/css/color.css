@@ -1,0 +1,106 @@
+:root {
+    --primary-dark: rgba(28, 28, 28);
+    --primary-dark-alt: rgb(44, 44, 44);
+    --primary-dark-hover: rgba(103, 116, 131);
+    
+    --primary-light: rgba(251, 250, 243);
+
+    --muted: rgba(233, 229, 219);
+    --muted-hover: rgb(201, 195, 177);
+    
+    --offwhite: rgba(233, 229, 219, 0.5);
+    --offwhite-hover: rgba(196, 191, 179, 0.5);
+    
+    --medium: rgb(81, 90, 99);
+    --medium-hover: rgb(60, 68, 75);
+    
+    --highlight: #d0fa66;
+    --highlight-hover: #add05b;
+
+    --radio: #e94736;
+    
+    --process: rgb(253, 235, 101);
+
+    --border: rgba(28, 28, 28);
+    --button-primary: rgba(28, 28, 28);
+}
+
+/* ----------------
+BACKGROUND COLORS
+---------------- */
+.bg-highlight {
+    background-color: var(--highlight);
+}
+
+.bg-process {
+    background-color: var(--process);
+}
+
+.bg-muted {
+    background-color: var(--muted);
+}
+
+.bg-medium {
+    background-color: var(--medium);
+}
+
+.bg-offwhite {
+    background-color: var(--offwhite);
+}
+
+.bg-light {
+    background-color: var(--primary-light);
+}
+
+.bg-dark {
+    background-color: var(--primary-dark);
+}
+
+.bg-radio {
+    background-color: var(--radio);
+}
+/* ----------------
+TEXT COLORS
+---------------- */
+.text-highlight {
+    color: var(--highlight);
+}
+
+.text-muted {
+    color: var(--muted);
+}
+
+.text-offwhite {
+    color: var(--offwhite);
+}
+
+.text-light {
+    color: var(--primary-light);
+}
+
+
+/* ----------------
+LINK COLORS
+---------------- */
+a {
+    color: var(--primary-dark);
+}
+
+a:hover {
+    color: var(--primary-dark-hover);
+}
+
+/* ----------------
+DARK SECTION OVERRIDES
+---------------- */
+.bg-dark {
+    --border: var(--primary-dark);
+}
+
+.bg-dark a {
+    color: var(--highlight)
+}
+
+.bg-dark a:hover {
+    color: var(--highlight-hover);
+}

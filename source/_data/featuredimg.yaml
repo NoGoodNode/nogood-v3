@@ -1,0 +1,21 @@
+items:
+  - url: "/work/"
+    src: "source/assets/img/projects/Featured_Blockstream.jpg"
+    alt: "Blockstream Sovereign Electronics illustration"
+
+  - url: "/work/"
+    src: "source/assets/img/projects/Featured_Gamekings.jpg"
+    alt: "Gamekings 25th anniversary poster illustration"
+
+  - url: "/work/"
+    src: "source/assets/img/projects/Featured_Mindcrowave.jpg"
+    alt: "Mindcrowave illustration"
+
+  - url: "/work/"
+    src: "source/assets/img/projects/Featured_SatoshiRadio.jpg"
+    alt: "Satoshi Radio Mining Corp. poster illustration"
+
+  - url: "/work/"
+    src: "source/assets/img/projects/Featured_TABConf.jpg"
+    alt: "TABConf 7 The Quantum Resistance poster illustration"
+

@@ -1,0 +1,37 @@
+{# BUTTON #}
+{% if site.sold_out === false %}
+<div class="button-wrapper">
+    <a class="snipcart-add-item button pixel-font uppercase"
+        data-item-id="{{ snipcart.id }}" data-item-price="{{ snipcart.price }}"
+        data-item-url="{{ page.url }}" data-item-description="{{ snipcart.short_description }}"
+        data-item-image="{{ snipcart.snipcartimage }}" data-item-name="{{ title }}"
+        data-item-weight="{{ snipcart.weight }}" {% if snipcart.size_variant===true %}
+        data-item-custom1-name="{{ snipcart.size_variant_name}}"
+        data-item-custom1-options="{{ snipcart.size_variant_options}}" data-item-custom1-required="true" {% endif %}>
+        {% if site.pre_order === true %}
+        Pre-order
+        {% else %}
+        Purchase
+        {% endif %}
+    </a>
+</div>
+{# SOLD OUT #}
+{% elseif site.sold_out === true %}
+<div class="button-wrapper">
+    <a class="button button-sold-out pixel-font uppercase">
+        Sold out
+    </a>
+</div>
+{% endif %}
+
+<div class="spacer-small"></div>
+
+{# EXTERNAL LINK #}
+{% if site.external_product === true %}
+<div class="align-center">
+    Bitcoin payments available 
+    <a href="{{ site.external_product_link }}" target="_blank" rel="noopener" class="">
+        on {{ site.external_product_title }}
+    </a>
+</div>
+{% endif %}

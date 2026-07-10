@@ -1,0 +1,164 @@
+# Sketchbook masonry items
+# span: false | true (spans 2 columns)
+# padding: image-padding | image-padding-large | image-padding-extralarge (optional)
+
+items:
+  - src: "source/assets/img/process/Collected_Sketch_014.jpg"
+    alt: "NoGood work in progress sketch 014"
+    span: false
+    padding:
+
+  - src: "source/assets/img/process/Collected_Sketch_027.jpg"
+    alt: "NoGood work in progress sketch 027"
+    span: false
+    padding: image-padding-extralarge
+
+  - src: "source/assets/img/process/Collected_Sketch_003.jpg"
+    alt: "NoGood work in progress sketch 003"
+    span: false
+    padding: image-padding-large
+
+  - src: "source/assets/img/process/Collected_Sketch_019.jpg"
+    alt: "NoGood work in progress sketch 019"
+    span: false
+    padding:
+
+  - src: "source/assets/img/process/Collected_Sketch_012.jpg"
+    alt: "NoGood work in progress sketch 012"
+    span: false
+    padding:    
+
+  - src: "source/assets/img/process/Collected_Sketch_031.jpg"
+    alt: "NoGood work in progress sketch 031"
+    span: false
+    padding: image-padding-large
+
+  - src: "source/assets/img/process/Collected_Sketch_022.jpg"
+    alt: "NoGood work in progress sketch 022"
+    span: false
+    padding: image-padding-large
+
+  - src: "source/assets/img/process/Collected_Sketch_005.jpg"
+    alt: "NoGood work in progress sketch 005"
+    span: false
+    padding:
+
+  - src: "source/assets/img/process/Collected_Sketch_016.jpg"
+    alt: "NoGood work in progress sketch 016"
+    span: false
+    padding:
+
+  - src: "source/assets/img/process/Collected_Sketch_029.jpg"
+    alt: "NoGood work in progress sketch 029"
+    span: false
+    padding:
+
+  - src: "source/assets/img/process/Collected_Sketch_011.jpg"
+    alt: "NoGood work in progress sketch 011"
+    span: false
+    padding: image-padding-large
+
+  - src: "source/assets/img/process/Collected_Sketch_024.jpg"
+    alt: "NoGood work in progress sketch 024"
+    span: false
+    padding: image-padding
+
+  - src: "source/assets/img/process/Collected_Sketch_002.jpg"
+    alt: "NoGood work in progress sketch 002"
+    span: false
+    padding: image-padding
+
+  - src: "source/assets/img/process/Collected_Sketch_018.jpg"
+    alt: "NoGood work in progress sketch 018"
+    span: false
+    padding:
+
+  - src: "source/assets/img/process/Collected_Sketch_007.jpg"
+    alt: "NoGood work in progress sketch 007"
+    span: false
+    padding: image-padding-large
+
+  - src: "source/assets/img/process/Collected_Sketch_032.jpg"
+    alt: "NoGood work in progress sketch 032"
+    span: false
+    padding:
+
+  - src: "source/assets/img/process/Collected_Sketch_013.jpg"
+    alt: "NoGood work in progress sketch 013"
+    span: false
+    padding:
+
+  - src: "source/assets/img/process/Collected_Sketch_025.jpg"
+    alt: "NoGood work in progress sketch 025"
+    span: false
+    padding: image-padding
+
+  - src: "source/assets/img/process/Collected_Sketch_020.jpg"
+    alt: "NoGood work in progress sketch 020"
+    span: false
+    padding: image-padding-large
+
+  - src: "source/assets/img/process/Collected_Sketch_010.jpg"
+    alt: "NoGood work in progress sketch 010"
+    span: false
+    padding:
+
+  - src: "source/assets/img/process/Collected_Sketch_028.jpg"
+    alt: "NoGood work in progress sketch 028"
+    span: false
+    padding:
+
+  - src: "source/assets/img/process/Collected_Sketch_004.jpg"
+    alt: "NoGood work in progress sketch 004"
+    span: false
+    padding:
+
+  - src: "source/assets/img/process/Collected_Sketch_008.jpg"
+    alt: "NoGood work in progress sketch 008"
+    span: false
+    padding:
+
+  - src: "source/assets/img/process/Collected_Sketch_017.jpg"
+    alt: "NoGood work in progress sketch 017"
+    span: false
+    padding: image-padding
+
+  - src: "source/assets/img/process/Collected_Sketch_030.jpg"
+    alt: "NoGood work in progress sketch 030"
+    span: false
+    padding:
+
+  - src: "source/assets/img/process/Collected_Sketch_009.jpg"
+    alt: "NoGood work in progress sketch 009"
+    span: false
+    padding:
+
+  - src: "source/assets/img/process/Collected_Sketch_021.jpg"
+    alt: "NoGood work in progress sketch 021"
+    span: false
+    padding: image-padding-extralarge
+
+  - src: "source/assets/img/process/Collected_Sketch_001.jpg"
+    alt: "NoGood work in progress sketch 001"
+    span: false
+    padding: image-padding
+
+  - src: "source/assets/img/process/Collected_Sketch_026.jpg"
+    alt: "NoGood work in progress sketch 026"
+    span: false
+    padding: image-padding
+
+  - src: "source/assets/img/process/Collected_Sketch_015.jpg"
+    alt: "NoGood work in progress sketch 015"
+    span: false
+    padding:
+
+  - src: "source/assets/img/process/Collected_Sketch_023.jpg"
+    alt: "NoGood work in progress sketch 023"
+    span: false
+    padding:
+
+  - src: "source/assets/img/process/Collected_Sketch_006.jpg"
+    alt: "NoGood work in progress sketch 006"
+    span: false
+    padding:

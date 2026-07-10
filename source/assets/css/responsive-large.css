@@ -1,0 +1,27 @@
+@media screen and (min-width: 1729px) {
+    body {
+        border-left: 1px solid var(--border);
+        border-right: 1px solid var(--border);
+    }
+
+    footer {
+        min-height: unset;
+    }
+
+    footer .bg-image {
+        flex: none;
+        min-height: 40vh;
+        max-height: 40vh;
+    }
+}
+
+@media screen and (min-width:1280px) {
+
+    /* ----------------
+    HIDDEN ITEMS
+    ---------------- */
+    .hide-large {
+        display: none;
+    }
+}
+

@@ -1,0 +1,22 @@
+---
+layout: base.njk
+title: Clippings
+description: "Articles, videos, podcasts, and music NoGood is currently into."
+permalink: /clippings/
+---
+
+<div class="section">
+    <div class="section-column pixel-font uppercase">
+        <h1>Clippings</h1>
+    </div>
+    <div class="spacer-large"></div>
+</div>
+<div class="section">
+    <div class="section-column inner-column">
+        <div class="list two-col-list">
+            {% for item in collections.clippings %}
+                {% include "source/snippets/list-clippings.njk" %}
+            {% endfor %}
+        </div>
+    </div>
+</div>

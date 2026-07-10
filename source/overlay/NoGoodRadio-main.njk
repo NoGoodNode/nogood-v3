@@ -1,0 +1,1579 @@
+---
+layout: overlay
+title: NoGood Radio — Zap Bar
+permalink: /overlay/NoGoodRadio-main/
+eleventyExcludeFromCollections: true
+---
+
+<style>
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  @font-face {
+    font-family: 'Offbit-Bold';
+    src: url('/assets/fonts/OffBit-Bold.woff2') format('woff2'),
+         url('/assets/fonts/OffBit-Bold.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: 'UntitledSans-Regular';
+    src: url('/assets/fonts/untitled-sans-regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: 'PPSupplyMono';
+    src: url('/assets/fonts/PPSupplyMono-Regular.woff2') format('woff2'),
+         url('/assets/fonts/PPSupplyMono-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: 'PPSupplyMono';
+    src: url('/assets/fonts/PPSupplyMono-Medium.woff2') format('woff2'),
+         url('/assets/fonts/PPSupplyMono-Medium.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: 'PPSupplyMono';
+    src: url('/assets/fonts/PPSupplyMono-Bold.woff2') format('woff2'),
+         url('/assets/fonts/PPSupplyMono-Bold.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+  }
+
+#zap-bar, #name-bar {
+    position: absolute;
+    bottom: 15px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 10px;
+    background: rgba(28, 28, 28, 0.75);
+    transition: opacity 0.4s ease;
+  }
+
+  #zap-bar {
+    right: 15px;
+    width: 220px;
+    overflow: hidden;
+    padding: 0;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.4s ease, transform 0.4s ease, background-color 0.4s ease;
+  }
+
+  #name-bar {
+    left: 15px;
+    width: 30%;
+    overflow: hidden;
+    background: rgb(28, 28, 28);
+  }
+
+  #mempool-wrap {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  #mempool-bar {
+    background: rgba(28, 28, 28, 0.75);
+    border-left: 1px solid rgb(248, 194, 40);
+    width: fit-content;
+    display: grid;
+    grid-template-columns: auto auto;
+    column-gap: 30px;
+    row-gap: 1px;
+    padding: 8px 10px 6px 10px;
+    align-items: center;
+  }
+
+  #block-bar {
+    display: none;
+    position: absolute;
+    left: 100%;
+    top: 0;
+    bottom: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    overflow: hidden;
+    padding: 8px 10px 6px 10px;
+    background: rgb(28, 28, 28);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  #block-bar.is-visible {
+    opacity: 1;
+  }
+
+  #block-gif {
+    width: 100%;
+    height: 50px;
+    object-fit: contain;
+    overflow: hidden;
+  }
+
+  #block-text {
+    font-family: 'PPSupplyMono', monospace;
+    font-size: 0.9rem;
+    color: rgb(248, 194, 40);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    text-align: center;
+  }
+
+  .mempool-row {
+    display: contents;
+  }
+
+  .mempool-cell {
+    font-family: 'PPSupplyMono', monospace;
+    font-weight: 400;
+    font-size: 0.9rem;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+  }
+
+  .mempool-label {
+    color: rgb(251, 250, 243);
+    text-transform: uppercase;
+  }
+
+  .mempool-value {
+    text-align: right;
+    justify-self: end;
+    color: rgb(251, 250, 243);
+  }
+
+  #name-scroll {
+    flex: 1;
+    overflow: hidden;
+    min-width: 0;
+    transform: translateY(2px);
+  }
+
+  #name-track {
+    display: flex;
+    gap: 20px;
+    white-space: nowrap;
+    will-change: transform;
+  }
+
+  @keyframes scrollNames {
+    from { transform: translateX(0); }
+    to   { transform: translateX(var(--scroll-width)); }
+  }
+
+  #name-bar-label {
+    font-family: 'PPSupplyMono', monospace;
+    font-weight: 400;
+    font-size: 1rem;
+    color: rgb(248, 194, 40);
+    letter-spacing: 0.04em;
+    line-height: 1;
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding-right: 5px;
+    transform: translateY(2px);
+  }
+
+  .name-item {
+    font-family: 'PPSupplyMono', monospace;
+    font-weight: 400;
+    font-size: 1rem;
+    color: rgb(251, 250, 243);
+    letter-spacing: 0.04em;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  @keyframes zapTickerScroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(var(--scroll-width)); }
+  }
+
+  .zap-text-base {
+    font-family: 'PPSupplyMono', monospace;
+    font-size: 1rem;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    line-height: 1;
+    display: inline-block;
+    transform: translateY(1px);
+    white-space: nowrap;
+    text-transform: uppercase;
+  }
+
+  .zap-text-announce { color: rgb(28, 28, 28); }
+  .zap-text-message  { color: rgb(251, 250, 243); }
+
+  .zap-text-amount,
+  .zap-text-thanks {
+    font-family: 'PPSupplyMono', monospace;
+    font-size: 1rem;
+    font-weight: 400;
+    color: rgb(248, 194, 40);
+    letter-spacing: 0.08em;
+    line-height: 1;
+    display: block;
+    width: 100%;
+    text-align: center;
+    text-transform: uppercase;
+    transform: translateY(1px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .zap-text-thanks {
+    color: rgb(251, 250, 243);
+    letter-spacing: 0.04em;
+  }
+
+#chat-box {
+    position: absolute;
+    left: 15px;
+    bottom: 65px;
+    width: 340px;
+    max-height: 520px;
+    overflow-y: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    background: rgba(28, 28, 28, 0.75);
+    border-left: 1px solid rgb(248, 194, 40);
+    padding: 20px;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  #chat-box::-webkit-scrollbar { display: none; }
+
+  .ov-msg {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-family: 'UntitledSans-Regular', sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    color: rgb(251, 250, 243);
+    letter-spacing: 0.02em;
+    line-height: 1.5;
+  }
+
+  .ov-msg + .ov-msg { margin-top: 6px; }
+
+  .ov-emoji {
+    display: inline-block;
+    height: 1.25em;
+    width: auto;
+    vertical-align: middle;
+    margin: 0 0.1em;
+  }
+
+  .ov-msg--zap {
+    outline: 1px solid rgb(160, 80, 240);
+    border-radius: 4px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 10px 12px;
+  }
+
+  .ov-msg--zap .ov-msg-name { color: rgb(160, 80, 240); }
+
+  .ov-msg--zap-small {
+    background: rgba(160, 80, 240, 0.15);
+    outline-color: rgb(160, 80, 240);
+  }
+  .ov-msg--zap-small .ov-msg-name { color: rgb(160, 80, 240); }
+
+  .ov-msg--zap-big { outline-color: #6faca0; }
+  .ov-msg--zap-big .ov-msg-name { color: #6faca0; }
+
+  @keyframes megaZapGlow {
+    0%, 100% { box-shadow: 0 0 6px rgba(248, 194, 40, 0.35); }
+    50%       { box-shadow: 0 0 18px rgba(248, 194, 40, 0.75), 0 0 32px rgba(248, 194, 40, 0.2); }
+  }
+
+  .ov-msg--zap-mega {
+    background: rgba(248, 194, 40, 0.2);
+    outline-color: rgb(248, 194, 40);
+    animation: megaZapGlow 2.5s ease-in-out infinite;
+  }
+
+  .ov-msg--zap-mega .ov-msg-name {
+    color: rgb(248, 194, 40);
+  }
+
+  .ov-msg-zap-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  @keyframes letterBounce {
+    0%,  18%, 100% { transform: translateY(0); }
+    8%              { transform: translateY(-2px); }
+    14%             { transform: translateY(1px); }
+  }
+
+  .ov-msg-zap-amount span {
+    display: inline-block;
+    animation: letterBounce 2.5s ease infinite;
+  }
+
+  .ov-msg-link { opacity: 0.6; }
+  .ov-msg-mention { color: rgb(160, 80, 240); }
+
+  .ov-msg-content {
+    font-family: 'UntitledSans-Regular', sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    color: rgb(251, 250, 243);
+    letter-spacing: 0.02em;
+    line-height: 1.5;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .ov-msg-avatar {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .ov-msg-body {
+    flex: 1;
+    min-width: 0;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    overflow: hidden;
+  }
+
+  .ov-msg-name {
+    font-family: 'PPSupplyMono', monospace;
+    color: rgb(161, 154, 137);
+    margin-right: 4px;
+  }
+
+  .ov-msg--zap .ov-msg-name {
+    max-width: 160px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .ov-msg-zap-amount {
+    font-family: 'PPSupplyMono', monospace;
+    display: inline-flex;
+  }
+
+  .ov-msg--raid {
+    background: rgba(160, 80, 240, 0.35);
+    border-radius: 4px;
+    padding: 10px 12px;
+    font-family: 'PPSupplyMono', monospace;
+    font-size: 1rem;
+    color: rgb(251, 250, 243);
+    letter-spacing: 0.04em;
+  }
+
+  .ov-msg--raid span { display: inline-block; transform: translateY(1px); }
+
+  #now-playing-bar {
+    position: absolute;
+    top: 20px;
+    left: 42%;
+    width: 520px;
+    height: 36px;
+    overflow: hidden;
+    background: rgb(248, 194, 40);
+    display: flex;
+    align-items: center;
+    padding: 0 10px 0 80px;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  #viewers-bar {
+    position: absolute;
+    top: 20px;
+    left: calc(42% + 540px);
+    height: 36px;
+    background: rgba(28, 28, 28, 0.75);
+    border-left: 1px solid rgb(248, 194, 40);
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    white-space: nowrap;
+    font-family: 'PPSupplyMono', monospace;
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: rgb(251, 250, 243);
+    letter-spacing: 0.06em;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  #viewers-bar span { transform: translateY(1px); display: inline-block; }
+
+  #follow-feed {
+    position: absolute;
+    bottom: 20%;
+    right: 0;
+    width: 300px;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: flex-end;
+    gap: 5px;
+    pointer-events: none;
+    border-right: 3px solid rgb(248, 194, 40);
+    padding-right: 15px;
+  }
+
+  .follow-notif {
+    font-family: 'PPSupplyMono', monospace;
+    font-weight: 400;
+    font-size: 0.9rem;
+    color: rgb(251, 250, 243);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: right;
+    opacity: 0;
+  }
+
+  .follow-notif.is-in  { opacity: 1; }
+  .follow-notif.is-out { opacity: 0; }
+
+  #node-bar {
+    position: absolute;
+    bottom: 605px;
+    left: 15px;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    font-family: 'PPSupplyMono', monospace;
+    font-size: 0.8rem;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    line-height: 1;
+    text-transform: uppercase;
+    padding: 8px 12px;
+    border-radius: 999px;
+    border: 1px solid;
+  }
+
+  #node-bar span:not(.node-dot) { transform: translateY(1px); display: inline-block; }
+  #node-bar.node-online  { color: rgb(216, 255, 124); border-color: rgb(216, 255, 124); background: rgba(216, 255, 124, 0.2); }
+  #node-bar.node-offline { color: #e57373;           border-color: #e57373;           background: rgba(229, 115, 115, 0.2); }
+
+  @keyframes nodeBlink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.2; }
+  }
+
+  .node-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-left: 7px;
+    animation: nodeBlink 3s ease-in-out infinite;
+    flex-shrink: 0;
+    vertical-align: middle;
+  }
+
+  .node-online  .node-dot { background: rgb(216, 255, 124); }
+  .node-offline .node-dot { background: #e57373; }
+
+  #np-scroll {
+    flex: 1;
+    overflow: hidden;
+    min-width: 0;
+    transform: translateY(1px);
+  }
+
+  @keyframes scrollNowPlaying {
+    from { transform: translateX(0); }
+    to   { transform: translateX(var(--np-scroll-width)); }
+  }
+
+  #np-track {
+    display: flex;
+    white-space: nowrap;
+    will-change: transform;
+  }
+
+  .np-item {
+    font-family: 'PPSupplyMono', monospace;
+    font-size: 1em;
+    font-weight: 400;
+    color: rgb(28, 28, 28);
+    letter-spacing: 0.04em;
+    line-height: 1.3;
+    flex-shrink: 0;
+  }
+
+  .np-sep {
+    font-family: 'PPSupplyMono', monospace;
+    font-size: 1em;
+    font-weight: 400;
+    color: rgb(28, 28, 28);
+    letter-spacing: 0;
+    line-height: 1;
+    transform: translateY(1px);
+    flex-shrink: 0;
+    padding: 0 14px;
+  }
+
+  #zap-floats {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 500px;
+    height: 1080px;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  @keyframes floatUp {
+    0%   { transform: translateY(0)      translateX(0);                          opacity: 0; }
+    8%   {                                                                        opacity: 1; }
+    50%  { transform: translateY(-600px) translateX(calc(var(--drift, 80px) * 0.5)); }
+    85%  {                                                                        opacity: 1; }
+    100% { transform: translateY(-1200px) translateX(var(--drift, 80px));         opacity: 0; }
+  }
+
+  .zap-float {
+    position: absolute;
+    border-radius: 50%;
+    object-fit: cover;
+    font-size: 60%;
+    animation: floatUp linear forwards;
+  }
+
+  #overlay-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: rgb(28, 28, 28);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+    z-index: 100;
+  }
+
+  #badge-sign {
+    width: 52px;
+    height: 52px;
+    object-fit: contain;
+}
+
+  @keyframes badgeSpin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+
+  #badge-text {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    font-size: 12.6px;
+    fill: rgb(251, 250, 243);
+    font-family: 'Offbit-Bold', Arial, sans-serif;
+    letter-spacing: 0.05rem;
+    text-transform: uppercase;
+    animation: badgeSpin 12s linear infinite;
+  }
+  #book-sale-bar {
+    position: absolute;
+    bottom: 15px;
+    left: 42%;
+    width: 160px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    background: rgb(216, 255, 124);
+    padding: 15px 15px 10px 15px;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  #book-sale-bar picture { display: block; width: 100%; opacity: 0; }
+  #book-sale-bar img { width: 100%; height: auto; display: block; }
+
+  @keyframes bookItemIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .book-item-in  { animation: bookItemIn 0.4s ease both; }
+  .book-item-out { animation: bookItemIn 0.3s ease reverse both; }
+
+  #book-sale-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  #book-sale-label {
+    font-family: 'PPSupplyMono', monospace;
+    font-size: 1rem;
+    font-weight: 400;
+    color: rgb(28, 28, 28);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: 1;
+    white-space: nowrap;
+    opacity: 0;
+  }
+
+  #book-sale-counter {
+    font-family: 'PPSupplyMono', monospace;
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: rgb(28, 28, 28);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: 1;
+    white-space: nowrap;
+    opacity: 0;
+  }
+</style>
+
+<div id="overlay-badge">
+  <img id="badge-sign" src="/assets/img/nogood_sign.png" alt="NoGood sign">
+  <svg id="badge-text" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <path id="badge-circle-path" d="M 50,50 m -35,0 a 35,35 0 1,1 70,0 a 35,35 0 1,1 -70,0"/>
+    </defs>
+    <text><textPath href="#badge-circle-path">UP TO NOGOOD ⚡ UP TO NOGOOD ⚡</textPath></text>
+  </svg>
+</div>
+<div id="now-playing-bar"><div id="np-scroll"><div id="np-track"></div></div></div>
+<div id="viewers-bar"></div>
+<div id="follow-feed"></div>
+<div id="node-bar"></div>
+<div id="mempool-wrap">
+  <div id="mempool-bar"></div>
+  <div id="block-bar">
+    <img src="/assets/img/NG_Block_Animation.gif" alt="" aria-hidden="true" id="block-gif">
+    <span id="block-text"></span>
+  </div>
+</div>
+<div id="chat-box"></div>
+<div id="zap-bar"></div>
+<div id="zap-floats"></div>
+<div id="name-bar">
+  <span id="name-bar-label">BOOK PRE-ORDERS</span>
+  <div id="name-scroll"><div id="name-track"></div></div>
+</div>
+<div id="book-sale-bar">
+  {% imageFast "source/assets/img/shop/NoGoodBook_Collectors.png", "The NoGood Book", [320], "160px" %}
+  <div id="book-sale-info">
+    <span id="book-sale-label">New Order</span>
+    <span id="book-sale-counter">— / {{ booksales.total_print_run }}</span>
+  </div>
+</div>
+
+<script>
+  // ----------------
+  // ZAP BAR
+  // ----------------
+  const MAX_ZAPS = 5;
+  const bar = document.getElementById('zap-bar');
+  let resolveNamesReady, resolveMempoolReady, resolveChatReady;
+  const namesReady   = new Promise(r => { resolveNamesReady   = r; });
+  const mempoolReady = new Promise(r => { resolveMempoolReady = r; });
+  const chatReady    = new Promise(r => { resolveChatReady    = r; window.__resolveChatReady = r; });
+
+  namesReady.then(()   => { document.getElementById('name-bar').style.opacity    = '1'; });
+  mempoolReady.then(() => { document.getElementById('mempool-bar').style.opacity = '1'; });
+  chatReady.then(()    => { document.getElementById('chat-box').style.opacity    = '1'; });
+
+  const zapQueue = [];
+  let zapShowing = false;
+  const ZAP_GAP = 30;
+
+  function phaseScroll(text, cssClass) {
+    return new Promise(resolve => {
+      bar.innerHTML = '';
+      const track = document.createElement('div');
+      track.style.cssText = 'display:flex;white-space:nowrap;will-change:transform;opacity:0;transition:opacity 0.4s ease';
+      [text, text, text, text, text, text].forEach(t => {
+        const s = document.createElement('span');
+        s.className = cssClass;
+        s.textContent = t;
+        s.style.marginRight = ZAP_GAP + 'px';
+        track.appendChild(s);
+      });
+      bar.appendChild(track);
+      requestAnimationFrame(() => {
+        const hw = track.scrollWidth / 2;
+        track.style.setProperty('--scroll-width', `-${hw}px`);
+        track.style.animation = `zapTickerScroll ${Math.max(hw / 35, 2).toFixed(2)}s linear infinite`;
+        requestAnimationFrame(() => {
+          track.style.opacity = '1';
+          setTimeout(() => { track.style.opacity = '0'; setTimeout(resolve, 400); }, 4000);
+        });
+      });
+    });
+  }
+
+  function phaseStatic(text, cssClass) {
+    return new Promise(resolve => {
+      bar.innerHTML = '';
+      const el = document.createElement('span');
+      el.className = cssClass;
+      el.textContent = text;
+      el.style.cssText = 'opacity:0;transition:opacity 0.4s ease';
+      bar.appendChild(el);
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        el.style.opacity = '1';
+        setTimeout(() => { el.style.opacity = '0'; setTimeout(resolve, 400); }, 4000);
+      }));
+    });
+  }
+
+  function showNextZap() {
+    if (zapQueue.length === 0) { zapShowing = false; return; }
+    zapShowing = true;
+    const zap = zapQueue.shift();
+
+    bar.innerHTML = '';
+    launchFloats(zap);
+
+    setTimeout(() => {
+      bar.style.backgroundColor = 'rgb(248, 194, 40)';
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        bar.style.opacity = '1';
+        bar.style.transform = 'translateY(0)';
+      }));
+
+      let chain = phaseScroll('ZAP RECEIVED', 'zap-text-base zap-text-announce')
+        .then(() => new Promise(r => {
+          bar.style.backgroundColor = 'rgb(28, 28, 28)';
+          setTimeout(r, 400);
+        }))
+        .then(() => phaseStatic(`⚡ ${zap.sats.toLocaleString()} sats`, 'zap-text-amount'));
+      if (zap.message) chain = chain.then(() => phaseScroll(zap.message, 'zap-text-base zap-text-message'));
+      chain
+        .then(() => new Promise(resolve => {
+          bar.innerHTML = '';
+          const el = document.createElement('span');
+          el.className = 'zap-text-thanks';
+          el.textContent = zap.name || 'anon';
+          el.style.cssText = 'opacity:0;transition:opacity 0.4s ease';
+          bar.appendChild(el);
+          requestAnimationFrame(() => requestAnimationFrame(() => {
+            el.style.opacity = '1';
+            setTimeout(resolve, 4000);
+          }));
+        }))
+        .then(() => setTimeout(() => {
+          bar.style.opacity = '0';
+          bar.style.transform = 'translateY(8px)';
+          setTimeout(showNextZap, 400);
+        }, 1000));
+    }, 3000);
+  }
+
+  function getFloatCount(sats) {
+    if (sats >= 10000) return 120;
+    if (sats >= 5000)  return 80;
+    if (sats >= 1000)  return 50;
+    if (sats >= 500)   return 30;
+    if (sats >= 100)   return 18;
+    return 10;
+  }
+
+  function launchFloats(zap) {
+    const container = document.getElementById('zap-floats');
+    const count = getFloatCount(zap.sats);
+    const spread = Math.min(count * 200, 4000);
+
+    for (let i = 0; i < count; i++) {
+      setTimeout(() => {
+        let el;
+        if (zap.avatar) {
+          el = document.createElement('img');
+          el.src = zap.avatar;
+          el.onerror = function() {
+            const fallback = document.createElement('div');
+            fallback.textContent = '⚡';
+            fallback.style.cssText = this.style.cssText + ';display:flex;align-items:center;justify-content:center;border-radius:0;background:none;';
+            this.replaceWith(fallback);
+          };
+        } else {
+          el = document.createElement('div');
+          el.textContent = '⚡';
+          el.style.cssText = 'display:flex;align-items:center;justify-content:center;border-radius:0;';
+        }
+        el.className = 'zap-float';
+
+        const size  = 20 + Math.random() * 16;
+        const x     = Math.random() * (500 - size);
+        const dur   = 6 + Math.random() * 4;
+        const drift = (80 + Math.random() * 80) + 'px';
+
+        el.style.width             = size + 'px';
+        el.style.height            = size + 'px';
+        el.style.left              = x + 'px';
+        el.style.top               = '1080px';
+        el.style.animationDuration = dur + 's';
+        el.style.setProperty('--drift', drift);
+
+        container.appendChild(el);
+        setTimeout(() => el.remove(), dur * 1000 + 200);
+      }, (i / count) * spread);
+    }
+  }
+
+  function addZap(zap) {
+    zapQueue.push(zap);
+    if (!zapShowing) showNextZap();
+  }
+
+  // ----------------
+  // NAMES BAR
+  // ----------------
+  (async function() {
+    const track = document.getElementById('name-track');
+    const res = await fetch('/overlay/names.txt').catch(() => null);
+    if (!res || !res.ok) { resolveNamesReady(); return; }
+    const names = (await res.text()).split('\n').map(n => n.trim()).filter(Boolean);
+    if (!names.length) { resolveNamesReady(); return; }
+
+    const doubled = [...names, ...names];
+    doubled.forEach(name => {
+      const span = document.createElement('span');
+      span.className = 'name-item';
+      span.textContent = name;
+      track.appendChild(span);
+    });
+
+    requestAnimationFrame(() => {
+      const singleWidth = track.scrollWidth / 2;
+      const duration = singleWidth / 12;
+      track.style.setProperty('--scroll-width', `-${singleWidth}px`);
+      track.style.animation = `scrollNames ${duration}s linear infinite`;
+      resolveNamesReady();
+    });
+  })();
+
+  // ----------------
+  // MEMPOOL BAR
+  // ----------------
+  const mempoolBar = document.getElementById('mempool-bar');
+  const MEMPOOL_FIELDS = [
+    { label: 'BLOCK',      key: 'block' },
+    { label: 'MEMPOOL',    key: 'count' },
+    { label: 'FEE',        key: 'halfHourFee', suffix: ' sat/vB' },
+    { label: 'DIFFICULTY', key: 'difficultyChange', suffix: '%' },
+  ];
+
+  function renderMempoolData(data) {
+    mempoolBar.innerHTML = '';
+    MEMPOOL_FIELDS.forEach(({ label, key, suffix = '' }) => {
+      const val = data[key];
+      if (val == null) return;
+      const row = document.createElement('div');
+      row.className = 'mempool-row';
+      const l = document.createElement('span');
+      l.className = 'mempool-cell mempool-label';
+      l.textContent = label;
+      const v = document.createElement('span');
+      v.className = 'mempool-cell mempool-value';
+      v.textContent = (typeof val === 'number' ? val.toLocaleString() : val) + suffix;
+      row.appendChild(l);
+      row.appendChild(v);
+      mempoolBar.appendChild(row);
+    });
+    resolveMempoolReady();
+  }
+
+  async function fetchMempool() {
+    try {
+      const [block, mempool, fees, difficulty] = await Promise.all([
+        fetch('https://mempool.space/api/blocks/tip/height').then(r => r.text()),
+        fetch('https://mempool.space/api/mempool').then(r => r.json()),
+        fetch('https://mempool.space/api/v1/fees/recommended').then(r => r.json()),
+        fetch('https://mempool.space/api/v1/difficulty-adjustment').then(r => r.json()),
+      ]);
+      renderMempool({
+        block: parseInt(block),
+        count: mempool.count,
+        halfHourFee: fees.halfHourFee,
+        difficultyChange: (difficulty.difficultyChange > 0 ? '+' : '') + difficulty.difficultyChange.toFixed(2),
+      });
+    } catch { resolveMempoolReady(); }
+  }
+
+  // ----------------
+  // BLOCK BAR
+  // ----------------
+  let lastBlockHeight = null;
+  let blockBarTimeout = null;
+  const blockBar  = document.getElementById('block-bar');
+  const blockText = document.getElementById('block-text');
+  const BLOCK_TEXTS = ['NEW BLOCK', null]; // null = block number
+
+  function showBlockBar(height) {
+    if (blockBarTimeout) clearTimeout(blockBarTimeout);
+
+    // Lock width to widest text variant (position:absolute — no layout side effects)
+    blockBar.style.visibility = 'hidden';
+    blockBar.style.display = 'flex';
+    blockBar.style.width = 'auto';
+    const allTexts = BLOCK_TEXTS.map(t => t === null ? height.toLocaleString() : t);
+    let maxWidth = 0;
+    allTexts.forEach(t => {
+      blockText.textContent = t;
+      maxWidth = Math.max(maxWidth, blockBar.getBoundingClientRect().width);
+    });
+    blockBar.style.width = maxWidth + 'px';
+    blockBar.style.visibility = '';
+    requestAnimationFrame(() => blockBar.classList.add('is-visible'));
+
+    let phase = 0;
+    function cycleText() {
+      const label = BLOCK_TEXTS[phase % BLOCK_TEXTS.length];
+      blockText.textContent = label === null ? height.toLocaleString() : label;
+      phase++;
+    }
+    cycleText();
+    const cycleInterval = setInterval(cycleText, 8000);
+
+    blockBarTimeout = setTimeout(() => {
+      clearInterval(cycleInterval);
+      blockBar.classList.remove('is-visible');
+      setTimeout(() => { blockBar.style.display = 'none'; }, 400);
+    }, 30000);
+  }
+
+  function renderMempool(data) {
+    renderMempoolData(data);
+    if (lastBlockHeight !== null && data.block > lastBlockHeight) {
+      showBlockBar(data.block);
+    }
+    lastBlockHeight = data.block;
+  }
+
+  fetchMempool();
+  setInterval(fetchMempool, 60000);
+
+
+  // ----------------
+  // NOW PLAYING
+  // ----------------
+  const npBar   = document.getElementById('now-playing-bar');
+  const npTrack = document.getElementById('np-track');
+  let npCurrentText = '';
+
+  function setNowPlayingText(text) {
+    if (text === npCurrentText) return;
+    npCurrentText = text;
+
+    const populate = () => {
+      npTrack.style.animation = 'none';
+      npTrack.innerHTML = '';
+      Array(10).fill(text).forEach(t => {
+        const span = document.createElement('span');
+        span.className = 'np-item';
+        span.textContent = t;
+        npTrack.appendChild(span);
+        const sep = document.createElement('span');
+        sep.className = 'np-sep';
+        sep.textContent = '//';
+        npTrack.appendChild(sep);
+      });
+      requestAnimationFrame(() => {
+        const singleWidth = npTrack.scrollWidth / 10;
+        const duration = singleWidth / 12;
+        npTrack.style.setProperty('--np-scroll-width', `-${singleWidth}px`);
+        npTrack.style.animation = `scrollNowPlaying ${duration}s linear infinite`;
+        npTrack.style.opacity = '1';
+        npBar.style.opacity = '1';
+      });
+    };
+
+    if (npBar.style.opacity === '1') {
+      npTrack.style.transition = 'opacity 0.6s ease';
+      npTrack.style.opacity = '0';
+      setTimeout(populate, 600);
+    } else {
+      npTrack.style.opacity = '1';
+      populate();
+    }
+  }
+
+  async function fetchNowPlaying() {
+    try {
+      const resp = await fetch('https://lastfm-api.hello-5b9.workers.dev/', { cache: 'no-store' });
+      if (!resp.ok) { setNowPlayingText('NOGOOD RADIO'); return; }
+      const tracks = await resp.json();
+      const current = tracks.find(t => !t.playedAt);
+      if (!current) { setNowPlayingText('NOGOOD RADIO'); return; }
+
+      setNowPlayingText(`${current.artist} — ${current.name}`);
+    } catch { setNowPlayingText('NOGOOD RADIO'); }
+  }
+
+  fetchNowPlaying();
+  setInterval(fetchNowPlaying, 20000);
+
+  // ----------------
+  // BADGE
+  // ----------------
+  const badge = document.getElementById('overlay-badge');
+  const BADGE_WAIT = 8 * 60 * 1000;
+  const BADGE_SHOW = 20 * 1000;
+
+  function badgeCycle() {
+    badge.style.opacity = '1';
+    badge.style.transform = 'translateY(0)';
+    setTimeout(() => {
+      badge.style.opacity = '0';
+      badge.style.transform = 'translateY(20px)';
+      setTimeout(badgeCycle, BADGE_WAIT);
+    }, BADGE_SHOW);
+  }
+
+  setTimeout(badgeCycle, BADGE_WAIT);
+
+  // ----------------
+  // NODE STATUS
+  // ----------------
+  const nodeBar = document.getElementById('node-bar');
+  let nodeOfflineCount = 0;
+  let nodeInitialized = false;
+  const NODE_OFFLINE_THRESHOLD = 3; // 3 × 120s = 6 minutes
+
+  function setNodeOnline() {
+    nodeOfflineCount = 0;
+    nodeBar.className = 'node-online';
+    nodeBar.innerHTML = '<span>NOGOODNODE ONLINE</span><span class="node-dot"></span>';
+    if (!nodeInitialized) { nodeInitialized = true; nodeBar.style.opacity = '1'; }
+  }
+
+  function setNodeOffline(force = false) {
+    nodeOfflineCount++;
+    if (force || nodeOfflineCount >= NODE_OFFLINE_THRESHOLD) {
+      nodeBar.className = 'node-offline';
+      nodeBar.innerHTML = '<span>NOGOODNODE OFFLINE</span><span class="node-dot"></span>';
+      if (!nodeInitialized) { nodeInitialized = true; nodeBar.style.opacity = '1'; }
+    }
+  }
+
+  async function checkNode() {
+    try {
+      const res = await fetch('https://btcpay.hello-5b9.workers.dev/health', {
+        cache: 'no-store',
+        signal: AbortSignal.timeout(5000)
+      });
+      const data = await res.json();
+      res.ok && data.synchronized === true ? setNodeOnline() : setNodeOffline(!nodeInitialized);
+    } catch {
+      setNodeOffline(!nodeInitialized);
+    }
+  }
+
+  checkNode();
+  setInterval(checkNode, 120000);
+
+  // ----------------
+  // BOOK SALES
+  // ----------------
+  const GEYSER_SALES  = {{ booksales.geyser_sales }};
+  const WP_SALES      = {{ booksales.wordpress_sales }};
+  const PRINT_RUN     = {{ booksales.total_print_run }};
+  const bookBar         = document.getElementById('book-sale-bar');
+  const bookSaleCounter = document.getElementById('book-sale-counter');
+  let lastBookOrderDate = null;
+  let bookBarActive = false;
+  const bookBarQueue = [];
+
+  function displayBookBar(sold) {
+    bookBarActive = true;
+    const bookPicture = bookBar.querySelector('picture');
+    const bookLabel   = document.getElementById('book-sale-label');
+    if (sold !== null) {
+      bookSaleCounter.textContent = sold + ' / ' + PRINT_RUN + ' sold';
+      bookSaleCounter.style.display = '';
+    } else {
+      bookSaleCounter.style.display = 'none';
+    }
+    [bookPicture, bookLabel, bookSaleCounter].forEach((el, i) => {
+      el.classList.remove('book-item-in');
+      void el.offsetWidth;
+      el.style.animationDelay = (i * 0.15) + 's';
+      el.classList.add('book-item-in');
+    });
+    bookBar.style.opacity = '1';
+    setTimeout(() => {
+      [bookSaleCounter, bookLabel, bookPicture].forEach((el, i) => {
+        el.classList.remove('book-item-in');
+        void el.offsetWidth;
+        el.style.animationDelay = (i * 0.15) + 's';
+        el.classList.add('book-item-out');
+      });
+      setTimeout(() => {
+        bookBar.style.opacity = '0';
+        [bookPicture, bookLabel, bookSaleCounter].forEach(el => {
+          el.classList.remove('book-item-out');
+          el.style.animationDelay = '';
+          el.style.display = '';
+        });
+        bookBarActive = false;
+        if (bookBarQueue.length > 0) displayBookBar(bookBarQueue.shift());
+      }, 3 * 150 + 300);
+    }, 60000);
+  }
+
+  function showBookSale(sold) {
+    if (bookBarActive) { bookBarQueue.push(sold); } else { displayBookBar(sold); }
+  }
+
+  async function waitForUpdatedCount(knownSold) {
+    for (let i = 0; i < 4; i++) {
+      await new Promise(r => setTimeout(r, 3000));
+      try {
+        const fresh = await fetch('https://book-stats.hello-5b9.workers.dev/book-sales').then(r => r.json());
+        const freshSold = (fresh.total ?? 0) + GEYSER_SALES + WP_SALES;
+        if (freshSold > knownSold) {
+          bookSaleCounter.textContent = freshSold + ' / ' + PRINT_RUN + ' sold';
+          showBookSale(freshSold);
+          return;
+        }
+      } catch {}
+    }
+    showBookSale(null);
+  }
+
+  async function pollBookSales() {
+    try {
+      const data = await fetch('https://book-stats.hello-5b9.workers.dev/book-sales').then(r => r.json());
+      const sold = (data.total ?? 0) + GEYSER_SALES + WP_SALES;
+      bookSaleCounter.textContent = sold + ' / ' + PRINT_RUN + ' sold';
+      if (lastBookOrderDate !== null && data.lastOrderDate !== lastBookOrderDate) {
+        lastBookOrderDate = data.lastOrderDate;
+        waitForUpdatedCount(sold);
+      } else {
+        lastBookOrderDate = data.lastOrderDate;
+      }
+    } catch {}
+  }
+
+  pollBookSales();
+
+  setInterval(pollBookSales, 300000);
+
+</script>
+
+<script type="module">
+  import { initNostr, subscribeStreamInfo, subscribeZaps, subscribeChat, subscribeRaids, subscribeNotifications, fetchProfile } from '/assets/js/radio/nostr.js';
+  import * as nip19 from '/assets/js/vendor/nostr-nip19.js';
+
+  // ----------------
+  // CONFIG
+  // ----------------
+  const NADDR     = 'naddr1qqjr2vehvyenvdtr94nrzetr956rgctr94skvvfs95eryep3x3snwve389nxyqgwwaehxw309ahx7uewd3hkctczyr85tf46zd366lkjzws83ecs6fq3ttnjrjd500g7haz936h0knp22qcyqqq8vecjrlda8';
+  const RELAYS    = ['wss://relay.primal.net', 'wss://nos.lol', 'wss://relay.damus.io'];
+  const MY_PUBKEY = '55f04590674f3648f4cdc9dc8ce32da2a282074cd0b020596ee033d12d385185';
+
+  const MAX_CHAT_DOM = 15;
+
+  const chatBox = document.getElementById('chat-box');
+  const seenMessages = new Set();
+  const seenZaps = new Set();
+  const seenRaids = new Set();
+  const historicalZapsForChat = [];
+  const historicalChatMsgs = [];
+  const historicalRaids = [];
+  let chatHistoricalDone = false;
+  let historicalRendered = false;
+
+  initNostr(NADDR, RELAYS, MY_PUBKEY);
+
+  // Reload every hour to keep relay connections fresh on the 24/7 stream
+  setTimeout(() => window.location.reload(), 60 * 60 * 1000);
+
+  const viewersBar = document.getElementById('viewers-bar');
+  subscribeStreamInfo(info => {
+    if (info.viewers !== null && info.viewers > 0) {
+      viewersBar.innerHTML = `<span>${info.viewers} listening</span>`;
+      viewersBar.style.opacity = '1';
+    } else {
+      viewersBar.style.opacity = '0';
+    }
+  });
+
+  // ----------------
+  // CHAT HELPERS
+  // ----------------
+  function insertInOrder(el, timestamp) {
+    el.dataset.ts = timestamp;
+    const children = chatBox.children;
+    let refNode = null;
+    for (let i = 0; i < children.length; i++) {
+      const ts = parseInt(children[i].dataset.ts, 10);
+      if (!isNaN(ts) && ts > timestamp) { refNode = children[i]; break; }
+    }
+    if (refNode) chatBox.insertBefore(el, refNode);
+    else chatBox.appendChild(el);
+    while (chatBox.children.length > MAX_CHAT_DOM) chatBox.firstElementChild.remove();
+    if (!refNode) chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  function appendZapToChat(zap) {
+    if (!chatBox) return;
+    const el = document.createElement('div');
+    el.className = 'ov-msg ov-msg--zap' +
+      (zap.amount >= 5000 ? ' ov-msg--zap-big ov-msg--zap-mega' :
+       zap.amount >= 1000 ? ' ov-msg--zap-big' :
+       zap.amount < 100  ? '' : ' ov-msg--zap-small');
+
+    const header = document.createElement('div');
+    header.className = 'ov-msg-zap-header';
+
+    const amount = document.createElement('span');
+    amount.className = 'ov-msg-name ov-msg-zap-amount';
+    amount.appendChild(document.createTextNode('⚡\u00A0'));
+    zap.amount.toLocaleString().split('').forEach((char, i) => {
+      const s = document.createElement('span');
+      s.textContent = char;
+      s.style.animationDelay = `${i * 0.06}s`;
+      amount.appendChild(s);
+    });
+    header.appendChild(amount);
+
+    if (zap.senderPubkey) {
+      const sender = document.createElement('span');
+      sender.className = 'ov-msg-name';
+      sender.textContent = zap.senderPubkey.slice(0, 8);
+      fetchProfile(zap.senderPubkey).then(p => { sender.textContent = p.name; });
+      header.appendChild(sender);
+    } else if (zap.name) {
+      const sender = document.createElement('span');
+      sender.className = 'ov-msg-name';
+      sender.textContent = zap.name;
+      header.appendChild(sender);
+    }
+
+    el.appendChild(header);
+
+    if (zap.content) {
+      const text = document.createElement('div');
+      text.className = 'ov-msg-content';
+      text.textContent = zap.content;
+      el.appendChild(text);
+    }
+
+    insertInOrder(el, zap.timestamp);
+  }
+
+  function renderContentWithMentions(el, text, emojiMap = {}) {
+    const tokenPattern = /(https?:\/\/[^\s]+)|(?:nostr:|@)(npub1[a-z0-9]+|nprofile1[a-z0-9]+)|:([a-zA-Z0-9_]+):/g;
+    let lastIndex = 0;
+    let match;
+    while ((match = tokenPattern.exec(text)) !== null) {
+      if (match.index > lastIndex) el.appendChild(document.createTextNode(text.slice(lastIndex, match.index)));
+      if (match[1]) {
+        const span = document.createElement('span');
+        span.className = 'ov-msg-link';
+        span.textContent = match[1].length > 30 ? match[1].slice(0, 30) + '…' : match[1];
+        el.appendChild(span);
+      } else if (match[2]) {
+        try {
+          const decoded = nip19.decode(match[2]);
+          const pk = decoded.type === 'npub' ? decoded.data : decoded.data?.pubkey;
+          const span = document.createElement('span');
+          span.className = 'ov-msg-mention';
+          if (pk) {
+            fetchProfile(pk).then(p => {
+              span.textContent = `@${p?.name || match[2].slice(0, 12) + '…'}`;
+            });
+          } else {
+            span.textContent = `@${match[2].slice(0, 12)}…`;
+          }
+          el.appendChild(span);
+        } catch {
+          el.appendChild(document.createTextNode(match[0]));
+        }
+      } else if (match[3] && emojiMap[match[3]]) {
+        const img = document.createElement('img');
+        img.src = emojiMap[match[3]];
+        img.alt = `:${match[3]}:`;
+        img.className = 'ov-emoji';
+        el.appendChild(img);
+      } else {
+        el.appendChild(document.createTextNode(match[0]));
+      }
+      lastIndex = match.index + match[0].length;
+    }
+    if (lastIndex < text.length) el.appendChild(document.createTextNode(text.slice(lastIndex)));
+  }
+
+  function appendChatMessage(msg) {
+    if (!chatBox) return;
+
+    const el = document.createElement('div');
+    el.className = 'ov-msg';
+
+    const img = document.createElement('img');
+    img.className = 'ov-msg-avatar';
+    img.style.display = 'none';
+    img.onerror = function() { this.remove(); };
+    el.appendChild(img);
+
+    const body = document.createElement('div');
+    body.className = 'ov-msg-body';
+
+    const sender = document.createElement('span');
+    sender.className = 'ov-msg-name';
+    sender.textContent = msg.pubkey.slice(0, 8);
+
+    const emojiMap = {};
+    if (msg.tags) {
+      for (const tag of msg.tags) {
+        if (tag[0] === 'emoji' && tag[1] && tag[2]) emojiMap[tag[1]] = tag[2];
+      }
+    }
+
+    const text = document.createElement('span');
+    renderContentWithMentions(text, msg.content, emojiMap);
+
+    body.appendChild(sender);
+    body.appendChild(text);
+    el.appendChild(body);
+
+    fetchProfile(msg.pubkey).then(p => {
+      const name = p.name || msg.pubkey.slice(0, 8);
+      sender.textContent = name.length > 12 ? name.slice(0, 12) + '…' : name;
+      if (p.picture) { img.src = p.picture; img.style.display = ''; }
+      else { img.remove(); }
+    });
+
+    insertInOrder(el, msg.timestamp);
+  }
+
+  function appendRaidToChat(raid) {
+    if (!chatBox) return;
+
+    const el = document.createElement('div');
+    el.className = 'ov-msg ov-msg--raid';
+
+    const span = document.createElement('span');
+    span.textContent = `RAID FROM ${raid.pubkey.slice(0, 8)}`;
+    fetchProfile(raid.pubkey).then(p => { span.textContent = `RAID FROM ${p.name}`; });
+    el.appendChild(span);
+
+    insertInOrder(el, raid.timestamp);
+  }
+
+  // ----------------
+  // HISTORICAL RENDER
+  // ----------------
+  function maybeRenderHistorical() {
+    if (!chatHistoricalDone || historicalRendered) return;
+    historicalRendered = true;
+
+    const firstChatTs = historicalChatMsgs.length > 0
+      ? Math.min(...historicalChatMsgs.map(m => m.timestamp))
+      : 0;
+
+    const items = [
+      ...historicalChatMsgs.slice(-MAX_CHAT_DOM).map(m => ({ type: 'chat', timestamp: m.timestamp, data: m })),
+      ...historicalZapsForChat
+        .filter(z => z.timestamp >= firstChatTs)
+        .slice(-MAX_CHAT_DOM)
+        .map(z => ({ type: 'zap', timestamp: z.timestamp, data: z })),
+      ...historicalRaids.slice(-5).map(r => ({ type: 'raid', timestamp: r.timestamp, data: r })),
+    ].sort((a, b) => a.timestamp - b.timestamp);
+
+    items.forEach(item => {
+      if (item.type === 'chat') appendChatMessage(item.data);
+      else if (item.type === 'zap') appendZapToChat(item.data);
+      else appendRaidToChat(item.data);
+    });
+
+    historicalZapsForChat.length = 0;
+
+    chatBox.scrollTop = chatBox.scrollHeight;
+    if (window.__resolveChatReady) window.__resolveChatReady();
+  }
+
+  // ----------------
+  // NOSTR SUBSCRIPTIONS
+  // ----------------
+  subscribeZaps(async (zap, isHistorical) => {
+    if (seenZaps.has(zap.id)) return;
+    seenZaps.add(zap.id);
+    if (isHistorical) {
+      if (zap.isStreamZap) historicalZapsForChat.push(zap);
+    } else {
+      if (zap.isStreamZap) appendZapToChat(zap);
+      fetchProfile(zap.senderPubkey || '').then(p => addZap({ sats: zap.amount, name: p.name, avatar: p.picture, message: zap.content }));
+    }
+  }, () => {
+    if (historicalRendered) {
+      historicalZapsForChat.forEach(z => { if (z.isStreamZap) appendZapToChat(z); });
+    } else {
+      maybeRenderHistorical();
+    }
+  });
+
+  subscribeChat((msg, isHistorical) => {
+    if (seenMessages.has(msg.id)) return;
+    seenMessages.add(msg.id);
+    if (isHistorical) { historicalChatMsgs.push(msg); return; }
+    appendChatMessage(msg);
+  }, () => {
+    chatHistoricalDone = true;
+    maybeRenderHistorical();
+  });
+
+  subscribeRaids((raid, isHistorical) => {
+    if (seenRaids.has(raid.timestamp + raid.pubkey)) return;
+    seenRaids.add(raid.timestamp + raid.pubkey);
+    if (isHistorical) { historicalRaids.push(raid); return; }
+    appendRaidToChat(raid);
+  }, () => {
+    if (historicalRendered) {
+      historicalRaids.forEach(r => appendRaidToChat(r));
+    } else {
+      maybeRenderHistorical();
+    }
+  });
+
+  // ----------------
+  // NOTIFICATION CENTER
+  // ----------------
+  const followFeed = document.getElementById('follow-feed');
+  const MAX_NOTIFS = 3;
+  const seenNotifs = new Set();
+  const notifQueue = [];
+
+  const NOTIF_LABELS = {
+    post:     'posted a new note',
+    zap:      'zapped NoGood',
+    comment:  'commented on NoGood',
+    reaction: 'liked NoGood\'s post',
+    reply:    'replied to NoGood',
+  };
+
+  function addNotification(name, type, pubkey) {
+    const label = NOTIF_LABELS[type] || type;
+
+    // Snapshot positions of items that are staying
+    const snapshots = [...followFeed.children]
+      .map(el => ({ el, top: el.getBoundingClientRect().top }));
+
+    // Add new item invisibly
+    const item = document.createElement('div');
+    item.className = 'follow-notif';
+    item.textContent = `${name} ${label}`;
+    followFeed.insertBefore(item, followFeed.firstChild);
+    followFeed.getBoundingClientRect();
+
+    // FLIP invert: push staying items back down
+    snapshots.forEach(({ el, top }) => {
+      const dy = top - el.getBoundingClientRect().top;
+      if (Math.abs(dy) < 0.5) return;
+      el.style.transition = 'none';
+      el.style.transform = `translateY(${dy}px)`;
+    });
+    followFeed.getBoundingClientRect();
+
+    // Phase 1: animate staying items up
+    requestAnimationFrame(() => {
+      snapshots.forEach(({ el }) => {
+        el.style.transition = 'transform 0.35s ease';
+        el.style.transform = '';
+      });
+    });
+
+    // Phase 2: after move, fade in new item + resolve profile
+    setTimeout(() => {
+      snapshots.forEach(({ el }) => { el.style.transition = ''; });
+      item.style.transition = 'opacity 0.35s ease';
+      item.classList.add('is-in');
+      if (pubkey) fetchProfile(pubkey).then(p => {
+        const resolvedName = p.name.length > 10 ? p.name.slice(0, 10) + '…' : p.name;
+        item.textContent = `${resolvedName} ${label}`;
+      });
+    }, 350);
+
+    // Auto fade-out after 15s
+    setTimeout(() => {
+      if (!item.isConnected) return;
+      item.style.transition = 'opacity 0.6s ease';
+      item.classList.remove('is-in');
+      item.classList.add('is-out');
+      setTimeout(() => { item.remove(); drainQueue(); }, 600);
+    }, 30000);
+
+    return item;
+  }
+
+  function drainQueue() {
+    if (notifQueue.length === 0 || followFeed.children.length >= MAX_NOTIFS) return;
+    const next = notifQueue.shift();
+    addNotification(next.name, next.type, next.pubkey);
+  }
+
+  function queueNotification(name, type, pubkey) {
+    if (followFeed.children.length < MAX_NOTIFS) {
+      addNotification(name, type, pubkey);
+    } else {
+      notifQueue.push({ name, type, pubkey });
+    }
+  }
+
+
+  // Delay until after main mux EOSE (4s timeout + buffer)
+  setTimeout(() => subscribeNotifications(({ type, pubkey, id, own }) => {
+    if (seenNotifs.has(id)) return;
+    seenNotifs.add(id);
+    if (type === 'follow') return;
+    queueNotification(pubkey.slice(0, 8), type, pubkey);
+  }), 6000);
+
+
+</script>

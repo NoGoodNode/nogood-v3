@@ -1,0 +1,1787 @@
+---
+layout: overlay
+title: NoGood — Drawing Overlay
+permalink: /overlay/nogood-main/
+eleventyExcludeFromCollections: true
+---
+
+<script>
+  // ─── UPDATE THESE BEFORE EACH STREAM ─────────────────────────────────────────
+  window.NADDRESS          = 'naddr1qqjxxv34vserwef3943nye3s956rxwp495un2wp494jrzden8pjrzcmrxcenwqghwaehxw309aex2mrp0yh8qunfd4skctnwv46z7q3qeaz6dwsnvwkha5sn5puwwyxjgy26uusundrm684lg3vw4ma5c2jsxpqqqpmxwzdl57d';
+  window.CURRENTLY_DRAWING = 'NoGood Book Collectors Edition print';
+  // ─────────────────────────────────────────────────────────────────────────────
+</script>
+
+<style>
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  @font-face {
+    font-family: 'Offbit-Bold';
+    src: url('/assets/fonts/OffBit-Bold.woff2') format('woff2'),
+         url('/assets/fonts/OffBit-Bold.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: 'UntitledSans-Regular';
+    src: url('/assets/fonts/untitled-sans-regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: 'PPSupplyMono';
+    src: url('/assets/fonts/PPSupplyMono-Regular.woff2') format('woff2'),
+         url('/assets/fonts/PPSupplyMono-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: 'PPSupplyMono';
+    src: url('/assets/fonts/PPSupplyMono-Bold.woff2') format('woff2'),
+         url('/assets/fonts/PPSupplyMono-Bold.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+  }
+
+  /* ── DRAWING HEADER ─────────────────────────────────────────────────────── */
+
+  #drawing-header {
+    display: none;
+    position: absolute;
+    top: 15px;
+    left: 395px;
+    right: 15px;
+    height: 56px;
+    background: rgb(28, 28, 28);
+    align-items: center;
+    padding: 0 16px;
+    gap: 20px;
+  }
+
+  #drawing-label {
+    font-family: 'Offbit-Bold', monospace;
+    font-size: 1.25rem;
+    color: rgb(28, 28, 28);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transform: translateY(1px);
+  }
+
+  #drawing-cursor {
+    display: inline-block;
+    width: 9px;
+    height: 1em;
+    background: rgb(248, 194, 40);
+    vertical-align: middle;
+    animation: cursorBlink 1.1s step-end infinite;
+  }
+
+  @keyframes cursorBlink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0; }
+  }
+
+  #drawing-piece {
+    font-family: 'PPSupplyMono', monospace;
+    font-size: 1rem;
+    color: rgb(251, 250, 243);
+    letter-spacing: 0.04em;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    transform: translateY(1px);
+  }
+
+  #drawing-timer {
+    font-family: 'PPSupplyMono', monospace;
+    font-size: 1.1rem;
+    color: rgb(251, 250, 243);
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    transform: translateY(1px);
+  }
+
+  .timer-digit {
+    display: inline-block;
+  }
+
+  .timer-sep {
+    display: inline-block;
+    color: rgb(28, 28, 28);
+    margin: 0 1px;
+  }
+
+  @keyframes timerTick {
+    0%   { transform: scaleY(1)    translateY(0);    }
+    25%  { transform: scaleY(0.8)  translateY(3px);  }
+    60%  { transform: scaleY(1.1)  translateY(-2px); }
+    100% { transform: scaleY(1)    translateY(0);    }
+  }
+
+  .timer-digit.ticking {
+    animation: timerTick 0.22s ease both;
+  }
+
+  /* ── MEMPOOL ─────────────────────────────────────────────────────────────── */
+
+  #mempool-wrap {
+    display: none;
+    position: absolute;
+    top: 90px;
+    left: 395px;
+  }
+
+  #mempool-bar {
+    background: rgba(28, 28, 28, 0.75);
+    display: grid;
+    grid-template-columns: auto auto;
+    column-gap: 20px;
+    row-gap: 1px;
+    padding: 8px 10px 6px 10px;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .mempool-row { display: contents; }
+
+  .mempool-cell {
+    font-family: 'PPSupplyMono', monospace;
+    font-weight: 400;
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+  }
+
+  .mempool-label {
+    color: rgb(251, 250, 243);
+    text-transform: uppercase;
+  }
+
+  .mempool-value {
+    text-align: right;
+    justify-self: end;
+    color: rgb(251, 250, 243);
+  }
+
+  @keyframes chatBgShift {
+    0%   { background-position: 0% 0%; }
+    50%  { background-position: 0% 100%; }
+    100% { background-position: 0% 0%; }
+  }
+
+  /* ── CHAT COLUMN ─────────────────────────────────────────────────────────── */
+
+  #chat-column {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 80px;
+    width: 460px;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(to bottom, rgb(44, 44, 44) 0%, rgb(44, 44, 44) 20%, rgb(80, 80, 80) 50%, rgb(44, 44, 44) 80%, rgb(44, 44, 44) 100%);
+    background-size: 100% 400%;
+    animation: chatBgShift 20s ease infinite;
+    border-right: 1px solid rgb(248, 194, 40);
+    overflow: hidden;
+  }
+
+  #chat-column::before {
+    content: '';
+    position: absolute;
+    width: 1030px;
+    height: 460px;
+    top: 285px;
+    left: -285px;
+    background-image: url('/assets/img/lWuz6V7ZF--1400.webp');
+    background-size: cover;
+    background-position: center;
+    transform: rotate(90deg);
+    pointer-events: none;
+  }
+
+  #chat-box {
+    flex: 1;
+    min-height: 0;
+    overflow-y: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 20px;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  #chat-box::-webkit-scrollbar { display: none; }
+
+  @keyframes msgSlideIn {
+    from { opacity: 0; transform: translateX(-14px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  .ov-msg {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-family: 'UntitledSans-Regular', sans-serif;
+    font-weight: 400;
+    font-size: 0.95rem;
+    color: rgb(251, 250, 243);
+    letter-spacing: 0.02em;
+    line-height: 1.5;
+    border: 1px solid rgba(251, 250, 243, 0.12);
+    border-radius: 16px;
+    padding: 10px 14px;
+    background: rgba(251, 250, 243, 0.05);
+    animation: msgSlideIn 0.3s ease both;
+  }
+
+  .ov-msg + .ov-msg { margin-top: 6px; }
+
+  /* offset applied randomly per message in JS */
+
+  .ov-emoji {
+    display: inline-block;
+    height: 1.25em;
+    width: auto;
+    vertical-align: middle;
+    margin: 0 0.1em;
+  }
+
+  .ov-msg--zap {
+    border-color: rgb(160, 80, 240);
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .ov-msg--zap .ov-msg-name { color: rgb(160, 80, 240); }
+
+  .ov-msg--zap-small {
+    background: rgba(160, 80, 240, 0.15);
+    border-color: rgb(160, 80, 240);
+  }
+  .ov-msg--zap-small .ov-msg-name { color: rgb(160, 80, 240); }
+
+  .ov-msg--zap-big { border-color: #6faca0; }
+  .ov-msg--zap-big .ov-msg-name { color: #6faca0; }
+
+  @keyframes megaZapGlow {
+    0%, 100% { box-shadow: 0 0 6px rgba(248, 194, 40, 0.35); }
+    50%       { box-shadow: 0 0 18px rgba(248, 194, 40, 0.75), 0 0 32px rgba(248, 194, 40, 0.2); }
+  }
+
+  .ov-msg--zap-mega {
+    background: rgba(248, 194, 40, 0.2);
+    border-color: rgb(248, 194, 40);
+    animation: megaZapGlow 2.5s ease-in-out infinite, msgSlideIn 0.3s ease both;
+  }
+
+  .ov-msg--zap-mega .ov-msg-name { color: rgb(248, 194, 40); }
+
+  .ov-msg-zap-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  @keyframes letterBounce {
+    0%,  18%, 100% { transform: translateY(0); }
+    8%              { transform: translateY(-2px); }
+    14%             { transform: translateY(1px); }
+  }
+
+  .ov-msg-zap-amount span {
+    display: inline-block;
+    animation: letterBounce 2.5s ease infinite;
+  }
+
+  .ov-msg-link    { opacity: 0.6; }
+  .ov-msg-mention { color: rgb(160, 80, 240); }
+
+  .ov-msg-content {
+    font-family: 'UntitledSans-Regular', sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    color: rgb(251, 250, 243);
+    letter-spacing: 0.02em;
+    line-height: 1.5;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .ov-msg-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .ov-msg-body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    overflow: hidden;
+  }
+
+  .ov-msg-name {
+    font-family: 'PPSupplyMono', monospace;
+    font-size: 0.8rem;
+    color: rgb(28, 28, 28);
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-transform: uppercase;
+  }
+
+  .ov-msg--zap .ov-msg-name {
+    max-width: 160px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .ov-msg-zap-amount {
+    font-family: 'PPSupplyMono', monospace;
+    display: inline-flex;
+  }
+
+  .ov-msg--raid {
+    background: rgba(160, 80, 240, 0.35);
+    font-family: 'PPSupplyMono', monospace;
+    font-size: 1rem;
+    color: rgb(251, 250, 243);
+    letter-spacing: 0.04em;
+  }
+
+  .ov-msg--raid span { display: inline-block; transform: translateY(1px); }
+
+  /* ── ZAP BAR ─────────────────────────────────────────────────────────────── */
+
+  #zap-bar {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    background: transparent;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  @keyframes zapTickerScroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(var(--scroll-width)); }
+  }
+
+  .zap-text-base {
+    font-family: 'PPSupplyMono', monospace;
+    font-size: 1rem;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    line-height: 1;
+    display: inline-block;
+    transform: translateY(1px);
+    white-space: nowrap;
+    text-transform: uppercase;
+  }
+
+  .zap-text-announce { color: rgb(248, 194, 40); }
+  .zap-text-message  { color: rgb(251, 250, 243); }
+
+  .zap-text-amount,
+  .zap-text-thanks {
+    font-family: 'PPSupplyMono', monospace;
+    font-size: 1rem;
+    font-weight: 400;
+    color: rgb(251, 250, 243);
+    letter-spacing: 0.08em;
+    line-height: 1;
+    display: block;
+    width: 100%;
+    text-align: center;
+    text-transform: uppercase;
+    transform: translateY(1px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .zap-text-thanks {
+    color: rgb(251, 250, 243);
+    letter-spacing: 0.04em;
+  }
+
+  /* ── ZAP FLOATS ──────────────────────────────────────────────────────────── */
+
+  #zap-floats {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 700px;
+    height: 1080px;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  @keyframes floatUp {
+    0%   { transform: translateY(0)       translateX(0);                               opacity: 0; }
+    8%   {                                                                              opacity: 1; }
+    50%  { transform: translateY(-600px)  translateX(calc(var(--drift, 80px) * 0.5)); }
+    85%  {                                                                              opacity: 1; }
+    100% { transform: translateY(-1200px) translateX(var(--drift, 80px));              opacity: 0; }
+  }
+
+  .zap-float {
+    position: absolute;
+    border-radius: 50%;
+    object-fit: cover;
+    animation: floatUp linear forwards;
+  }
+
+  /* ── CAPTURE FRAME ──────────────────────────────────────────────────────── */
+
+  #bottom-bar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 30px;
+    height: 50px;
+    background: rgb(248, 194, 40);
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+  }
+
+  #bottom-bar-2 {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 30px;
+    background: rgb(28, 28, 28);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 20px;
+    padding: 0 10px;
+  }
+
+  #bottom-timer {
+    font-family: 'PPSupplyMono', monospace;
+    font-size: 14px;
+    color: rgb(251, 250, 243);
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+  }
+
+  #bottom-viewers {
+    font-family: 'PPSupplyMono', monospace;
+    font-size: 14px;
+    color: rgb(251, 250, 243);
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+    display: none;
+  }
+
+  #bottom-ticker-label {
+    flex-shrink: 0;
+    font-family: 'Offbit-Bold', monospace;
+    font-size: 1.05rem;
+    color: rgb(28, 28, 28);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0 20px 0 0;
+    transform: translateY(2px);
+    white-space: nowrap;
+  }
+
+  #bottom-ticker-wrap {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+
+  #bottom-ticker-track,
+  #bottom-ticker-track-dup {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex-shrink: 0;
+    animation: bottom-ticker-scroll 60s linear infinite;
+    will-change: transform;
+  }
+
+  #bottom-ticker-track-dup {
+    padding-left: 60px;
+  }
+
+  @keyframes bottom-ticker-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-100%); }
+  }
+
+  .bottom-zap {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    padding: 0 80px 0 0;
+  }
+
+  .bottom-zap-amount {
+    font-family: 'Offbit-Bold', monospace;
+    font-size: 1.05rem;
+    color: rgb(28, 28, 28);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transform: translateY(2px);
+  }
+
+  .bottom-zap-name {
+    font-family: 'PPSupplyMono', monospace;
+    font-size: 1.05rem;
+    color: rgb(28, 28, 28);
+    letter-spacing: 0.04em;
+  }
+
+  .bottom-zap-msg {
+    font-family: 'PPSupplyMono', monospace;
+    font-size: 1.05rem;
+    color: rgba(28, 28, 28, 0.8);
+    letter-spacing: 0.04em;
+  }
+
+  .bottom-zap-sep {
+    display: none;
+  }
+
+
+  #capture-book-img {
+    position: absolute;
+    bottom: -10px;
+    left: -10px;
+    height: 180px;
+    width: auto;
+    z-index: 20;
+    pointer-events: none;
+  }
+
+  #capture-book {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: 110px;
+    flex-shrink: 0;
+  }
+
+  #capture-book-label {
+    font-family: 'Offbit-Bold', monospace;
+    font-size: 1.05rem;
+    color: rgb(251, 250, 243);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transform: translateY(2px);
+    white-space: nowrap;
+  }
+
+  #capture-book-count {
+    font-family: 'PPSupplyMono', monospace;
+    font-size: 1.05rem;
+    color: rgb(248, 194, 40);
+    white-space: nowrap;
+  }
+
+  #capture-book-url {
+    white-space: nowrap;
+  }
+
+  #capture-book-url span {
+    display: inline-block;
+    font-family: 'PPSupplyMono', monospace;
+    font-size: 1.05rem;
+    color: rgb(248, 194, 40);
+    animation: letterBounce 2.5s ease infinite;
+  }
+
+  #capture-bar {
+    position: absolute;
+    left: 460px;
+    right: 240px;
+    bottom: 80px;
+    height: 40px;
+    background: rgb(28, 28, 28);
+    display: flex;
+    align-items: stretch;
+    overflow: visible;
+  }
+
+  #capture-bar-left {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 10px;
+    position: relative;
+    overflow: visible;
+  }
+
+  #capture-bar-right {
+    flex: 1;
+    display: flex;
+    align-items: stretch;
+    overflow: hidden;
+    padding-left: 40px;
+    padding-right: 20px;
+  }
+
+  #bottom-largest-zap {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    padding: 0 10px 0 20px;
+    align-self: stretch;
+  }
+
+  #bottom-largest-label {
+    font-family: 'Offbit-Bold', monospace;
+    font-size: 1.05rem;
+    color: rgb(28, 28, 28);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transform: translateY(2px);
+    white-space: nowrap;
+  }
+
+  #bottom-largest-amount {
+    font-family: 'Offbit-Bold', monospace;
+    font-size: 1.05rem;
+    color: rgb(28, 28, 28);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transform: translateY(2px);
+    white-space: nowrap;
+  }
+
+  #bottom-largest-name {
+    font-family: 'PPSupplyMono', monospace;
+    font-size: 1.05rem;
+    color: rgb(28, 28, 28);
+    white-space: nowrap;
+  }
+
+  #bottom-largest-msg {
+    font-family: 'PPSupplyMono', monospace;
+    font-size: 1.05rem;
+    color: rgba(28, 28, 28, 0.7);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 300px;
+  }
+
+  #capture-badge {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: rgb(28, 28, 28);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  #capture-badge-sign {
+    width: 52px;
+    height: 52px;
+    object-fit: contain;
+  }
+
+  #capture-badge-text {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    font-size: 12.6px;
+    fill: rgb(251, 250, 243);
+    font-family: 'Offbit-Bold', Arial, sans-serif;
+    letter-spacing: 0.05rem;
+    text-transform: uppercase;
+    animation: badgeSpin 12s linear infinite;
+  }
+
+  @keyframes badgeSpin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+
+  #capture-frame {
+    position: absolute;
+    left: 460px;
+    top: 0;
+    right: 240px;
+    bottom: 120px;
+    border: none;
+    background: transparent;
+    pointer-events: none;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  #capture-frame::before {
+    content: '';
+    position: absolute;
+    inset: 20px;
+    border-radius: 20px;
+    box-shadow: 0 0 0 40px rgb(28, 28, 28);
+    pointer-events: none;
+  }
+
+  /* ── RIGHT SIDEBAR ──────────────────────────────────────────────────────── */
+
+  #right-sidebar {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 240px;
+    bottom: 80px;
+    background: rgb(28, 28, 28);
+    background-image: linear-gradient(rgba(28,28,28,0.2), rgba(28,28,28,0.2)), url('/assets/img/suhgEL8JLO-1400.webp');
+    background-size: cover;
+    background-position: left center;
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 16px;
+    gap: 32px;
+  }
+
+  #sidebar-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .sidebar-section-label {
+    font-family: 'Offbit-Bold', monospace;
+    font-size: 0.9rem;
+    color: rgb(248, 194, 40);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transform: translateY(2px);
+    margin-bottom: 6px;
+  }
+
+  .sidebar-stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .sidebar-stat-label {
+    font-family: 'PPSupplyMono', monospace;
+    font-size: 0.8rem;
+    color: rgba(251, 250, 243, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .sidebar-stat-value {
+    font-family: 'Offbit-Bold', monospace;
+    font-size: 1rem;
+    color: rgb(251, 250, 243);
+    transform: translateY(2px);
+  }
+
+  #sidebar-mempool .sidebar-stat-label,
+  #sidebar-mempool .sidebar-stat-value {
+    font-family: 'PPSupplyMono', monospace;
+    font-size: 0.9rem;
+    color: rgb(251, 250, 243);
+    transform: none;
+  }
+
+  #sidebar-divider {
+    height: 1px;
+    background: rgba(251, 250, 243, 0.1);
+  }
+
+  #sidebar-leaderboard {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .sidebar-leader {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .sidebar-leader-rank {
+    font-family: 'Offbit-Bold', monospace;
+    font-size: 0.8rem;
+    color: rgba(251, 250, 243, 0.3);
+    transform: translateY(2px);
+    flex-shrink: 0;
+    width: 16px;
+  }
+
+  .sidebar-leader-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    background: rgba(251, 250, 243, 0.1);
+  }
+
+  .sidebar-leader-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .sidebar-leader-name {
+    font-family: 'PPSupplyMono', monospace;
+    font-size: 0.8rem;
+    color: rgb(251, 250, 243);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-transform: uppercase;
+  }
+
+  .sidebar-leader-sats {
+    font-family: 'Offbit-Bold', monospace;
+    font-size: 0.8rem;
+    color: rgb(248, 194, 40);
+    transform: translateY(2px);
+  }
+
+  /* ── NOTIFICATIONS ───────────────────────────────────────────────────────── */
+
+  #follow-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    overflow: hidden;
+    height: 94px;
+    flex-shrink: 0;
+  }
+
+  .follow-notif {
+    font-family: 'PPSupplyMono', monospace;
+    font-size: 0.75rem;
+    line-height: 14px;
+    flex-shrink: 0;
+    color: rgba(251, 250, 243, 0.7);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+
+  .follow-notif.is-in  { opacity: 1; }
+  .follow-notif.is-out { opacity: 0; }
+
+  #follow-feed:empty::before {
+    content: 'No activity yet';
+    font-family: 'PPSupplyMono', monospace;
+    font-size: 0.75rem;
+    color: rgba(251, 250, 243, 0.3);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+</style>
+
+<div id="drawing-header">
+  <div id="drawing-label">DRAWING <span id="drawing-cursor"></span></div>
+  <div id="drawing-piece"></div>
+  <div id="drawing-timer">
+    <span class="timer-digit" id="t-hh">0</span><span class="timer-digit" id="t-hl">0</span><span class="timer-sep">:</span><span class="timer-digit" id="t-mh">0</span><span class="timer-digit" id="t-ml">0</span><span class="timer-sep">:</span><span class="timer-digit" id="t-sh">0</span><span class="timer-digit" id="t-sl">0</span>
+  </div>
+</div>
+<div id="mempool-wrap"><div id="mempool-bar"></div></div>
+<div id="bottom-bar">
+  <div id="bottom-ticker-label">Zap Messages</div>
+  <div id="bottom-ticker-wrap">
+    <div id="bottom-ticker-track"></div>
+    <div id="bottom-ticker-track-dup"></div>
+  </div>
+  <div id="bottom-largest-zap">
+    <span id="bottom-largest-label">Top Zap</span>
+    <span id="bottom-largest-amount"></span>
+    <span id="bottom-largest-name"></span>
+    <span id="bottom-largest-msg"></span>
+  </div>
+</div>
+<div id="bottom-bar-2">
+  <div id="bottom-timer">00:00:00</div>
+  <div id="bottom-viewers"></div>
+</div>
+<div id="capture-bar">
+  <div id="capture-bar-left">
+    <img id="capture-book-img" src="/assets/img/XMeR7KyWVM-320.webp" alt="The NoGood Book">
+    <div id="capture-book">
+      <span id="capture-book-label">The NoGood Book</span>
+      <span id="capture-book-count">— / {{ booksales.total_print_run }} available at</span>
+      <span id="capture-book-url"></span>
+    </div>
+  </div>
+  <div id="capture-bar-right">
+    <div id="zap-bar"></div>
+  </div>
+</div>
+<div id="right-sidebar">
+  <div id="sidebar-mempool">
+    <div class="sidebar-section-label">Mempool</div>
+    <div class="sidebar-stat">
+      <span class="sidebar-stat-label">Block</span>
+      <span class="sidebar-stat-value" id="sidebar-block">—</span>
+    </div>
+    <div class="sidebar-stat">
+      <span class="sidebar-stat-label">Fee</span>
+      <span class="sidebar-stat-value" id="sidebar-fee">— sat/vB</span>
+    </div>
+    <div class="sidebar-stat">
+      <span class="sidebar-stat-label">Mempool</span>
+      <span class="sidebar-stat-value" id="sidebar-mempool-count">—</span>
+    </div>
+    <div class="sidebar-stat">
+      <span class="sidebar-stat-label">Difficulty</span>
+      <span class="sidebar-stat-value" id="sidebar-difficulty">—</span>
+    </div>
+  </div>
+  <div id="sidebar-leaderboard">
+    <div class="sidebar-section-label">Top Zappers</div>
+  </div>
+  <div id="sidebar-notifs">
+    <div class="sidebar-section-label">Activity</div>
+    <div id="follow-feed"></div>
+  </div>
+</div>
+<div id="capture-frame"></div>
+<div id="chat-column">
+  <div id="chat-box"></div>
+</div>
+<div id="zap-floats"></div>
+
+<script>
+  // ── DRAWING PIECE LABEL ──────────────────────────────────────────────────────
+  const pieceEl = document.getElementById('drawing-piece');
+  const title = window.CURRENTLY_DRAWING || 'Untitled';
+  let typeIdx = 0;
+  const typeInterval = setInterval(() => {
+    pieceEl.textContent = title.slice(0, ++typeIdx);
+    if (typeIdx >= title.length) clearInterval(typeInterval);
+  }, 55);
+
+  // ── TIMER ────────────────────────────────────────────────────────────────────
+  const storedStart = sessionStorage.getItem('streamStart');
+  const startTime = storedStart ? parseInt(storedStart, 10) : Date.now();
+  if (!storedStart) sessionStorage.setItem('streamStart', String(startTime));
+  const TD = {
+    hh: document.getElementById('t-hh'),
+    hl: document.getElementById('t-hl'),
+    mh: document.getElementById('t-mh'),
+    ml: document.getElementById('t-ml'),
+    sh: document.getElementById('t-sh'),
+    sl: document.getElementById('t-sl'),
+  };
+  const bottomTimer = document.getElementById('bottom-timer');
+  let prevS = -1, prevM = -1, prevH = -1;
+
+  function tickDigit(el, char) {
+    if (el.textContent === char) return;
+    el.classList.remove('ticking');
+    void el.offsetWidth;
+    el.textContent = char;
+    el.classList.add('ticking');
+    el.addEventListener('animationend', () => el.classList.remove('ticking'), { once: true });
+  }
+
+  function updateTimer() {
+    const elapsed = Math.floor((Date.now() - startTime) / 1000);
+    const h = Math.floor(elapsed / 3600);
+    const m = Math.floor((elapsed % 3600) / 60);
+    const s = elapsed % 60;
+    if (s !== prevS) {
+      prevS = s;
+      const ss = String(s).padStart(2, '0');
+      tickDigit(TD.sh, ss[0]);
+      tickDigit(TD.sl, ss[1]);
+      bottomTimer.textContent =
+        String(h).padStart(2, '0') + ':' +
+        String(m).padStart(2, '0') + ':' +
+        ss;
+    }
+    if (m !== prevM) {
+      prevM = m;
+      const ms = String(m).padStart(2, '0');
+      tickDigit(TD.mh, ms[0]);
+      tickDigit(TD.ml, ms[1]);
+    }
+    if (h !== prevH) {
+      prevH = h;
+      const hs = String(h).padStart(2, '0');
+      tickDigit(TD.hh, hs[0]);
+      tickDigit(TD.hl, hs[1]);
+    }
+  }
+
+  setInterval(updateTimer, 500);
+  updateTimer();
+
+  // ── ZAP BAR ──────────────────────────────────────────────────────────────────
+  const bar = document.getElementById('zap-bar');
+  const zapQueue = [];
+  let zapShowing = false;
+  const ZAP_GAP = 30;
+
+  function phaseScroll(text, cssClass) {
+    return new Promise(resolve => {
+      bar.innerHTML = '';
+      const track = document.createElement('div');
+      track.style.cssText = 'display:flex;white-space:nowrap;will-change:transform;opacity:0;transition:opacity 0.4s ease';
+      [text, text, text, text, text, text, text, text, text, text, text, text].forEach(t => {
+        const s = document.createElement('span');
+        s.className = cssClass;
+        s.textContent = t;
+        s.style.marginRight = ZAP_GAP + 'px';
+        track.appendChild(s);
+      });
+      bar.appendChild(track);
+      requestAnimationFrame(() => {
+        const hw = track.scrollWidth / 2;
+        track.style.setProperty('--scroll-width', `-${hw}px`);
+        track.style.animation = `zapTickerScroll ${Math.max(hw / 35, 2).toFixed(2)}s linear infinite`;
+        requestAnimationFrame(() => {
+          track.style.opacity = '1';
+          setTimeout(() => { track.style.opacity = '0'; setTimeout(resolve, 400); }, 4000);
+        });
+      });
+    });
+  }
+
+  function phaseStatic(text, cssClass) {
+    return new Promise(resolve => {
+      bar.innerHTML = '';
+      const el = document.createElement('span');
+      el.className = cssClass;
+      el.textContent = text;
+      el.style.cssText = 'opacity:0;transition:opacity 0.4s ease';
+      bar.appendChild(el);
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        el.style.opacity = '1';
+        setTimeout(() => { el.style.opacity = '0'; setTimeout(resolve, 400); }, 4000);
+      }));
+    });
+  }
+
+  function showNextZap() {
+    if (zapQueue.length === 0) { zapShowing = false; return; }
+    zapShowing = true;
+    const zap = zapQueue.shift();
+
+    bar.innerHTML = '';
+    launchFloats(zap);
+
+    setTimeout(() => {
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        bar.style.opacity = '1';
+      }));
+
+      let chain = phaseScroll('ZAP RECEIVED', 'zap-text-base zap-text-announce')
+        .then(() => phaseStatic(`⚡ ${zap.sats.toLocaleString()} sats`, 'zap-text-amount'));
+      if (zap.message) chain = chain.then(() => phaseScroll(zap.message, 'zap-text-base zap-text-message'));
+      chain
+        .then(() => new Promise(resolve => {
+          bar.innerHTML = '';
+          const el = document.createElement('span');
+          el.className = 'zap-text-thanks';
+          el.textContent = zap.name || 'anon';
+          el.style.cssText = 'opacity:0;transition:opacity 0.4s ease';
+          bar.appendChild(el);
+          requestAnimationFrame(() => requestAnimationFrame(() => {
+            el.style.opacity = '1';
+            setTimeout(resolve, 4000);
+          }));
+        }))
+        .then(() => setTimeout(() => {
+          bar.style.opacity = '0';
+          setTimeout(showNextZap, 400);
+        }, 1000));
+    }, 3000);
+  }
+
+  function getFloatCount(sats) {
+    if (sats >= 10000) return 120;
+    if (sats >= 5000)  return 80;
+    if (sats >= 1000)  return 50;
+    if (sats >= 500)   return 30;
+    if (sats >= 100)   return 18;
+    return 10;
+  }
+
+  function launchFloats(zap) {
+    const container = document.getElementById('zap-floats');
+    const count  = getFloatCount(zap.sats);
+    const spread = Math.min(count * 200, 4000);
+
+    for (let i = 0; i < count; i++) {
+      setTimeout(() => {
+        const el = document.createElement('div');
+        el.textContent = '⚡';
+        el.style.cssText = 'display:flex;align-items:center;justify-content:center;border-radius:0;';
+        el.className = 'zap-float';
+
+        const size  = 20 + Math.random() * 16;
+        const x     = Math.random() * (700 - size);
+        const dur   = 6  + Math.random() * 4;
+        const drift = (80 + Math.random() * 80) + 'px';
+
+        el.style.width             = size + 'px';
+        el.style.height            = size + 'px';
+        el.style.left              = x + 'px';
+        el.style.top               = '1080px';
+        el.style.animationDuration = dur + 's';
+        el.style.setProperty('--drift', drift);
+
+        container.appendChild(el);
+        setTimeout(() => el.remove(), dur * 1000 + 200);
+      }, (i / count) * spread);
+    }
+  }
+
+  const recentZaps = [];
+  let largestZap = null;
+  const tickerTrack      = document.getElementById('bottom-ticker-track');
+  const tickerTrackDup   = document.getElementById('bottom-ticker-track-dup');
+  const bottomLargestZap    = document.getElementById('bottom-largest-zap');
+  const bottomLargestAmount = document.getElementById('bottom-largest-amount');
+  const bottomLargestName   = document.getElementById('bottom-largest-name');
+  const bottomLargestMsg    = document.getElementById('bottom-largest-msg');
+
+  // ── SIDEBAR ──────────────────────────────────────────────────────────────────
+  const sidebarLeaderboard = document.getElementById('sidebar-leaderboard');
+  const leaderMap = new Map(); // pubkey -> { name, avatar, total }
+
+  function renderSidebar() {
+    const sorted = [...leaderMap.values()].sort((a, b) => b.total - a.total).slice(0, 8);
+    const existing = sidebarLeaderboard.querySelectorAll('.sidebar-leader');
+    existing.forEach(el => el.remove());
+
+    sorted.forEach((entry, i) => {
+      const row = document.createElement('div');
+      row.className = 'sidebar-leader';
+
+      const img = document.createElement('img');
+      img.className = 'sidebar-leader-avatar';
+      img.src = entry.avatar || '';
+      img.alt = '';
+
+      const info = document.createElement('div');
+      info.className = 'sidebar-leader-info';
+
+      const name = document.createElement('span');
+      name.className = 'sidebar-leader-name';
+      name.textContent = entry.name || 'anon';
+
+      const sats = document.createElement('span');
+      sats.className = 'sidebar-leader-sats';
+      sats.textContent = `⚡ ${entry.total.toLocaleString()}`;
+
+      info.appendChild(name);
+      info.appendChild(sats);
+      row.appendChild(img);
+      row.appendChild(info);
+      sidebarLeaderboard.appendChild(row);
+    });
+  }
+
+  function trackZapForSidebar(zap) {
+    const key = zap.pubkey || zap.name || 'anon';
+    const existing = leaderMap.get(key);
+    if (existing) {
+      existing.total += zap.sats;
+      existing.name = zap.name || existing.name;
+      existing.avatar = zap.avatar || existing.avatar;
+    } else {
+      leaderMap.set(key, { name: zap.name || 'anon', avatar: zap.avatar || '', total: zap.sats });
+    }
+    renderSidebar();
+  }
+
+  function renderLargestZap() {
+    if (!largestZap) return;
+    bottomLargestAmount.textContent = `⚡ ${largestZap.sats.toLocaleString()}`;
+    bottomLargestName.textContent = largestZap.name || 'anon';
+    bottomLargestMsg.textContent = largestZap.message || '';
+    bottomLargestMsg.style.display = largestZap.message ? '' : 'none';
+    bottomLargestZap.style.display = 'flex';
+  }
+
+  function buildTickerItem(z) {
+    const frag = document.createDocumentFragment();
+    const el = document.createElement('span');
+    el.className = 'bottom-zap';
+
+    const amount = document.createElement('span');
+    amount.className = 'bottom-zap-amount';
+    amount.textContent = z.sats.toLocaleString();
+
+    const icon = document.createElement('span');
+    icon.className = 'bottom-zap-amount';
+    icon.textContent = '⚡';
+
+    const name = document.createElement('span');
+    name.className = 'bottom-zap-name';
+    name.textContent = z.name || 'anon';
+
+    el.appendChild(amount);
+    el.appendChild(icon);
+    el.appendChild(name);
+
+    const zapMsg = z.message || z.content || '';
+    if (zapMsg) {
+      const msg = document.createElement('span');
+      msg.className = 'bottom-zap-msg';
+      msg.textContent = zapMsg;
+      el.appendChild(msg);
+    }
+
+    const sep = document.createElement('span');
+    sep.className = 'bottom-zap-sep';
+    sep.textContent = '';
+    frag.appendChild(el);
+    frag.appendChild(sep);
+    return frag;
+  }
+
+  function renderBottomZaps() {
+    tickerTrack.innerHTML = '';
+    tickerTrackDup.innerHTML = '';
+    recentZaps.filter(z => z.message || z.content).forEach(z => {
+      tickerTrack.appendChild(buildTickerItem(z));
+      tickerTrackDup.appendChild(buildTickerItem(z));
+    });
+    // restart animation for smooth loop after content changes
+    tickerTrack.style.animation = 'none';
+    tickerTrackDup.style.animation = 'none';
+    requestAnimationFrame(() => {
+      tickerTrack.style.animation = '';
+      tickerTrackDup.style.animation = '';
+    });
+  }
+
+  function addZap(zap, silent = false) {
+    if (!silent) {
+      zapQueue.push(zap);
+      if (!zapShowing) showNextZap();
+      trackZapForSidebar(zap);
+    }
+    recentZaps.unshift(zap);
+    if (recentZaps.length > 10) recentZaps.pop();
+    if (!largestZap || zap.sats > largestZap.sats) {
+      largestZap = zap;
+      renderLargestZap();
+    }
+    renderBottomZaps();
+  }
+
+  // ── MEMPOOL ───────────────────────────────────────────────────────────────────
+  const mempoolBar = document.getElementById('mempool-bar');
+  const MEMPOOL_FIELDS = [
+    { label: 'BLOCK',   key: 'block' },
+    { label: 'FEE',     key: 'halfHourFee', suffix: ' sat/vB' },
+    { label: 'MEMPOOL', key: 'count' },
+  ];
+
+  function renderMempool(data) {
+    mempoolBar.innerHTML = '';
+    MEMPOOL_FIELDS.forEach(({ label, key, suffix = '' }) => {
+      const val = data[key];
+      if (val == null) return;
+      const row = document.createElement('div');
+      row.className = 'mempool-row';
+      const l = document.createElement('span');
+      l.className = 'mempool-cell mempool-label';
+      l.textContent = label;
+      const v = document.createElement('span');
+      v.className = 'mempool-cell mempool-value';
+      v.textContent = (typeof val === 'number' ? val.toLocaleString() : val) + suffix;
+      row.appendChild(l);
+      row.appendChild(v);
+      mempoolBar.appendChild(row);
+    });
+    mempoolBar.style.opacity = '1';
+  }
+
+  const sidebarBlock      = document.getElementById('sidebar-block');
+  const sidebarFee        = document.getElementById('sidebar-fee');
+  const sidebarMempoolCount = document.getElementById('sidebar-mempool-count');
+  const sidebarDifficulty = document.getElementById('sidebar-difficulty');
+
+  function renderSidebarMempool(data) {
+    if (data.block != null)           sidebarBlock.textContent = data.block.toLocaleString();
+    if (data.halfHourFee != null)     sidebarFee.textContent = data.halfHourFee + ' sat/vB';
+    if (data.count != null)           sidebarMempoolCount.textContent = data.count.toLocaleString();
+    if (data.difficultyChange != null) sidebarDifficulty.textContent = data.difficultyChange + '%';
+  }
+
+  async function fetchMempool() {
+    try {
+      const [block, mempool, fees, difficulty] = await Promise.all([
+        fetch('https://mempool.space/api/blocks/tip/height').then(r => r.text()),
+        fetch('https://mempool.space/api/mempool').then(r => r.json()),
+        fetch('https://mempool.space/api/v1/fees/recommended').then(r => r.json()),
+        fetch('https://mempool.space/api/v1/difficulty-adjustment').then(r => r.json()),
+      ]);
+      const data = {
+        block: parseInt(block),
+        count: mempool.count,
+        halfHourFee: fees.halfHourFee,
+        difficultyChange: (difficulty.difficultyChange > 0 ? '+' : '') + difficulty.difficultyChange.toFixed(2),
+      };
+      renderMempool(data);
+      renderSidebarMempool(data);
+    } catch {}
+  }
+
+  fetchMempool();
+  setInterval(fetchMempool, 60000);
+</script>
+
+<script>
+  // ── BOOK COUNTER ─────────────────────────────────────────────────────────────
+  const BOOK_GEYSER_SALES = {{ booksales.geyser_sales }};
+  const BOOK_WP_SALES     = {{ booksales.wordpress_sales }};
+  const BOOK_PRINT_RUN    = {{ booksales.total_print_run }};
+  const bookCountEl       = document.getElementById('capture-book-count');
+  const bookUrlEl         = document.getElementById('capture-book-url');
+
+  'nogood.studio'.split('').forEach((char, i) => {
+    const s = document.createElement('span');
+    s.textContent = char === ' ' ? '\u00A0' : char;
+    s.style.animationDelay = `${i * 0.06}s`;
+    bookUrlEl.appendChild(s);
+  });
+
+  async function pollBookSales() {
+    try {
+      const data = await fetch('https://book-stats.hello-5b9.workers.dev/book-sales').then(r => r.json());
+      const sold      = (data.total ?? 0) + BOOK_GEYSER_SALES + BOOK_WP_SALES;
+      const available = BOOK_PRINT_RUN - sold;
+      bookCountEl.textContent = available + ' / ' + BOOK_PRINT_RUN + ' available at';
+    } catch {}
+  }
+
+  pollBookSales();
+  setInterval(pollBookSales, 300000);
+</script>
+
+<script type="module">
+  import { initNostr, subscribeStreamInfo, subscribeZaps, subscribeChat, subscribeRaids, subscribeNotifications, fetchProfile } from '/assets/js/radio/nostr.js';
+  import * as nip19 from '/assets/js/vendor/nostr-nip19.js';
+
+  const NADDRESS  = window.NADDRESS;
+  const RELAYS    = ['wss://relay.primal.net', 'wss://nos.lol', 'wss://relay.damus.io'];
+  const MY_PUBKEY = '55f04590674f3648f4cdc9dc8ce32da2a282074cd0b020596ee033d12d385185';
+  const MAX_CHAT_DOM = 20;
+
+  initNostr(NADDRESS, RELAYS, MY_PUBKEY);
+
+  // Reload hourly to keep relay connections fresh
+  setTimeout(() => window.location.reload(), 60 * 60 * 1000);
+
+  const viewersEl = document.getElementById('bottom-viewers');
+  subscribeStreamInfo(info => {
+    if (info.viewers !== null && info.viewers > 0) {
+      viewersEl.textContent = `${info.viewers} WATCHING`;
+      viewersEl.style.display = 'inline-block';
+    } else {
+      viewersEl.style.display = 'none';
+    }
+  });
+
+  const chatBox = document.getElementById('chat-box');
+  const seenMessages = new Set();
+  const seenZaps     = new Set();
+  const seenRaids    = new Set();
+  const historicalZapsForChat = [];
+  const historicalAllZaps     = [];
+  const historicalChatMsgs    = [];
+  const historicalRaids       = [];
+  let chatHistoricalDone  = false;
+  let historicalRendered  = false;
+
+  // ── CHAT HELPERS ──────────────────────────────────────────────────────────────
+
+  function randomOffset(el) {
+    el.style.marginLeft  = Math.floor(Math.random() * 60) + 'px';
+  }
+
+  function insertInOrder(el, timestamp) {
+    el.dataset.ts = timestamp;
+    const children = chatBox.children;
+    let refNode = null;
+    for (let i = 0; i < children.length; i++) {
+      const ts = parseInt(children[i].dataset.ts, 10);
+      if (!isNaN(ts) && ts > timestamp) { refNode = children[i]; break; }
+    }
+    if (refNode) chatBox.insertBefore(el, refNode);
+    else chatBox.appendChild(el);
+    while (chatBox.children.length > MAX_CHAT_DOM) chatBox.firstElementChild.remove();
+    if (!refNode) chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  function appendZapToChat(zap) {
+    if (!chatBox) return;
+    const el = document.createElement('div');
+    el.className = 'ov-msg ov-msg--zap' +
+      (zap.amount >= 5000 ? ' ov-msg--zap-big ov-msg--zap-mega' :
+       zap.amount >= 1000 ? ' ov-msg--zap-big' :
+       zap.amount < 100   ? '' : ' ov-msg--zap-small');
+
+    const header = document.createElement('div');
+    header.className = 'ov-msg-zap-header';
+
+    const amount = document.createElement('span');
+    amount.className = 'ov-msg-name ov-msg-zap-amount';
+    amount.appendChild(document.createTextNode('⚡\u00A0'));
+    zap.amount.toLocaleString().split('').forEach((char, i) => {
+      const s = document.createElement('span');
+      s.textContent = char;
+      s.style.animationDelay = `${i * 0.06}s`;
+      amount.appendChild(s);
+    });
+    header.appendChild(amount);
+
+    if (zap.senderPubkey) {
+      const sender = document.createElement('span');
+      sender.className = 'ov-msg-name';
+      sender.textContent = zap.senderPubkey.slice(0, 8);
+      fetchProfile(zap.senderPubkey).then(p => { sender.textContent = p.name; });
+      header.appendChild(sender);
+    } else if (zap.name) {
+      const sender = document.createElement('span');
+      sender.className = 'ov-msg-name';
+      sender.textContent = zap.name;
+      header.appendChild(sender);
+    }
+    el.appendChild(header);
+
+    if (zap.content) {
+      const text = document.createElement('div');
+      text.className = 'ov-msg-content';
+      text.textContent = zap.content;
+      el.appendChild(text);
+    }
+    randomOffset(el);
+    insertInOrder(el, zap.timestamp);
+  }
+
+  function renderContentWithMentions(el, text, emojiMap = {}) {
+    const tokenPattern = /(https?:\/\/[^\s]+)|(?:nostr:|@)(npub1[a-z0-9]+|nprofile1[a-z0-9]+)|:([a-zA-Z0-9_]+):/g;
+    let lastIndex = 0, match;
+    while ((match = tokenPattern.exec(text)) !== null) {
+      if (match.index > lastIndex) el.appendChild(document.createTextNode(text.slice(lastIndex, match.index)));
+      if (match[1]) {
+        const span = document.createElement('span');
+        span.className = 'ov-msg-link';
+        span.textContent = match[1].length > 30 ? match[1].slice(0, 30) + '…' : match[1];
+        el.appendChild(span);
+      } else if (match[2]) {
+        try {
+          const decoded = nip19.decode(match[2]);
+          const pk = decoded.type === 'npub' ? decoded.data : decoded.data?.pubkey;
+          const span = document.createElement('span');
+          span.className = 'ov-msg-mention';
+          if (pk) fetchProfile(pk).then(p => { span.textContent = `@${p?.name || match[2].slice(0, 12) + '…'}`; });
+          else span.textContent = `@${match[2].slice(0, 12)}…`;
+          el.appendChild(span);
+        } catch {
+          el.appendChild(document.createTextNode(match[0]));
+        }
+      } else if (match[3] && emojiMap[match[3]]) {
+        const img = document.createElement('img');
+        img.src = emojiMap[match[3]];
+        img.alt = `:${match[3]}:`;
+        img.className = 'ov-emoji';
+        el.appendChild(img);
+      } else {
+        el.appendChild(document.createTextNode(match[0]));
+      }
+      lastIndex = match.index + match[0].length;
+    }
+    if (lastIndex < text.length) el.appendChild(document.createTextNode(text.slice(lastIndex)));
+  }
+
+  function appendChatMessage(msg) {
+    if (!chatBox) return;
+    const el = document.createElement('div');
+    el.className = 'ov-msg';
+
+    const img = document.createElement('img');
+    img.className = 'ov-msg-avatar';
+    img.style.display = 'none';
+    img.onerror = function() { this.remove(); };
+    el.appendChild(img);
+
+    const body = document.createElement('div');
+    body.className = 'ov-msg-body';
+
+    const sender = document.createElement('span');
+    sender.className = 'ov-msg-name';
+    sender.textContent = msg.pubkey.slice(0, 8);
+
+    const emojiMap = {};
+    if (msg.tags) {
+      for (const tag of msg.tags) {
+        if (tag[0] === 'emoji' && tag[1] && tag[2]) emojiMap[tag[1]] = tag[2];
+      }
+    }
+
+    const text = document.createElement('span');
+    renderContentWithMentions(text, msg.content, emojiMap);
+
+    body.appendChild(sender);
+    body.appendChild(text);
+    el.appendChild(body);
+
+    fetchProfile(msg.pubkey).then(p => {
+      const name = p.name || msg.pubkey.slice(0, 8);
+      sender.textContent = name.length > 12 ? name.slice(0, 12) + '…' : name;
+      if (p.picture) { img.src = p.picture; img.style.display = ''; }
+      else { img.remove(); }
+    });
+
+    randomOffset(el);
+    insertInOrder(el, msg.timestamp);
+  }
+
+  function appendRaidToChat(raid) {
+    if (!chatBox) return;
+    const el = document.createElement('div');
+    el.className = 'ov-msg ov-msg--raid';
+    const span = document.createElement('span');
+    span.textContent = `RAID FROM ${raid.pubkey.slice(0, 8)}`;
+    fetchProfile(raid.pubkey).then(p => { span.textContent = `RAID FROM ${p.name}`; });
+    el.appendChild(span);
+    randomOffset(el);
+    insertInOrder(el, raid.timestamp);
+  }
+
+  // ── HISTORICAL RENDER ─────────────────────────────────────────────────────────
+
+  function maybeRenderHistorical() {
+    if (!chatHistoricalDone || historicalRendered) return;
+    historicalRendered = true;
+
+    const firstChatTs = historicalChatMsgs.length > 0
+      ? Math.min(...historicalChatMsgs.map(m => m.timestamp))
+      : 0;
+
+    const items = [
+      ...historicalChatMsgs.slice(-MAX_CHAT_DOM).map(m => ({ type: 'chat', timestamp: m.timestamp, data: m })),
+      ...historicalZapsForChat
+        .filter(z => z.timestamp >= firstChatTs)
+        .slice(-MAX_CHAT_DOM)
+        .map(z => ({ type: 'zap', timestamp: z.timestamp, data: z })),
+      ...historicalRaids.slice(-5).map(r => ({ type: 'raid', timestamp: r.timestamp, data: r })),
+    ].sort((a, b) => a.timestamp - b.timestamp);
+
+    items.forEach(item => {
+      if (item.type === 'chat') appendChatMessage(item.data);
+      else if (item.type === 'zap') appendZapToChat(item.data);
+      else appendRaidToChat(item.data);
+    });
+
+    // Seed bottom bar with recent historical zaps (silent — no announcement)
+    const sortedHist = [...historicalAllZaps].sort((a, b) => b.timestamp - a.timestamp);
+    const recentHist = sortedHist.slice(0, 10);
+    recentHist.reverse().forEach(z => {
+      const msg = z.content;
+      fetchProfile(z.senderPubkey || '').then(p => {
+        addZap({ sats: z.amount, name: p.name, avatar: p.picture, message: msg }, true);
+      });
+    });
+    // Seed leaderboard from all historical zaps
+    sortedHist.forEach(z => {
+      fetchProfile(z.senderPubkey || '').then(p => {
+        trackZapForSidebar({ sats: z.amount, name: p.name, avatar: p.picture, pubkey: z.senderPubkey });
+      });
+    });
+
+    historicalZapsForChat.length = 0;
+    historicalAllZaps.length = 0;
+    chatBox.scrollTop = chatBox.scrollHeight;
+    chatBox.style.opacity = '1';
+  }
+
+  // ── SUBSCRIPTIONS ─────────────────────────────────────────────────────────────
+
+  subscribeZaps(async (zap, isHistorical) => {
+    if (seenZaps.has(zap.id)) return;
+    seenZaps.add(zap.id);
+    if (isHistorical) {
+      if (zap.isStreamZap) historicalZapsForChat.push(zap);
+      historicalAllZaps.push(zap);
+    } else {
+      if (zap.isStreamZap) appendZapToChat(zap);
+      const zapMsg = zap.content;
+      const zapPubkey = zap.senderPubkey;
+      fetchProfile(zap.senderPubkey || '').then(p => addZap({ sats: zap.amount, name: p.name, avatar: p.picture, message: zapMsg, pubkey: zapPubkey }));
+    }
+  }, () => {
+    if (historicalRendered) {
+      historicalZapsForChat.forEach(z => { if (z.isStreamZap) appendZapToChat(z); });
+    } else {
+      maybeRenderHistorical();
+    }
+  });
+
+  subscribeChat((msg, isHistorical) => {
+    if (seenMessages.has(msg.id)) return;
+    seenMessages.add(msg.id);
+    if (isHistorical) { historicalChatMsgs.push(msg); return; }
+    appendChatMessage(msg);
+  }, () => {
+    chatHistoricalDone = true;
+    maybeRenderHistorical();
+  });
+
+  subscribeRaids((raid, isHistorical) => {
+    if (seenRaids.has(raid.timestamp + raid.pubkey)) return;
+    seenRaids.add(raid.timestamp + raid.pubkey);
+    if (isHistorical) { historicalRaids.push(raid); return; }
+    appendRaidToChat(raid);
+  }, () => {
+    if (historicalRendered) historicalRaids.forEach(r => appendRaidToChat(r));
+    else maybeRenderHistorical();
+  });
+
+  // ── NOTIFICATIONS ─────────────────────────────────────────────────────────────
+
+  const followFeed = document.getElementById('follow-feed');
+  const MAX_NOTIFS = 5;
+  const seenNotifs = new Set();
+
+  const NOTIF_LABELS = {
+    zap:      'zapped NoGood',
+    comment:  'commented',
+    reaction: 'liked a post',
+    reply:    'replied',
+  };
+
+  const NOTIF_STORAGE_KEY = 'streamNotifs';
+
+  function saveNotifs() {
+    const items = [...followFeed.children].map(el => el.dataset.notif);
+    sessionStorage.setItem(NOTIF_STORAGE_KEY, JSON.stringify(items));
+  }
+
+  function renderNotifItem(text, animate = false) {
+    if (followFeed.children.length >= MAX_NOTIFS) followFeed.lastElementChild.remove();
+    const snapshots = [...followFeed.children].map(el => ({ el, top: el.getBoundingClientRect().top }));
+    const item = document.createElement('div');
+    item.className = 'follow-notif';
+    item.dataset.notif = text;
+    item.textContent = text;
+    followFeed.insertBefore(item, followFeed.firstChild);
+    if (animate) {
+      followFeed.getBoundingClientRect();
+      snapshots.forEach(({ el, top }) => {
+        const dy = top - el.getBoundingClientRect().top;
+        if (Math.abs(dy) < 0.5) return;
+        el.style.transition = 'none';
+        el.style.transform = `translateY(${dy}px)`;
+      });
+      followFeed.getBoundingClientRect();
+      requestAnimationFrame(() => {
+        snapshots.forEach(({ el }) => { el.style.transition = 'transform 0.35s ease'; el.style.transform = ''; });
+      });
+      setTimeout(() => {
+        snapshots.forEach(({ el }) => { el.style.transition = ''; });
+        item.style.transition = 'opacity 0.35s ease';
+        item.classList.add('is-in');
+      }, 350);
+    } else {
+      item.classList.add('is-in');
+    }
+    return item;
+  }
+
+  function addNotification(name, type, pubkey) {
+    const label = NOTIF_LABELS[type] || type;
+    const text = `${name} ${label}`;
+    const item = renderNotifItem(text, true);
+    saveNotifs();
+    if (pubkey) fetchProfile(pubkey).then(p => {
+      const n = p.name.length > 10 ? p.name.slice(0, 10) + '…' : p.name;
+      const resolved = `${n} ${label}`;
+      item.textContent = resolved;
+      item.dataset.notif = resolved;
+      saveNotifs();
+    });
+  }
+
+  // Restore on load
+  const savedNotifs = JSON.parse(sessionStorage.getItem(NOTIF_STORAGE_KEY) || '[]');
+  savedNotifs.reverse().forEach(text => renderNotifItem(text, false));
+
+  function queueNotification(name, type, pubkey) {
+    addNotification(name, type, pubkey);
+  }
+
+  window.testNotif = (type) => {
+    const names = ['satoshi', 'plebfan', 'nogoodvibes', 'lightning_larry'];
+    addNotification(names[Math.floor(Math.random() * names.length)], type, null);
+  };
+
+  setTimeout(() => subscribeNotifications(({ type, pubkey, id }) => {
+    if (seenNotifs.has(id)) return;
+    seenNotifs.add(id);
+    if (type === 'follow') return;
+    queueNotification(pubkey.slice(0, 8), type, pubkey);
+  }), 6000);
+</script>

@@ -1,0 +1,164 @@
+---
+layout: base.njk
+title: Radio
+description: "NoGood Radio — A 24/7 pirate radio station running on scrap parts and broadcasting from a basement somewhere. NOSTR and zaps enabled."
+radio: true
+ogImage: /assets/img/og/Radio_OG.jpg
+---
+
+{# ZAP MARQUEE #}
+<div class="ticker marquee pixel-font header-large uppercase section" role="marquee" aria-label="Recent zaps">
+  <ul class="marquee-content ticker__track" id="ticker-track"></ul>
+  <ul class="marquee-content" id="ticker-track-dup" aria-hidden="true"></ul>
+</div>
+<div
+  id="radio" class="section large-grid">
+  {# RADIO PLAYER #}
+  <div class="section-column player" aria-label="Video stream">
+    <video
+      class="player__video"
+      id="stream-video"
+      playsinline
+      muted></video>
+    <div class="player__controls" id="player-controls">
+      <button class="player__btn" id="player-play-pause" aria-label="Play">
+        <svg viewbox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M4 2l10 6-10 6z"/>
+        </svg>
+      </button>
+      <span class="player__live-badge pixel-font uppercase">Live</span>
+      <div class="player__controls-spacer"></div>
+      <button class="player__btn" id="player-mute" aria-label="Unmute">
+        <svg viewbox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M2 5v6h3l5 4V1L5 5H2z"/><path d="m11 5 4 4m0-4-4 4" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        </svg>
+      </button>
+      <div class="player__quality" id="quality-selector" hidden>
+        <button class="player__btn player__quality-toggle pixel-font uppercase" id="quality-toggle" aria-label="Video quality">
+          <span id="quality-label">Auto</span>
+        </button>
+        <div class="player__quality-menu" id="quality-menu"></div>
+      </div>
+      <button class="player__btn" id="player-fullscreen" aria-label="Fullscreen">
+        <svg viewbox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"/>
+        </svg>
+      </button>
+    </div>
+    <div class="player__fallback" id="stream-fallback">
+      <span class="player__offline-label pill pill-offline pixel-font uppercase">Offline</span>
+    </div>
+  </div>
+  {# CHAT #}
+  <div class="section-column chat" aria-label="Live chat">
+    <div class="chat__messages scroll-hidden" id="chat-messages" role="log" aria-live="polite"></div>
+    <div class="chat__input-area" id="chat-input-area">
+      <input
+        type="text"
+        class="chat__input"
+        id="chat-input"
+        placeholder="You need a nostr account to chat..."
+        disabled
+        maxlength="280"
+        aria-label="Chat message">
+      <button class="button uppercase pixel-font" id="chat-send" disabled aria-label="Send message">Send</button>
+    </div>
+    <div class="chat__notice" id="chat-notice" hidden></div>
+  </div>
+</div>
+<div
+  class="section medium-grid">
+  {# STREAM INFO #}
+  <div class="section-column">
+    <div class="inner-column">
+      <div class="tag-row">
+        <span id="stream-offline" class="tag pixel-font uppercase" style="display:none;">Offline</span>
+        <span id="stream-viewers" class="tag tag-dark pixel-font uppercase" style="display:none;"></span>
+        <span id="stream-uptime" class="tag pixel-font uppercase" style="display:none;"></span>
+      </div>
+      <div class="spacer-small"></div>
+      <h2 class="" id="stream-description">Loading stream info...</h2>
+    </div>
+    <div class="inner-column place-bottom text-large">
+      <p>NOSTR chat and zaps enabled. NoGood Radio lives on
+        <a href="https://zap.stream/nogood" target="_blank" rel="noopener">zap.stream</a>
+        but there are
+        <a
+          href="https://shosho.live/live/naddr1qvzqqqrkvupzpn6956apxcad0mfp8grcuugdysg44eepex68h50t73zcathmfs49qqjr2vehvyenvdtr94nrzetr956rgctr94skvvfs95eryep3x3snwve389nxy0sfn5z"
+          target="_blank" rel="noopener">many</a>
+        <a
+          href="https://nostrudel.ninja/streams/naddr1qvzqqqrkvupzpn6956apxcad0mfp8grcuugdysg44eepex68h50t73zcathmfs49qy2hwumn8ghj7un9d3shjtnyv9kh2uewd9hj7qgewaehxw309aex2mrp0yh8xmn0wf6zuum0vd5kzmp0qqjr2vehvyenvdtr94nrzetr956rgctr94skvvfs95eryep3x3snwve389nxy8wx5lv"
+          target="_blank" rel="noopener">other</a>
+        <a href="https://primal.net/nogood/live/537a365c-f1ec-44ac-af10-22d14a7319fb" target="_blank" rel="noopener">streaming</a>
+        <a
+          href="https://nostria.app/stream/naddr1qvzqqqrkvupzpn6956apxcad0mfp8grcuugdysg44eepex68h50t73zcathmfs49qqjr2vehvyenvdtr94nrzetr956rgctr94skvvfs95eryep3x3snwve389nxy0sfn5z"
+          target="_blank" rel="noopener">services</a>
+        available.</p>
+    </div>
+  </div>
+  {# TRACKLIST #}
+  <div class="section-column" aria-label="Recent tracks">
+    <div class="bg-offwhite padding-small">
+      <h2 class="pixel-font uppercase">Tracklist</h2>
+      <div class="spacer"></div>
+      <div class="list tracklist" id="lastfm-list"></div>
+    </div>
+  </div>
+  {# ZAP STREAM #}
+  <div class="section-column" aria-label="Send a zap">
+    <div class="inner-column">
+      <h2 class="pixel-font uppercase">Zap NoGood Radio</h2>
+      <div class="spacer"></div>
+      <p class="text-large">
+        If you have a Lightning Wallet you can zap the stream. Your zap should show up on screen, but there will be bugs.
+      </p>
+      <div class="spacer-large"></div>
+      <div class="inner-column place-bottom">
+        <div class="zap-status" id="zap-status" role="status" aria-live="polite"></div>
+        <div class="button-group">
+          <button class="zap-btn button pixel-font uppercase" data-amount="21">⚡ 21</button>
+          <button class="zap-btn button pixel-font uppercase" data-amount="100">⚡ 100</button>
+          <button class="zap-btn button pixel-font uppercase" data-amount="1000">⚡ 1000</button>
+          <button class="zap-btn button pixel-font uppercase" data-amount="5000">⚡ 5000</button>
+        </div>
+        <div class="spacer-small"></div>
+        <div class="input-group">
+          <input
+            type="number"
+            class="zap-custom__input"
+            id="zap-custom-input"
+            placeholder="Custom amount"
+            min="1"
+            inputmode="numeric"
+            pattern="[0-9]*"
+            aria-label="Custom zap amount"/>
+          <button class="zap-btn button pixel-font uppercase" id="zap-custom-btn">⚡ Zap</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="section medium-grid">
+  {# RECENT ZAPPERS #}
+  <div class="section-column">
+    <h5 class="uppercase pixel-font">Radio supporters</h5>
+    <div class="spacer-small"></div>
+    <div id="radio-zap-feed" class="zap-feed animate-in"></div>
+  </div>
+  {# ZAP LEADERBOARD #}
+  <div class="section-column">
+    <h5 class="uppercase pixel-font">Radio leaderboard</h5>
+    <div class="spacer-small"></div>
+    <div id="radio-zap-leaderboard" class="zap-feed animate-in"></div>
+  </div>
+  <div class="section-column"></div>
+</div>
+<script type="module" src="/assets/js/zap-feed.js"></script>
+<div class="zap-modal" id="zap-modal" hidden>
+  <div class="zap-modal__backdrop"></div>
+  <div class="zap-modal__dialog" role="dialog" aria-label="Pay Lightning invoice">
+    <button class="zap-modal__close" id="zap-modal-close" aria-label="Close">&times;</button>
+    <p class="pixel-font uppercase">Scan to zap</p>
+    <canvas class="zap-modal__qr" id="zap-modal-qr"></canvas>
+    <p class="zap-modal__amount pixel-font" id="zap-modal-amount"></p>
+    <button class="zap-modal__copy pixel-font uppercase" id="zap-modal-copy">Copy invoice</button>
+    <a class="zap-modal__open pixel-font uppercase" id="zap-modal-open" href="#">Open in wallet</a>
+  </div>
+</div>

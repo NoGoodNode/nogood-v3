@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {# SEO DEFAULTS #}
+    {% if page.url == "/" %}
+    <title>{{ settings.metadata.site_title }}</title>
+    <meta name="description"
+        content="{{ settings.metadata.site_description }}" />
+    {% else %}
+    <title>NoGood | {{ title }}</title>
+    <meta name="description" content="{{ seo.description or description }}" />
+    {% endif %}
+
+    {# OPEN GRAPH #}
+    <meta property="og:title" content="{{ title or settings.metadata.site_title }}" />
+    <meta property="og:author" content="{{ author or settings.metadata.site_title }}" />
+    <meta property="og:url" content="{{ settings.metadata.site_url }}{{ page.url }}" />
+    <meta property="og:description" content="{{ description or settings.metadata.site_description }}" />
+    <meta property="og:type" content="{% if layout == 'post' or layout == 'product' %}article{% else %}website{% endif %}" />
+
+    {# TWITTER CARD #}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{{ title or settings.metadata.site_title }}" />
+    <meta name="twitter:description" content="{{ description or settings.metadata.site_description }}" />
+
+    {# OG IMAGE #}
+    {% set ogImageUrl = settings.metadata.site_url + (ogImage if ogImage else "/assets/img/NoGood_OG.png") %}
+    <meta name="twitter:image" content="{{ ogImageUrl }}">
+    <meta property="og:image" content="{{ ogImageUrl }}" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="{{ title or settings.metadata.site_title }}" />
+    <meta property="og:image:type" content="{{ 'image/jpeg' if ogImage else 'image/png' }}" />
+
+    {# META #}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="{{ settings.metadata.site_title }}" />
+    <meta charset="UTF-8">
+    <link rel="canonical" href="{{ settings.metadata.site_url }}{{ page.url }}" />
+
+    {# PRECONNECT #}
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="preconnect" href="https://cloud.umami.is" crossorigin>
+
+    {# PRELOAD FONTS #}
+    <link rel="preload" href="/assets/fonts/untitled-sans-regular.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/assets/fonts/OffBit-Bold.woff2" as="font" type="font/woff2" crossorigin>
+
+    {# STRUCTURED DATA: WEBSITE #}
+    {% if layout !== 'post' and layout !== 'product' %}
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "{{ settings.metadata.site_title }}",
+        "url": "{{ settings.metadata.site_url }}",
+        "description": "{{ settings.metadata.site_description }}",
+        "author": {
+            "@type": "Brand",
+            "name": "{{ settings.metadata.site_title }}"
+        }
+    }
+    </script>
+    {% endif %}
+
+    {# STRUCTURED DATA: PRODUCT #}
+    {% if snipcart %}
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org/",
+        "@type": "Product",
+        "name": "{{ title }}",
+        "description": "{{ description | trim }}",
+        "image": "{{ settings.metadata.site_url }}{{ snipcart.snipcartimage }}",
+        "brand": {
+            "@type": "Brand",
+            "name": "NoGood"
+        },
+        "offers": {
+            "@type": "Offer",
+            "priceCurrency": "EUR",
+            "price": "{{ snipcart.price }}",
+            "availability": "{% if site.sold_out === true %}https://schema.org/OutOfStock{% else %}https://schema.org/InStock{% endif %}",
+            "url": "{{ settings.metadata.site_url }}{{ page.url }}"
+        }
+    }
+    </script>
+    {% endif %}
+
+    {# STRUCTURED DATA: BREADCRUMBS #}
+    {% if page.url !== "/" %}
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "NoGood",
+                "item": "{{ settings.metadata.site_url }}"
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "{% if snipcart %}Shop{% elif client %}Work{% else %}{{ title }}{% endif %}",
+                "item": "{% if snipcart %}{{ settings.metadata.site_url }}/shop/{% elif client %}{{ settings.metadata.site_url }}/work/{% else %}{{ settings.metadata.site_url }}{{ page.url }}{% endif %}"
+            }{% if snipcart or client %},
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "{{ title }}",
+                "item": "{{ settings.metadata.site_url }}{{ page.url }}"
+            }{% endif %}
+        ]
+    }
+    </script>
+    {% endif %}
+
+    {# STRUCTURED DATA: CREATIVE WORK #}
+    {% if client %}
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "CreativeWork",
+        "name": "{{ title }}",
+        "description": "{{ description | default('') | trim }}",
+        "creator": {
+            "@type": "Brand",
+            "name": "NoGood"
+        },
+        "url": "{{ settings.metadata.site_url }}{{ page.url }}"
+    }
+    </script>
+    {% endif %}
+
+    {# STRUCTURED DATA: ARTICLE #}
+    {% if layout == 'post' and not client and not snipcart %}
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "{{ title }}",
+        "description": "{{ description | default('') | trim }}",
+        "author": {
+            "@type": "Brand",
+            "name": "NoGood"
+        },
+        "url": "{{ settings.metadata.site_url }}{{ page.url }}"
+    }
+    </script>
+    {% endif %}
+
+    {# ICONS #}
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="/assets/img/favicon.svg" sizes="any" type="image/svg+xml" />
+
+    {# MANIFEST #}
+    <link rel="manifest" href="/site.webmanifest" />
+
+    {# INDIEWEB #}
+    <link href="mailto:{{ settings.metadata.site_email }}" rel="me" />
+    <link rel="webmention" href="https://webmention.io/nogood.studio/webmention" />
+    <link rel="pingback" href="https://webmention.io/nogood.studio/xmlrpc" />
+
+    {# RSS #}
+    <link rel="alternate" type="application/atom+xml" href="{{ settings.metadata.site_url }}/feed.xml"
+        title="NoGood's Atom feed" />
+
+    <script defer src="https://cloud.umami.is/script.js" data-website-id="4cbaeb5e-a751-403b-861e-57478e1820a8"></script>
+
+    {# STYLES #}
+    {% set css %}
+    {% include "source/assets/css/reset.css" %}
+    {% include "source/assets/css/body.css" %}
+    {% include "source/assets/css/color.css" %}
+    {% include "source/assets/css/typography.css" %}
+    {% include "source/assets/css/animations.css" %}
+    {% include "source/assets/css/icons.css" %}
+    {% include "source/assets/css/buttons.css" %}
+    {% include "source/assets/css/images.css" %}
+    {% include "source/assets/css/lists.css" %}
+    {% include "source/assets/css/tags.css" %}
+    {% include "source/assets/css/size-guide.css" %}
+    {% include "source/assets/css/layout.css" %}
+    {% include "source/assets/css/header.css" %}
+    {% include "source/assets/css/footer.css" %}
+    {% include "source/assets/css/post.css" %}
+    {% include "source/assets/css/pages.css" %}
+    {% include "source/assets/css/nostr.css" %}
+    {% include "source/assets/css/snipcart.css" %}
+    {% include "source/assets/css/snipcart-overrides.css" %}
+    {% include "source/assets/css/responsive-large.css" %}
+    {% include "source/assets/css/responsive-medium.css" %}
+    {% include "source/assets/css/responsive-small.css" %}
+    {% if radio %}{% include "source/assets/css/radio.css" %}{% endif %}
+    {% endset %}
+    <style>
+        {{ css | cssmin | safe }}
+    </style>
+</head>
+
+<body>
+    {# TOP BANNER #}
+    {% if page.url == "/" %}
+    {% include "source/snippets/top-banner.njk" %}
+    {% endif %}
+    {# NAV #}
+    {% include "source/snippets/nav.njk" %}
+    {# CONTENT #}
+    <main>
+        {{ content | safe }}
+    </main>
+    {# FOOTER #}
+    {% include "source/snippets/footer.njk"%}
+
+</body>
+
+<script defer src="/assets/js/site.js"></script>
+
+{# RADIO JS #}
+{% if radio %}
+<script type="module" src="/assets/js/radio/main.js"></script>
+{% endif %}
+
+{# SNIPCART #}
+<script>
+    window.SnipcartSettings = {
+        publicApiKey: "ZThkMmRkMzctODgwNC00YWEwLWFmYjMtZDExZTI0MTAwODBlNjM4OTMzNTY2MDcyNzAxMzg0",
+        currency: "eur",
+        modalStyle: "side",
+        loadStrategy: "on-user-interaction",
+    };
+
+    (function () { var c, d; (d = (c = window.SnipcartSettings).version) != null || (c.version = "3.0"); var s, S; (S = (s = window.SnipcartSettings).timeoutDuration) != null || (s.timeoutDuration = 2750); var l, p; (p = (l = window.SnipcartSettings).domain) != null || (l.domain = "cdn.snipcart.com"); var w, u; (u = (w = window.SnipcartSettings).protocol) != null || (w.protocol = "https"); var m, g; (g = (m = window.SnipcartSettings).loadCSS) != null || (m.loadCSS = !0); var y = window.SnipcartSettings.version.includes("v3.0.0-ci") || window.SnipcartSettings.version != "3.0" && window.SnipcartSettings.version.localeCompare("3.4.0", void 0, { numeric: !0, sensitivity: "base" }) === -1, f = ["focus", "mouseover", "touchmove", "scroll", "keydown"]; window.LoadSnipcart = o; document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", r) : r(); function r() { window.SnipcartSettings.loadStrategy ? window.SnipcartSettings.loadStrategy === "on-user-interaction" && (f.forEach(function (t) { return document.addEventListener(t, o) }), setTimeout(o, window.SnipcartSettings.timeoutDuration)) : o() } var a = !1; function o() { if (a) return; a = !0; let t = document.getElementsByTagName("head")[0], n = document.querySelector("#snipcart"), i = document.querySelector('src[src^="'.concat(window.SnipcartSettings.protocol, "://").concat(window.SnipcartSettings.domain, '"][src$="snipcart.js"]')), e = document.querySelector('link[href^="'.concat(window.SnipcartSettings.protocol, "://").concat(window.SnipcartSettings.domain, '"][href$="snipcart.css"]')); n || (n = document.createElement("div"), n.id = "snipcart", n.setAttribute("hidden", "true"), document.body.appendChild(n)), h(n), i || (i = document.createElement("script"), i.src = "".concat(window.SnipcartSettings.protocol, "://").concat(window.SnipcartSettings.domain, "/themes/v").concat(window.SnipcartSettings.version, "/default/snipcart.js"), i.async = !0, t.appendChild(i)), !e && window.SnipcartSettings.loadCSS && (e = document.createElement("link"), e.rel = "stylesheet", e.type = "text/css", e.href = "".concat(window.SnipcartSettings.protocol, "://").concat(window.SnipcartSettings.domain, "/themes/v").concat(window.SnipcartSettings.version, "/default/snipcart.css"), t.prepend(e)), f.forEach(function (v) { return document.removeEventListener(v, o) }) } function h(t) { !y || (t.dataset.apiKey = window.SnipcartSettings.publicApiKey, window.SnipcartSettings.addProductBehavior && (t.dataset.configAddProductBehavior = window.SnipcartSettings.addProductBehavior), window.SnipcartSettings.modalStyle && (t.dataset.configModalStyle = window.SnipcartSettings.modalStyle), window.SnipcartSettings.currency && (t.dataset.currency = window.SnipcartSettings.currency), window.SnipcartSettings.templatesUrl && (t.dataset.templatesUrl = window.SnipcartSettings.templatesUrl)) } })();
+</script>
+
+</html>

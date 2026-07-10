@@ -1,0 +1,172 @@
+#snipcart {
+    /* -----------------
+        Colors
+    ----------------- */
+    --color-default: rgba(28, 28, 28);
+    --color-alt: rgb(81, 90, 99);
+    --color-icon: rgba(28, 28, 28);
+    --color-success: hsl(144, 50%, 35%);
+    --color-error: hsl(6, 55%, 45%);
+
+    --color-link: rgba(28, 28, 28);
+    --color-link-hover: rgb(103, 116, 131);
+    --color-link-active: var(--color-link);
+    --color-link-focus: var(--color-link);
+
+    --color-input: rgba(28, 28, 28);
+    --color-input-hover: var(--color-input);
+    --color-input-focus: var(--color-input);
+    --color-input-checked: var(--color-input);
+    --color-input-disabled: rgb(81, 90, 99);
+    --color-input-error: var(--color-error);
+    --color-inputLabel: rgba(28, 28, 28);
+    --color-inputLabel-hover: var(--color-inputLabel);
+    --color-inputLabel-focus: var(--color-inputLabel);
+    --color-inputIcon: rgb(81, 90, 99);
+    --color-inputIcon-hover: rgba(28, 28, 28);
+    --color-inputIcon-focus: var(--color-inputIcon);
+    --color-inputIcon-checked: rgba(28, 28, 28);
+    --color-inputIcon-error: var(--color-error);
+    --color-inputPlaceholder: rgb(81, 90, 99);
+
+    --color-buttonPrimary: rgba(251, 250, 243);
+    --color-buttonPrimary-hover: rgba(28, 28, 28);
+    --color-buttonPrimary-active: var(--color-buttonPrimary);
+    --color-buttonPrimary-focus: var(--color-buttonPrimary);
+    --color-buttonPrimary-disabled: rgb(81, 90, 99);
+    --color-buttonPrimary-success: rgba(251, 250, 243);
+    --color-buttonPrimary-error: rgba(251, 250, 243);
+
+    --color-buttonSecondary: rgba(28, 28, 28);
+    --color-buttonSecondary-hover: rgba(251, 250, 243);
+    --color-buttonSecondary-active: var(--color-buttonSecondary);
+    --color-buttonSecondary-focus: var(--color-buttonSecondary);
+    --color-buttonSecondary-disabled: rgb(81, 90, 99);
+    --color-buttonSecondary-success: hsl(144, 50%, 35%);
+    --color-buttonSecondary-error: var(--color-error);
+
+    --color-buttonDanger: rgba(251, 250, 243);
+    --color-buttonDanger-hover: rgba(251, 250, 243);
+    --color-buttonDanger-active: var(--color-buttonDanger);
+    --color-buttonDanger-focus: var(--color-buttonDanger);
+    --color-buttonDanger-disabled: rgb(81, 90, 99);
+    --color-buttonDanger-success: rgba(251, 250, 243);
+    --color-buttonDanger-error: rgba(251, 250, 243);
+
+    --color-badge: rgba(28, 28, 28);
+    --color-badge-active: rgba(28, 28, 28);
+    --color-badge-disabled: rgb(81, 90, 99);
+
+    /* -----------------
+        Border colors
+    ----------------- */
+    --borderColor-default: rgba(28, 28, 28, 0.15);
+    --borderColor-error: hsl(6, 55%, 50%);
+
+    --borderColor-link: currentColor;
+    --borderColor-link-hover: currentColor;
+    --borderColor-link-active: currentColor;
+    --borderColor-link-focus: currentColor;
+
+    --borderColor-input: rgba(28, 28, 28, 0.3);
+    --borderColor-input-hover: rgba(216, 255, 124);
+    --borderColor-input-focus: rgba(28, 28, 28);
+    --borderColor-input-checked: rgba(28, 28, 28);
+    --borderColor-input-disabled: rgba(233, 229, 219);
+    --borderColor-input-error: var(--borderColor-error);
+
+    --borderColor-buttonPrimary: transparent;
+    --borderColor-buttonPrimary-hover: transparent;
+    --borderColor-buttonPrimary-focus: rgba(216, 255, 124);
+    --borderColor-buttonPrimary-disabled: transparent;
+    --borderColor-buttonPrimary-success: transparent;
+    --borderColor-buttonPrimary-error: transparent;
+
+    --borderColor-buttonSecondary: rgba(28, 28, 28);
+    --borderColor-buttonSecondary-hover: rgba(28, 28, 28);
+    --borderColor-buttonSecondary-focus: rgba(216, 255, 124);
+    --borderColor-buttonSecondary-disabled: rgba(233, 229, 219);
+    --borderColor-buttonSecondary-success: transparent;
+    --borderColor-buttonSecondary-error: transparent;
+
+    --borderColor-badge: transparent;
+    --borderColor-badge-active: transparent;
+    --borderColor-badge-disabled: transparent;
+
+    /* -----------------
+        Background colors
+    ----------------- */
+    --bgColor-default: rgba(251, 250, 243);
+    --bgColor-alt: rgba(233, 229, 219, 0.5);
+    --bgColor-success: hsl(144, 60%, 90%);
+    --bgColor-error: hsl(6, 60%, 93%);
+    --bgColor-info: rgba(233, 229, 219, 0.5);
+
+    --bgColor-modal: rgba(251, 250, 243);
+    --bgColor-modalVeil: rgba(28, 28, 28, 0.5);
+
+    --bgColor-link: none;
+    --bgColor-link-hover: none;
+    --bgColor-link-active: none;
+    --bgColor-link-focus: rgba(216, 255, 124, 0.3);
+
+    --bgColor-input: rgba(251, 250, 243);
+    --bgColor-input-hover: var(--bgColor-input);
+    --bgColor-input-focus: var(--bgColor-input);
+    --bgColor-input-checked: rgba(216, 255, 124);
+    --bgColor-input-disabled: rgba(233, 229, 219);
+    --bgColor-input-error: hsl(6, 60%, 97%);
+    --bgColor-input-autofill: rgba(216, 255, 124, 0.2);
+
+    --bgColor-buttonPrimary: rgba(28, 28, 28);
+    --bgColor-buttonPrimary-hover: rgba(216, 255, 124);
+    --bgColor-buttonPrimary-active: var(--bgColor-buttonPrimary);
+    --bgColor-buttonPrimary-focus: var(--bgColor-buttonPrimary);
+    --bgColor-buttonPrimary-disabled: rgba(233, 229, 219);
+    --bgColor-buttonPrimary-success: hsl(144, 50%, 35%);
+    --bgColor-buttonPrimary-error: hsl(6, 55%, 45%);
+
+    --bgColor-buttonSecondary: rgba(251, 250, 243);
+    --bgColor-buttonSecondary-hover: rgba(28, 28, 28);
+    --bgColor-buttonSecondary-active: var(--bgColor-buttonSecondary);
+    --bgColor-buttonSecondary-focus: var(--bgColor-buttonSecondary);
+    --bgColor-buttonSecondary-disabled: rgba(233, 229, 219, 0.5);
+    --bgColor-buttonSecondary-success: hsl(144, 60%, 90%);
+    --bgColor-buttonSecondary-error: hsl(6, 60%, 93%);
+
+    --bgColor-buttonDanger: hsl(6, 55%, 45%);
+    --bgColor-buttonDanger-hover: hsl(6, 55%, 38%);
+    --bgColor-buttonDanger-active: var(--bgColor-buttonDanger);
+    --bgColor-buttonDanger-focus: var(--bgColor-buttonDanger);
+    --bgColor-buttonDanger-disabled: rgba(233, 229, 219);
+    --bgColor-buttonDanger-success: hsl(144, 50%, 35%);
+    --bgColor-buttonDanger-error: hsl(6, 60%, 38%);
+
+    --bgColor-badge: rgba(216, 255, 124);
+    --bgColor-badge-active: rgb(173, 208, 91);
+    --bgColor-badge-disabled: rgba(233, 229, 219);
+
+    /* -----------------
+        Shadows
+    ----------------- */
+    --shadow-default: 0px 4px 16px rgba(28, 28, 28, 0.08);
+    --shadow-tooltip: 0px 4px 12px rgba(28, 28, 28, 0.12);
+
+    --shadow-link-focus: 0px 2px 0px rgba(216, 255, 124);
+
+    --shadow-input-hover: none;
+    --shadow-input-focus: 0px 0px 0px 2px rgba(216, 255, 124);
+    --shadow-input-checked: none;
+
+    --shadow-buttonPrimary-hover: none;
+    --shadow-buttonPrimary-active: none;
+    --shadow-buttonPrimary-focus: 0px 0px 0px 2px rgba(216, 255, 124);
+
+    --shadow-buttonSecondary-hover: none;
+    --shadow-buttonSecondary-active: none;
+    --shadow-buttonSecondary-focus: 0px 0px 0px 2px rgba(216, 255, 124);
+
+    --shadow-buttonDanger-hover: none;
+    --shadow-buttonDanger-active: none;
+    --shadow-buttonDanger-focus: 0px 0px 0px 2px rgba(216, 255, 124);
+}

@@ -1,0 +1,260 @@
+# Masonry grid items
+# type: image | slideshow | video | gif
+# span: false | true (spans 2 columns)
+# For type: image — src, alt
+# For type: slideshow — slides: [{src, alt}]
+# For type: video — src (mp4 url), poster (optional)
+# For type: gif — src, alt
+
+items:
+  - type: image
+    src: "source/assets/img/projects/Collected_BTCBurnout.jpg"
+    alt: "BTC Burnout illustration"
+    span: true
+    client: "Bitcoin Magazine"
+    client_url: "https://bitcoinmagazine.com"
+    bg:
+
+  - type: image
+    src: "source/assets/img/projects/Collected_AdvancingBitcoin.jpg"
+    alt: "Advancing Bitcoin illustration"
+    span: false
+    client: "Advancing Bitcoin"
+    client_url: "https://www.advancingbitcoin.com"
+    bg:
+
+
+  - type: image
+    src: "source/assets/img/projects/RedBull_Header.jpg"
+    alt: "Red Bull Game Pop magazine header illustration"
+    span: false
+    client: "Red Bull"
+    client_url: "https://www.redbull.com"
+    bg:
+
+  - type: video
+    src: "/assets/img/radio-bg.mp4"
+    poster: "/assets/img/projects/NoGood_Project_NoGoodRadio.webp"
+    span: false
+    client: "NoGood Radio"
+    client_url: "https://nogood.art/radio"
+    bg:
+    
+  - type: image
+    src: "source/assets/img/projects/Collected_AgentsAtWork.jpg"
+    alt: "Agents at Work illustration"
+    span: false
+    client: "Agents at Work"
+    client_url: ""
+    bg:
+
+  - type: slideshow
+    span: false
+    client: "Sovereign Engineering"
+    client_url: "https://sovereignengineering.io"
+    bg:
+    slides:
+      - src: "source/assets/img/projects/Collected_SEC07.jpg"
+        alt: "Sovereign Engineering illustration"  
+      - src: "source/assets/img/projects/Collected_SEC065.jpg"
+        alt: "Sovereign Engineering illustration"  
+
+  - type: gif
+    src: "source/assets/img/projects/Collected_BTCBackup.gif"
+    alt: "BTC Backup floppy animation"
+    span: false
+    client: ""
+    client_url: ""
+    bg:
+
+  - type: image
+    src: "source/assets/img/projects/TABConf_Poster_05.jpg"
+    alt: "TABConf 2025 poster illustration"
+    span: false
+    client: "TABConf"
+    client_url: "https://www.tabconf.com"
+
+  - type: image
+    src: "source/assets/img/projects/Collected_TABConf_02.jpg"
+    alt: "TABConf illustration"
+    span: false
+    client: "TABConf"
+    client_url: "https://www.tabconf.com"
+    bg:
+
+  - type: image
+    src: "source/assets/img/projects/SEC_Poster_02.jpg"
+    alt: "SEC-04 illustration"
+    span: false
+    client: "Sovereign Engineering"
+    client_url: "https://sovereignengineering.io"
+    bg: bg-highlight
+
+  - type: image
+    src: "source/assets/img/projects/Collected_BitcoinMagazine.jpg"
+    alt: "Bitcoin Magazine illustration"
+    span: false
+    client: "Bitcoin Magazine"
+    client_url: "https://bitcoinmagazine.com"
+    bg: bg-muted
+
+  - type: image
+    src: "source/assets/img/projects/Collected_SEC06.jpg"
+    alt: "Sovereign Engineering illustration"
+    span: false
+    client: "Sovereign Engineering"
+    client_url: "https://sovereignengineering.io"
+    bg:
+
+  - type: image
+    src: "source/assets/img/projects/Collected_CitadelDispatch.jpg"
+    alt: "Citadel Dispatch illustration"
+    span: false
+    client: "Citadel Dispatch"
+    client_url: "https://citadeldispatch.com"
+    bg:
+
+  - type: image
+    src: "source/assets/img/projects/Collected_Satstreamers.jpg"
+    alt: "Satstreamer illustration"
+    span: false
+    client: "Satstreamers"
+    client_url: "https://satstreamers.com"
+    bg:
+
+  - type: slideshow
+    span: false
+    client: "Voltage"
+    client_url: "https://voltage.cloud"
+    bg:
+    slides:
+      - src: "source/assets/img/projects/Collected_Voltage_01.jpg"
+        alt: "Voltage keychain illustration"
+      - src: "source/assets/img/projects/Collected_Voltage_02.jpg"
+        alt: "Voltage air freshener illustration"
+
+  - type: image
+    src: "source/assets/img/shop/NoGoodBook_Main.jpg"
+    alt: "Illustration of The NoGood Book"
+    span: false
+    client: "NoGood"
+    client_url: "https://nogood.art"
+    bg:
+
+  - type: slideshow
+    span: false
+    client: "Satoshi Radio"
+    client_url: "https://satoshiradio.nl"
+    bg:
+    slides:
+      - src: "source/assets/img/projects/SatoshiRadio_Poster_Forever21.jpg"
+        alt: "Satoshi Radio Forever21 poster design"
+      - src: "source/assets/img/projects/SatoshiRadio_Poster_StackSats.jpg"
+        alt: "Satoshi Radio Stack Sats poster design"
+      - src: "source/assets/img/projects/SatoshiRadio_Poster_RunNodes.jpg"
+        alt: "Satoshi Radio Run Nodes poster design"
+      - src: "source/assets/img/projects/SatoshiRadio_Poster_P2PEcash.jpg"
+        alt: "Satoshi Radio P2P E-cash poster design"
+
+  - type: image
+    src: "source/assets/img/projects/SovereignElectronics_Shopkeeper.jpg"
+    alt: "Blockstream Sovereign Electronics shopkeeper illustration"
+    span: false
+    client: "Blockstream"
+    client_url: "https://blockstream.com"
+    bg:
+
+  - type: gif
+    src: "source/assets/img/projects/Collected_Error.gif"
+    alt: "Error animation"
+    span: false
+    client: ""
+    client_url: ""
+    bg:
+
+  - type: image
+    src: "source/assets/img/projects/Featured_CTDL21.jpg"
+    alt: "CTDL21 illustration"
+    span: false
+    client: "CTDL21"
+    client_url: ""
+    bg:
+
+  - type: image
+    src: "source/assets/img/projects/Gamekings_Main.jpg"
+    alt: "Gamekings 25th anniversary poster illustration"
+    span: false
+    client: "Gamekings"
+    client_url: "https://gamekings.tv"
+    bg:
+
+  - type: image
+    src: "source/assets/img/projects/Collected_Mindcrowave.jpg"
+    alt: "Mindcrowave illustration"
+    span: false
+    client: "Mindcrowave"
+    client_url: "https://mindcrowave.com"
+    bg:
+
+  - type: gif
+    src: "source/assets/img/projects/Collected_PCB.gif"
+    alt: "PCB animation"
+    span: false
+    client: ""
+    client_url: ""
+    bg: bg-offwhite
+
+  - type: image
+    src: "source/assets/img/projects/SatoshiRadio_Poster_MiningCorp.jpg"
+    alt: "Satoshi Radio Mining Corp poster illustration"
+    span: false
+    client: "Satoshi Radio"
+    client_url: "https://satoshiradio.nl"
+    bg:
+
+  - type: slideshow
+    span: false
+    client: "TABConf"
+    client_url: "https://www.tabconf.com"
+    bg:
+    slides:
+      - src: "source/assets/img/projects/TABConf_Spot_01.jpg"
+        alt: "TABConf keys spot illustration"
+      - src: "source/assets/img/projects/TABConf_Spot_02.jpg"
+        alt: "TABConf keypad spot illustration"
+      - src: "source/assets/img/projects/TABConf_Spot_03.jpg"
+        alt: "TABConf Building Builders spot illustration"
+      - src: "source/assets/img/projects/TABConf_Spot_04.jpg"
+        alt: "TABConf tech spot illustration"
+
+  - type: image
+    src: "source/assets/img/projects/Collected_OffchainRamen.jpg"
+    alt: "Offchain Ramen illustration"
+    span: false
+    client: "Offchain Ramen"
+    client_url: "https://offchainramen.com"
+    bg:
+
+  - type: image
+    src: "source/assets/img/projects/Collected_Zapstream_001.jpg"
+    alt: "Zapstream illustration 1"
+    span: false
+    client: "Zap.Stream"
+    client_url: "https://zap.stream"
+    bg:
+
+  - type: image
+    src: "source/assets/img/projects/Collected_Zapstream_002.jpg"
+    alt: "Zapstream illustration 2"
+    span: false
+    client: "Zap.Stream"
+    client_url: "https://zap.stream"
+    bg:
+
+  - type: image
+    src: "source/assets/img/projects/Collected_ZeroTrust.jpg"
+    alt: "Zero Trust illustration"
+    span: false
+    client: "Zero Trust"
+    client_url: "https://zerotrust.house"
+    bg:

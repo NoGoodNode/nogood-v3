@@ -1,0 +1,80 @@
+---
+layout: base.njk
+tag: "page"
+title: "Shop"
+description: "Shop illustration prints, apparel and books by NoGood."
+---
+<div class="section home-shop large-grid">
+    {# INTRO #}
+    <div class="section-column">
+        <div class="inner-column">
+            <div class="sticky">
+                <h1 class="">
+                    Limited runs, produced locally. Shipped with care from the studio in Amsterdam.
+                </h1>
+            </div>
+        </div>
+    </div>
+    {# GRID #}
+    <div class="section-column large-grid">
+        {% include "source/snippets/product-grid.njk" %}
+    </div>
+</div>
+
+<div class="section large-grid">
+    <div class="section-column">
+        <h1 class="pixel-font uppercase">FREEBIES</h1>
+        <p class="text-large">
+            Digital files and mobile wallpapers are available as bittorrent downloads.
+        </p>
+        <div class="spacer-large"></div>
+        <div class="place-bottom">
+            {% include "source/snippets/downloads.njk"%}
+            <div class="spacer-small"></div>
+            <div class="slideshow slideshow-5">
+                {% image "source/assets/img/shop/Downloads_01.jpg", "NoGood wallpaper pack preview" %}
+                {% image "source/assets/img/shop/Downloads_02.jpg", "NoGood wallpaper pack preview" %}
+                {% image "source/assets/img/shop/Downloads_03.jpg", "NoGood wallpaper pack preview" %}
+                {% image "source/assets/img/shop/Downloads_04.jpg", "NoGood wallpaper pack preview" %}
+                {% image "source/assets/img/shop/Downloads_05.jpg", "NoGood wallpaper pack preview" %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="section-column">
+        <div class="sticky">
+        <div class="inner-column">
+            <h1 class="pixel-font uppercase">FAQ</h1>
+            <div class="spacer-large"></div>
+
+            <h4 class="pixel-font uppercase">Do you accept Bitcoin payments?</h4>
+            <p class="text-large">Yes — Bitcoin and Lightning payments are accepted at checkout. Other payment options include credit card and iDEAL.</p>
+
+            <div class="spacer"></div>
+
+            <h4 class="pixel-font uppercase">Where are your products made?</h4>
+            <p class="text-large">Almost everything is produced locally in the Netherlands, working with preferred suppliers I trust. The only exception is sticker packs, which are printed elsewhere.</p>
+
+            <div class="spacer"></div>
+
+            <h4 class="pixel-font uppercase">When will my order ship?</h4>
+            <p class="text-large">Orders are shipped once a week from the studio in Amsterdam. You'll receive a track & trace code by email so you can follow your package along the way.</p>
+
+            <div class="spacer"></div>
+
+            <h4 class="pixel-font uppercase">How do digital orders work?</h4>
+            <p class="text-large">Digital products are delivered instantly. After completing your order you'll see the download link on the order summary page. You will also receive the link by email.</p>
+
+            <div class="spacer"></div>
+
+            <h4 class="pixel-font uppercase">Can I return my order?</h4>
+            <p class="text-large">I don't accept returns on limited runs. If your order arrives badly damaged, reach out and I'll make it right.</p>
+
+            <div class="spacer"></div>
+
+            <h4 class="pixel-font uppercase">How do you use my data?</h4>
+            <p class="text-large">Only to fulfil your order. Snipcart stores your order info and shipping address. Mollie handles payments. I use MyParcel to take care of shipping. Read the <a href="/terms/">Terms &amp; Conditions</a> and <a href="/privacy/">Privacy Policy</a> for full details.</p>
+        </div>
+        </div>
+    </div>
+</div>

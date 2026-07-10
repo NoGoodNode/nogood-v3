@@ -1,0 +1,110 @@
+/* ----------------
+SNIPCART CART
+---------------- */
+.snipcart-item-line__image {
+    mix-blend-mode: normal;
+    padding: 2px;
+    background-color: var(--primary-light);
+}
+
+.snipcart, 
+.snipcart__font--secondary,
+.snipcart__font--subtitle,
+.snipcart__font--subtitle-small {
+    font-family: 'UntitledSans Regular',Arial, Helvetica, sans-serif;
+}
+
+.snipcart-summary-fees__notice {
+    margin-bottom: 20px;
+}
+
+.snipcart-featured-payment-methods__list {
+    display: none;
+}
+
+.snipcart-featured-payment-methods h3 {
+    text-transform: unset;
+}
+
+/* ----------------
+CART DRAWER
+---------------- */
+.snipcart-cart-header {
+    background-color: rgb(242, 240, 231) !important;
+}
+
+.snipcart-cart__content {
+    padding: 1rem !important;
+}
+
+.snipcart-cart__footer {
+    background-color: rgb(242, 240, 231) !important;
+}
+
+.snipcart-cart-summary {
+    background-color: rgb(242, 240, 231) !important;
+}
+
+.snipcart-layout:not(.snipcart-layout--large) {
+    border-left: 1px solid var(--border) !important;
+}
+
+
+/* no drop shadow */
+.snipcart-item-line {
+    box-shadow: none !important;
+}
+
+.snipcart-button-icon.is-danger {
+    color: rgba(251, 250, 243) !important;
+    background-color: rgba(28, 28, 28) !important;
+}
+
+.snipcart-button-icon.is-danger:hover {
+    color: rgba(251, 250, 243) !important;
+    background-color: hsl(6, 55%, 45%) !important;
+}
+
+/* ----------------
+CHECKOUT STEPS
+---------------- */
+.snipcart-checkout__step {
+    background-color: rgba(233, 229, 219, 0.3);
+}
+
+.snipcart-checkout__step--current {
+    background-color: rgba(251, 250, 243);
+}
+
+/* ----------------
+MODAL BACKGROUNDS
+---------------- */
+.snipcart-layout.snipcart-modal,
+.snipcart-layout--large,
+.snipcart-layout--large .snipcart-cart-summary,
+.snipcart-layout--large .snipcart-layout__content,
+.snipcart-layout--large .snipcart-layout__cols,
+.snipcart-layout--large .snipcart-layout__col,
+.snipcart-layout--large .snipcart-modal__container,
+.snipcart-layout--large .snipcart-checkout {
+    background-color: rgb(242, 240, 231) !important;
+}
+
+/* ----------------
+BADGE
+---------------- */
+/* inactive */
+.snipcart__box--badge {
+    border: 1px solid rgba(28, 28, 28) !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+/* active */
+.snipcart__box--badge-highlight {
+    background-color: rgba(216, 255, 124) !important;
+    color: rgba(28, 28, 28) !important;
+    border: 1px solid rgba(28, 28, 28) !important;
+    box-shadow: none !important;
+    outline: none !important;
+}

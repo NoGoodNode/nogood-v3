@@ -1,0 +1,252 @@
+/* ----------------
+HOME
+---------------- */
+#home-header {
+    grid-template-columns: 5fr 3fr 2fr;
+}
+
+.header-featured-image {
+    position: relative;
+}
+
+.header-badge {
+    position: absolute;
+    top: 45%;
+    right: 64px;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: var(--primary-dark);
+    overflow: hidden;
+}
+
+.header-badge-text {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    font-size: 12.6px;
+    fill: var(--primary-light);
+    pointer-events: none;
+    text-align: justify;
+}
+
+.header-badge picture,
+.header-badge > img {
+    width: 52px;
+    height: 52px;
+    flex-shrink: 0;
+    margin-right: -4px;
+    margin-top: -4px;
+}
+
+.header-badge picture img,
+.header-badge > img {
+    width: 52px;
+    height: 52px;
+    object-fit: contain;
+}
+
+#shop-header {
+    overflow: hidden;
+    grid-column: 1 / -1;
+}
+
+#shop-header img,
+#shop-header picture {
+    height: auto;
+    object-fit: unset;
+}
+
+.home-shop .border-bottom {
+    margin: 0 -10px;
+    width: calc(100% + 20px);
+}
+
+/* ----------------
+SHOP
+---------------- */
+.home-shop {
+    grid-template-columns: 3fr 7fr;
+}
+
+.shop-featured-image {
+    aspect-ratio: 1 / 1;
+    position: relative;
+}
+
+.shop-featured-image img,
+.shop-featured-image picture {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* ----------------
+PORTFOLIO
+---------------- */
+.home-portfolio {
+    grid-template-columns: 2fr 3fr;
+}
+
+.portfolio-carousel {
+    overflow: hidden;
+    position: relative;
+}
+
+
+.portfolio-carousel-track {
+    display: flex;
+    gap: 10px;
+}
+
+.portfolio-carousel-track .portfolio-item {
+    flex: 0 0 calc(33.33% - 7px);
+}
+
+
+/* ----------------
+PROJECT
+---------------- */
+#project {
+    grid-template-columns: 8fr 11fr 1fr;
+}
+
+/* ----------------
+POST
+---------------- */
+#post {
+    grid-template-columns: 3fr 680px 2fr;
+}
+
+/* ----------------
+CONTEXT ARTICLES
+---------------- */
+#context-articles {
+    grid-template-columns: 3fr 680px 2fr;
+}
+
+.context-article-list {
+    grid-template-columns: minmax(0, 1fr) auto;
+}
+
+#context-articles .tag {
+    position: relative;
+    top: -1px;
+}
+
+#context-articles h3 {
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+}
+
+.scroll-to-top-button {
+    position: fixed;
+    left: 1rem;
+    bottom: 1rem;
+    width: 64px;
+    height: 64px;
+    border: none;
+    border-radius: 50%;
+    background-color: var(--primary-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 100;
+}
+
+.scroll-to-top-button.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+.scroll-to-top-button:hover {
+    background-color: var(--highlight);
+}
+
+.scroll-to-top-button:hover svg {
+    fill: var(--primary-dark);
+}
+
+.scroll-to-top-button svg {
+    width: 28px;
+    height: auto;
+    fill: var(--primary-light);
+    transform: rotate(-90deg);
+}
+
+#context-articles .fade-in {
+    margin-bottom: 1.5rem;
+}
+
+#post .section-column > p:last-of-type {
+    margin-bottom: 0;
+}
+
+#post .section-column > .list {
+    margin-bottom: 1.25rem;
+}
+
+#post .section-column > .fade-in,
+#post .section-column > .slideshow,
+#post .section-column > .bg-highlight,
+#post .section-column > .bg-offwhite,
+#post .section-column > .video {
+    margin-top: 1.75rem;
+    margin-bottom: 3rem;
+}
+
+/* ----------------
+PRODUCT
+---------------- */
+#product {
+    grid-template-columns: 3fr 2fr;
+}
+
+#similar-products {
+    grid-template-columns: 2fr 3fr;
+}
+
+.product-sub-info {
+    grid-template-columns: 1fr 3fr;
+}
+
+
+/* ----------------
+NOW
+---------------- */
+#now {
+    grid-template-columns: 4fr 3fr 3fr;
+
+}
+
+/* ----------------
+NOW
+---------------- */
+#radio {
+    grid-template-columns: 3fr 1fr;
+    align-items: start;
+}
+
+/* ----------------
+WORK
+---------------- */
+#client-rotating {
+    display: inline-block;
+    min-width: 20ch;
+}
+
+#client-list {
+    line-height: 1;
+    position: relative;
+    top: 1px;
+}

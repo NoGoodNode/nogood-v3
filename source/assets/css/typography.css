@@ -1,0 +1,165 @@
+:root {
+    font-size: 16px;
+}
+
+/* ----------------
+CUSTOM FONTS
+---------------- */
+@font-face {
+    font-family: 'Offbit-Bold';
+    src: url('/assets/fonts/OffBit-Bold.woff2') format('woff2'),
+        url('/assets/fonts/OffBit-Bold.woff') format('woff'),
+        url('/assets/fonts/OffBit-Bold.otf') format('opentype'),
+        url('/assets/fonts/OffBit-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Offbit-Regular';
+    src: url('/assets/fonts/OffBit-Regular.woff2') format('woff2'),
+        url('/assets/fonts/OffBit-Regular.woff') format('woff'),
+        url('/assets/fonts/OffBit-Regular.otf') format('opentype'),
+        url('/assets/fonts/OffBit-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'UntitledSans-Bold';
+    src: url('/assets/fonts/untitled-sans-bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'UntitledSans-Regular';
+    src: url('/assets/fonts/untitled-sans-regular.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* ----------------
+TEXT
+---------------- */
+p {
+    font-size: 1rem;
+    line-height: 1.5rem;
+}
+
+p:not(:last-child) {
+    margin-bottom: 1.25rem;
+}
+
+/* ----------------
+HEADERS
+---------------- */
+
+h1 {
+    font-size: 3rem;
+    letter-spacing: -0.03rem;
+    text-wrap: pretty;
+}
+
+h2 {
+    font-size: 2rem;
+    letter-spacing: -0.02rem;
+    text-wrap: pretty;
+}
+
+h3 {
+    font-size: 1.5rem;
+}
+
+h4 {
+    font-size: 1.2rem;
+}
+
+.header-large {
+    font-size: 4rem;
+    letter-spacing: -0.1rem;
+    word-spacing: .2rem;
+}
+
+.header-extra-large {
+    font-size: 4.5rem;
+    letter-spacing: -0.06rem;
+    word-spacing: .2rem;
+}
+
+/* ----------------
+TEXT SIZE
+---------------- */
+.text-extra-small,
+.text-extra-small p {
+    font-size: 0.65rem;
+    letter-spacing: normal;
+}
+
+.text-small,
+.text-small p {
+    font-size: 0.8rem;
+    letter-spacing: normal;
+}
+
+.text-large,
+.text-large p {
+    font-size: 1.3rem;
+    line-height: 1.9rem;
+    text-wrap: pretty;
+}
+
+.text-extra-large,
+.text-extra-large p {
+    font-size: 1.6rem;
+    line-height: 2.3rem;
+    text-wrap: pretty;
+}
+
+
+/* ----------------
+TEXT WEIGHT
+---------------- */
+.text-bold {
+    font-family: 'UntitledSans-Bold', Arial, Helvetica, sans-serif;
+    font-weight: 700;
+    font-style: normal;
+}
+
+/* ----------------
+OTHER
+---------------- */
+.align-right {
+    text-align: end;
+}
+
+.rotating-text {
+    display: inline-block;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.rotating-text.fade-out {
+    opacity: 0;
+    transform: translateY(-6px);
+}
+
+.align-center {
+    text-align: center;
+}
+
+.pixel-font {
+    font-family: 'Offbit-Bold', Arial, Helvetica, sans-serif;
+    letter-spacing: 0.05rem;
+}
+
+.uppercase {
+    text-transform: uppercase;
+}
+
+.text-tabular {
+    font-variant-numeric: tabular-nums;
+}

@@ -1,0 +1,67 @@
+{% set previousPost = collections.post | withoutTag('product') | getPreviousCollectionItem(page) %}
+{% set nextPost = collections.post | withoutTag('product') | getNextCollectionItem(page) %}
+
+{# ZAP #}
+<div class="zaps">
+    <h4 class="pixel-font uppercase">ZAP this post</h4>
+    <div class="zap-status" id="zap-status" role="status" aria-live="polite"></div>
+    <div class="button-group" data-zap-title="{% if cat === 'process' %}NoGood process{% else %}NoGood project{% endif %}: {{ title }}">
+        <button class="button zap-btn pixel-font uppercase" data-amount="21">⚡ 21</button>
+        <button class="button zap-btn pixel-font uppercase" data-amount="210">⚡ 210</button>
+        <button class="button zap-btn pixel-font uppercase" data-amount="2100">⚡ 2100</button>
+    </div>
+    <div class="spacer-small"></div>
+    <div class="note bg-offwhite padding-small">
+        <p class="">What are <a href="https://nostr.how/en/zaps" target="_blank" rel="noopener">zaps</a>?</p>
+    </div>
+</div>
+
+<div class="spacer line"></div>
+
+{# PREVIOUS / NEXT POST #}
+<div class="more-posts">
+    {% if previousPost %}
+        <div class="previous">
+            <h4 class="pixel-font uppercase">Previous post</h4>
+            <div class="spacer"></div>
+            <div class="previous-post">
+                <div class="tag {{ previousPost.data.cat }}">
+                    {{ previousPost.data.cat }}
+                </div>
+                <a href="{{ previousPost.url }}">{{ previousPost.data.title }}</a>
+            </div>
+        </div>
+    {% endif %}
+    {% if nextPost %}
+        <div class="next">
+            <h4 class="pixel-font uppercase">Next post</h4>
+            <div class="spacer"></div>
+            <div class="next-post">
+                <div class="tag {{ nextPost.data.cat }}">
+                    {{ nextPost.data.cat }}
+                </div>
+                <a href="{{ nextPost.url }}">{{ nextPost.data.title }}</a>
+            </div>
+        </div>
+    {% endif %}
+</div>
+<div class="spacer-extralarge"></div>
+{# ALL IN CATEGORY #}
+<div class="all-posts">
+    <h4 class="pixel-font uppercase">All in: {{ cat }}</h4>
+    <div class="spacer"></div>
+    <div class="list tag-list">
+        {% for post in collections.post | reverse %}
+            {% for tag in post.data.tags %}
+                {% if tag === cat and post.url !== page.url %}
+                    {% include "source/snippets/list-tag.njk" %}
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+    </div>
+    <div class="spacer-small"></div>
+    {# FOOTNOTE #}
+    <div class="note bg-offwhite padding-small">
+        <p class="">Check out all updates in <a href="/book/">the book</a>.</p>
+    </div>
+</div>

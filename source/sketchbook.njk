@@ -1,0 +1,27 @@
+---
+layout: base.njk
+title: Sketchbook
+permalink: /sketchbook/
+bodyColor: bg-process
+---
+
+<div class="section bg-process">
+    <div class="section-column pixel-font uppercase">
+        <h1>Sketchbook</h1>
+    </div>
+    <div class="spacer-large"></div>
+</div>
+
+<div class="section section-fullwidth bg-process">
+    <div class="masonry">
+        {% for item in sketchbook.items %}
+
+        <div class="masonry-item{% if item.span %} masonry-item--wide{% endif %}">
+          <div class="fade-in bg-process{% if item.padding %} {{ item.padding }}{% endif %}">
+            {% image item.src, item.alt %}
+          </div>
+        </div>
+
+        {% endfor %}
+    </div>
+</div>

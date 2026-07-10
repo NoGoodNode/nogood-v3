@@ -1,0 +1,37 @@
+footer {
+	bottom: 0;
+	margin-top: auto;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
+footer .bg-image {
+	flex: 1;
+	min-height: unset;
+}
+
+
+#footer-top {
+	grid-template-columns: 3fr 1fr 1fr;
+}
+
+footer .large-grid .section-column,
+footer .medium-grid .section-column,
+footer .small-grid .section-column {
+	border-right: unset;
+}
+
+#footer-logo {
+	fill: var(--primary-dark);
+	height: auto;
+	width: 95px;
+}
+
+
+.footer-updates {
+	display: flex;
+	flex-direction: row;
+	gap: 20px;
+	align-items: center;
+}

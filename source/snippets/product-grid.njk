@@ -1,0 +1,61 @@
+{# HOMEPAGE GRID #}
+{% set count = 0 %}
+{% for post in collections.product | reverse %}
+{% if page.url == "/" and post.data.site.featured_product === true and count < 4 %}
+<div class="shop-item">
+    {# IMAGE CONTAINER #}
+    <div
+        class="shop-featured-image zoom {% if post.data.site.override_padding === false %}image-padding{% endif %} bg-{{ post.data.site.background_color }} {% if post.data.site.override_blend_mode === true %}no-blend{% endif %}">
+        {# TAG #}
+        {% if post.data.site.tag === true %}
+        <div class="tag shop-item-tag pixel-font">
+            {{ post.data.site.tag_content }}
+        </div>
+        {% endif %}
+        {# IMAGE #}
+        <a href="{{ post.url }} ">
+            {% image post.data.site.featured_image_url, post.data.site.featured_image_alt %}
+        </a>
+    </div>
+    <div class="item-info">
+        <div class="spacer"></div>
+        <div>
+            <h4 class="pixel-font uppercase">
+                <a href="{{ post.url }}">{{ post.data.title }} — {% if post.data.site.sold_out === true %}Sold out{% else %}€{{ post.data.snipcart.price }}{% endif %}</a>
+            </h4>
+        </div>
+    </div>
+</div>
+{% set count = count + 1 %}
+{% endif %}
+{% endfor %}
+
+{# SHOP PAGE GRID #}
+{% for post in collections.product | reverse %}
+{% if page.url == "/shop/" %}
+<div class="shop-item">
+    {# IMAGE CONTAINER #}
+    <div
+        class="shop-featured-image zoom {% if post.data.site.override_padding === false %}image-padding{% endif %} bg-{{ post.data.site.background_color }} {% if post.data.site.override_blend_mode === true %}no-blend{% endif %}">
+        {# TAG #}
+        {% if post.data.site.tag === true %}
+        <div class="tag shop-item-tag pixel-font">
+            {{ post.data.site.tag_content }}
+        </div>
+        {% endif %}
+        {# IMAGE #}
+        <a href="{{ post.url }} ">
+            {% image post.data.site.featured_image_url, post.data.site.featured_image_alt %}
+        </a>
+    </div>
+    <div class="item-info">
+        <div class="spacer"></div>
+        <div>
+            <h4 class="pixel-font uppercase">
+                <a href="{{ post.url }}">{{ post.data.title }} — {% if post.data.site.sold_out === true %}Sold out{% else %}€{{ post.data.snipcart.price }}{% endif %}</a>
+            </h4>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endfor %}

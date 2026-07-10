@@ -1,0 +1,35 @@
+/* ----------------
+BUTTONS
+---------------- */
+.button-wrapper {
+	display: flex;
+}
+
+.button {
+	text-align: center;
+	padding: .55rem 1rem .4rem 1rem;
+	color: var(--primary-light);
+	border-style: none;
+	text-decoration: none;
+	background: var(--button-primary);
+	cursor: pointer;
+	width: 100%;
+}
+
+.button:hover {
+	background: var(--highlight);
+	color: var(--primary-dark);
+}
+
+/* ----------------
+SOLD OUT BUTTON
+---------------- */
+.button-sold-out {
+	background: var(--muted);
+	color: var(--primary-dark);
+}
+
+.button-sold-out:hover {
+	background: var(--offwhite);
+	color: var(--primary-dark);
+}

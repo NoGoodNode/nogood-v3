@@ -1,0 +1,41 @@
+/* ----------------
+BREADCRUMBS
+---------------- */
+#breadcrumbs {
+	display: flex;
+	flex-direction: row;
+	align-items: baseline;
+	gap: 5px;
+	height:fit-content;
+}
+
+
+/* ----------------
+POST SUB NAV
+---------------- */
+.more-posts {
+	display: flex;
+    flex-direction: row;
+	justify-content: space-between;
+	column-gap: 40px;
+	padding-top: 1rem;
+}
+
+.previous,
+.next {
+	display: flex;
+	flex-direction: column;
+	flex-basis: 50%;
+}
+
+.next {
+	place-items: end;
+}
+
+.previous-post,
+.next-post {
+	display: flex;
+	flex-direction: row;
+	gap: 10px;
+	align-items: center;
+}

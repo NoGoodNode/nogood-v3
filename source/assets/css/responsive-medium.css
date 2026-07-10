@@ -1,0 +1,74 @@
+@media screen and (min-width: 769px) and (max-width:1279px) {
+
+    /* ----------------
+    HIDDEN ITEMS
+    ---------------- */
+    .hide-medium {
+        display: none;
+    }
+
+    /* ----------------
+    PAGE COLUMN OVERRIDES
+    ---------------- */
+    #home-header,
+    .home-shop,
+    .home-portfolio,
+    #project {
+        grid-template-columns: 1fr;
+    }
+
+    #now {
+        grid-template-columns: 2fr 1fr 1fr;
+    }
+
+    #radio {
+        grid-template-columns: 7fr 3fr;
+    }
+
+    /* ----------------
+    FOOTER
+    ---------------- */    
+    .footer-copyright {
+        text-align: start;
+    }
+
+    /* ----------------
+    LISTS
+    ---------------- */
+    .list a {
+        text-decoration: underline;
+    }
+
+    /* ----------------
+    PADDING
+    ---------------- */
+    .padding-large {
+        padding: 10px;
+    }
+
+    .padding-right-small,
+    .padding-right-large,
+    .padding-right-extralarge {
+        padding-right: unset;
+    }
+
+    .padding-bottom-small,
+    .padding-bottom-large,
+    .padding-bottom-extralarge {
+        padding-bottom: 20vh;
+    }
+
+    /* ----------------
+    VIDEO
+    ---------------- */
+    #radio-animation {
+        aspect-ratio: 1/1;
+        position: relative;
+    }
+
+    #radio-animation video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}

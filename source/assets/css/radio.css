@@ -1,0 +1,344 @@
+/* ----------------
+VIDEO PLAYER
+---------------- */
+.player {
+    position: relative;
+    aspect-ratio: 16 / 9;}
+
+.player__video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.player__fallback {
+    position: absolute;
+    inset: 10px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary-dark);
+}
+
+.player__fallback img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.player__fallback.is-visible {
+    display: flex;
+}
+
+.player__offline-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+}
+
+/* ----------------
+VIDEO PLAYER CONTROLS
+---------------- */
+.player__controls {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 16px 6px 6px;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.75));
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    z-index: 3;
+}
+
+.player:hover .player__controls,
+.player__controls:focus-within {
+    opacity: 1;
+}
+
+.player.is-offline .player__controls {
+    display: none;
+}
+
+.player__btn {
+    background: none;
+    border: none;
+    color: var(--primary-light);
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    opacity: 0.8;
+    transition: opacity 0.15s;
+    flex-shrink: 0;
+}
+
+.player__btn:hover {
+    opacity: 1;
+}
+
+.player__btn svg {
+    width: 16px;
+    height: 16px;
+    display: block;
+}
+
+.player__live-badge {
+    font-size: 0.6rem;
+    color: var(--highlight);
+    border: 1px solid currentColor;
+    padding: 0.15em 0.45em;
+    line-height: 1.6;
+    flex-shrink: 0;
+    margin-left: 4px;
+}
+
+.player__controls-spacer {
+    flex: 1;
+}
+
+.player__quality {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.player__quality-toggle {
+    font-size: 0.6rem;
+    color: var(--primary-light);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px 6px;
+    height: 28px;
+    opacity: 0.8;
+    transition: opacity 0.15s;
+    display: flex;
+    align-items: center;
+}
+
+.player__quality-toggle:hover {
+    opacity: 1;
+}
+
+.player__quality-menu {
+    position: absolute;
+    bottom: calc(100% + 4px);
+    right: 0;
+    background: rgba(0, 0, 0, 0.9);
+    border: 1px solid rgba(251, 250, 243, 0.2);
+    flex-direction: column;
+    min-width: 72px;
+    display: none;
+}
+
+.player__quality-menu.is-open {
+    display: flex;
+}
+
+.player__quality-option {
+    font-size: 0.6rem;
+    padding: 0.4em 0.7em;
+    color: rgba(251, 250, 243, 0.7);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+}
+
+.player__quality-option:hover {
+    background: rgba(251, 250, 243, 0.1);
+    color: var(--primary-light);
+}
+
+.player__quality-option--active {
+    color: var(--highlight);
+}
+
+/* ----------------
+ZAP MARQUEE
+---------------- */
+.ticker {
+    display: flex;
+    padding-top: 4px;
+    min-height: 28px;
+    height: auto;
+}
+
+@keyframes ticker-fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.ticker__item {
+    animation: ticker-fadein 0.4s ease forwards;
+}
+
+.ticker .marquee-content {
+    --gap: 30px;
+    animation-duration: 90s;
+}
+
+.ticker .marquee-content li {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.ticker__item {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-right: 8px;
+}
+
+.ticker__message {
+    color: var(--medium);
+}
+
+/* ----------------
+CHAT
+---------------- */
+.chat {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.chat__messages {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding-bottom: 0.75rem;
+    scroll-padding-bottom: 0.75rem;
+}
+
+
+.chat__input-area {
+    display: flex;
+}
+
+#chat-send {
+    width: auto;
+    flex-shrink: 0;
+}
+
+.chat__input {
+    flex: 1;
+    padding: 0.625rem 0.75rem;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    font-family: inherit;
+}
+
+.chat__input::placeholder {
+    color: var(--medium);
+}
+
+.chat__input:disabled::placeholder {
+    color: rgba(251, 250, 243, 0.3);
+}
+
+
+.chat__notice {
+    padding: 0.625rem 0.75rem;
+    font-size: 0.75rem;
+    color: var(--medium);
+    text-align: center;
+}
+
+
+/* ----------------
+ZAPS
+---------------- */
+.zap-section {
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+
+.zap-custom__input {
+    flex: 1;
+    padding: 0.55rem 0.75rem 0.4rem;
+    border: 1px solid var(--border);
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    font-size: 1rem;
+    font-family: inherit;
+    outline: none;
+}
+
+.zap-custom__input:focus {
+    border-color: var(--highlight);
+    box-shadow: 0 0 0 2px var(--highlight);
+}
+
+.zap-custom__input::-webkit-inner-spin-button,
+.zap-custom__input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+}
+
+.zap-custom__input[type=number] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+.zap-btn {
+    width: auto;
+    transition: all 0.15s ease;
+}
+
+.zap-btn:hover:not(:disabled) {
+    background: var(--highlight);
+    color: var(--primary-dark);
+}
+
+.zap-btn:active:not(:disabled) {
+    transform: scale(0.96);
+}
+
+.zap-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.zap-btn--loading {
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+
+/* ----------------
+RESPONSIVE
+---------------- */
+@media (max-width: 768px) {
+    .player {
+        max-width: 100%;
+    }
+
+    .chat {
+        min-height: 350px;
+    }
+
+    .chat__input-area--mobile-hidden {
+        display: none;
+    }
+}
+

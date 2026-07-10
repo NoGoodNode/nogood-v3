@@ -1,0 +1,27 @@
+# BOOK SPECS
+specs:
+  - title: "Limited run"
+    description: "Edition of 400"
+  - title: "Pages"
+    description: "272"
+  - title: "Size"
+    description: "180x250mm"
+  - title: "Language"
+    description: "English"
+  - title: "Binding"
+    description: "Exposed spine"
+  - title: "Cover"
+    description: "Softcover"
+  - title: "Stock"
+    description: "Munken CW 100gr/m2, Rainbow 18 Intensive Yellow 80gr/m2"
+  - title: "Printed by"
+    description: "Wilco Art Books"
+  - title: "Editor"
+    description: '<a href="https://daniel.pizza" target="_blank" rel="noopener">Daniël van der Winden</a>'
+  - title: "Typeset"
+    description: "Wonderwerk"
+  - title: "Typography"
+    description: '<a href="https://pangrampangram.com/products/supply-mono" target="_blank" rel="noopener">Supply Mono</a>, <a href="https://klim.co.nz/retail-fonts/untitled-sans/" target="_blank" rel="noopener">Untitled Sans & Serif</a>'
+  - title: "Contributions"
+    description: '<a href="https://craphound.com" target="_blank" rel="noopener">Cory Doctorow</a>, <a href="https://www.rushkoff.com" target="_blank" rel="noopener">Douglas Rushkoff</a>, <a href="https://www.techdirt.com" target="_blank" rel="noopener">Mike Masnick</a>, <a href="https://www.joanwestenberg.com" target="_blank" rel="noopener">Joan Westenberg</a>, <a href="https://bartmol.io" target="_blank" rel="noopener">Bart Mol</a>, <a href="https://www.privacyguides.org" target="_blank" rel="noopener">Em</a>'
+  
