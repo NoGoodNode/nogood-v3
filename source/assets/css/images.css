@@ -116,6 +116,52 @@ CIRCLE THUMBNAILS
 }
 
 /* ----------------
+EMBED FACADE
+---------------- */
+.embed-facade {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background-color: var(--primary-dark);
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.embed-play {
+    width: 48px;
+    height: 48px;
+    background-color: var(--highlight);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.embed-play::before {
+    content: '';
+    border-style: solid;
+    border-width: 8px 0 8px 16px;
+    border-color: transparent transparent transparent var(--primary-dark);
+    margin-left: 3px;
+}
+
+.embed-play:hover {
+    background-color: var(--highlight-hover);
+}
+
+.embed-iframe {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border: none;
+    display: block;
+}
+
+/* ----------------
 VIDEO FILL
 ---------------- */
 .video-fill {

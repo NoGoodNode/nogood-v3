@@ -9,5 +9,16 @@
     {% if item.intro %}
     <p class="">{{ item.intro }}</p>
     {% endif %}
+    {% if item.quote %}
+    <div class="spacer-small"></div>
+    <blockquote class="clipping-quote">{{ item.quote }}</blockquote>
+    {% endif %}
+    {% if item.embed %}
+    <div class="spacer-small"></div>
+    <div class="embed-facade" data-src="{{ item.embed }}"{% if item.embed_thumb %} style="background-image: url('{{ item.embed_thumb }}')"{% endif %}>
+        <button class="embed-play" aria-label="Load embed"></button>
+    </div>
+    {% endif %}
+    <div class="spacer-small"></div>
     <a href="{{ item.url }}" target="_blank" rel="noopener" class="text-small">Link →</a>
 </div>

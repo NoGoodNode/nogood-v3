@@ -27,6 +27,9 @@ function readClippings() {
 				tags: tags.filter(tag => tag !== categoryTag),
 				category: categoryTag ? categoryTag.split("/")[1] : "default",
 				intro: content.trim(),
+				quote: data.quote || null,
+				embed: data.embed || null,
+				embed_thumb: data.embed_thumb || null,
 			};
 		})
 		.sort((a, b) => b.date - a.date);
