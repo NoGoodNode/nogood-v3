@@ -3,3 +3,4 @@ _build/
 .cache/
 .DS_Store
 .env
+external-scripts/
