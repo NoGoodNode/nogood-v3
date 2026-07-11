@@ -191,6 +191,10 @@ DARK SECTION OVERRIDES
     color: var(--primary-dark);
 }
 
+.bg-dark a.icon::after {
+    background-image: url("/assets/icons/nogood_external-link-white.svg");
+}
+
 .bg-dark .nostr-note__stats {
     color: var(--primary-light);
 }
