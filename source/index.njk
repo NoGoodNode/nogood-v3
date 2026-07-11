@@ -278,6 +278,18 @@ bodyColor: bg-highlight
                 {% include "source/snippets/list-tag.njk" %}
                 {% endfor %}
             </div>
+            <div class="spacer-extralarge"></div>
+            <h4 class="uppercase pixel-font">Podcast Appearances</h4>
+            <div class="spacer-large"></div>
+            <div class="list two-col-list">
+                {% for episode in podcasts.episodes %}
+                    <div>
+                        {% if episode.url %}<a href="{{ episode.url }}" target="_blank" rel="noopener">{{ episode.title }}</a>{% else %}{{ episode.title }}{% endif %}
+                    </div>
+                    <div class="align-right text-tabular">{{ episode.date | postDate }}</div>
+                    <div class="row-border"></div>
+                {% endfor %}
+            </div>
         </div>
     </div>
     <div class="section-column">

@@ -231,9 +231,10 @@ eleventyConfig.ignores.add("source/snippets");
 
 	// Date filter
 	eleventyConfig.addFilter("postDate", (dateObj) => {
-		return DateTime.fromJSDate(dateObj, {
-			zone: "Europe/Amsterdam",
-		}).setLocale('en').toFormat("dd/MM/yyyy");
+		const dt = dateObj instanceof Date
+			? DateTime.fromJSDate(dateObj, { zone: "Europe/Amsterdam" })
+			: DateTime.fromISO(String(dateObj), { zone: "Europe/Amsterdam" });
+		return dt.setLocale('en').toFormat("dd/MM/yyyy");
 	});
 
 
