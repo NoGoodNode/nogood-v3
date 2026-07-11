@@ -48,7 +48,18 @@ permalink: /archive/
 
             <div class="spacer-extralarge"></div>
 
-            {% include "source/snippets/downloads.njk" %}
+            <h4 class="uppercase pixel-font">Torrents</h4>
+            <div class="spacer"></div>
+            <div class="list two-col-list">
+                {% for item in downloads.files %}
+                    <div>{{ item.title }}</div>
+                    <div class="align-right">
+                        <a href="{{ item.dtan_url }}" class="icon external-icon">details</a>|
+                        <a href="{{ item.torrent_url }}" class="icon download-icon">download</a>
+                    </div>
+                    <div class="row-border"></div>
+                {% endfor %}
+            </div>
         </div>
     </div>
 

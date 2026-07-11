@@ -255,20 +255,22 @@ bodyColor: bg-highlight
         <div class="spacer-large"></div>
         <div class="place-bottom hide-small hide-medium">
             <div class="">
-                <p class="">Follow NoGood on <a href="https://njump.me/npub12hcytyr8fumy3axde8wgeced523gyp6v6zczqktwuqeaztfc2xzsz3rdp4" target="_blank" rel="noopener">Nostr</a> and <a href="https://bsky.app/profile/nogood.studio" target="_blank" rel="noopener">Bluesky</a> for more updates.</p>
+                <p class="">View all blog posts and clippings in <a href="/archive/">the archive</a>.</p>
             </div>
         </div>
     </div>
-    <div class="section-column">
+    <div class="section-column sticky">
         <video autoplay muted loop playsinline poster="/assets/img/book/Book_Promo_Poster.jpg">
             <source src="/assets/img/book-promo.mp4" type="video/mp4">
         </video>
-        <h3 class="uppercase pixel-font">Blog</h3>
-        <div class="spacer-large"></div>
-        <div class="list tag-list">
-            {% for post in collections.feedPosts %}
-                {% include "source/snippets/list-tag.njk" %}
-            {% endfor %}
+        <div class="inner-column">
+            <h4 class="uppercase pixel-font">Blog</h4>
+            <div class="spacer-large"></div>
+            <div class="list tag-list">
+                {% for post in collections.feedPosts %}
+                    {% include "source/snippets/list-tag.njk" %}
+                {% endfor %}
+            </div>
         </div>
     </div>
     <div class="section-column">
