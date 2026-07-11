@@ -1,5 +1,5 @@
 <div class="outline padding-small{% if loop.first %} bg-offwhite{% endif %}">
-    <a href="{{ item.url }}" target="_blank" rel="noopener">{% if item.category == "podcast" %}<span class="play-circle"></span>{% endif %}{{ item.title }}</a>
+    <a href="{{ item.url }}" target="_blank" rel="noopener" data-umami-event="clipping-click" data-umami-event-title="{{ item.title }}">{% if item.category == "podcast" %}<span class="play-circle"></span>{% endif %}{{ item.title }}</a>
     <div class="spacer"></div>
     {% if item.intro %}
     <p class="">{{ item.intro }}</p>
@@ -20,6 +20,6 @@
             <span class="tag tag-dark pixel-font uppercase">{{ item.category }}</span>
             <span class="text-small text-tabular">{{ item.date | postDate }}</span>
         </div>
-        <a href="{{ item.url }}" target="_blank" rel="noopener" class="text-small">Source</a>
+        <a href="{{ item.url }}" target="_blank" rel="noopener" class="text-small" data-umami-event="clipping-click" data-umami-event-title="{{ item.title }}">Source</a>
     </div>
 </div>

@@ -10,6 +10,20 @@
         height: auto;
     }
 
+    #shop-header {
+        aspect-ratio: 1 / 1;
+    }
+
+    #shop-header video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .video-fill {
+        aspect-ratio: 1 / 1;
+    }
+
     /* ----------------
     PORTFOLIO CAROUSEL
     ---------------- */
@@ -395,5 +409,8 @@
         max-width: 100%;
     }
 
+    .top-banner.marquee {
+        padding: 6px 0;
+    }
 
 }

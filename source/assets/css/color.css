@@ -91,16 +91,125 @@ a:hover {
 }
 
 /* ----------------
+DARK NAV OVERRIDES
+---------------- */
+nav.bg-dark {
+    background-color: var(--primary-dark);
+    border-bottom-color: rgba(255, 255, 255, 0.3);
+}
+
+nav.bg-dark .logo {
+    border-right-color: rgba(255, 255, 255, 0.3);
+}
+
+nav.bg-dark .logo svg {
+    fill: var(--primary-light);
+}
+
+nav.bg-dark a {
+    color: var(--primary-light);
+}
+
+nav.bg-dark .radio-pill {
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+nav.bg-dark .radio-pill:hover {
+    background: var(--primary-dark-alt);
+    color: var(--primary-light);
+}
+
+nav.bg-dark .radio-pill .soundbars span {
+    background-color: var(--primary-light);
+}
+
+nav.bg-dark .radio-pill:hover .soundbars span {
+    background-color: var(--primary-light);
+}
+
+nav.bg-dark .cart-item {
+    border-left-color: rgba(255, 255, 255, 0.3);
+}
+
+nav.bg-dark .nav-status-wrap {
+    border-left-color: rgba(255, 255, 255, 0.3);
+}
+
+.mobile-menu-overlay,
+nav.bg-dark .mobile-menu-overlay {
+    color: var(--primary-dark);
+}
+
+nav.bg-dark .mobile-menu-overlay a {
+    color: var(--primary-dark);
+}
+
+nav.bg-dark .mobile-menu-icon {
+    fill: var(--primary-light);
+}
+
+/* ----------------
 DARK SECTION OVERRIDES
 ---------------- */
 .bg-dark {
-    --border: var(--primary-dark);
+    color: var(--primary-light);
+    --border: rgba(255, 255, 255, 0.3);
 }
 
 .bg-dark a {
-    color: var(--highlight)
+    color: var(--primary-light);
 }
 
 .bg-dark a:hover {
-    color: var(--highlight-hover);
+    color: var(--muted);
+}
+
+.bg-dark .list a {
+    color: var(--primary-light);
+}
+
+.bg-dark .list a:hover {
+    color: var(--muted);
+}
+
+.bg-dark .row-border {
+    border-top-color: rgba(255, 255, 255, 0.3);
+}
+
+.bg-dark .bg-offwhite {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.bg-dark .tag {
+    border-color: rgba(255, 255, 255, 0.4);
+    color: var(--primary-light);
+}
+
+.bg-dark .tag-dark {
+    background-color: var(--primary-light);
+    border-color: transparent;
+    color: var(--primary-dark);
+}
+
+.bg-dark .nostr-note__stats {
+    color: var(--primary-light);
+}
+
+
+.bg-dark .zap-feed .chat__message--zap {
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+}
+
+.bg-dark .zap-feed .chat__message--zap:first-child {
+    color: var(--primary-dark);
+    border-color: var(--highlight);
+}
+
+.bg-dark .play-circle {
+    background-color: var(--primary-light);
+}
+
+.bg-dark .play-circle::before {
+    border-color: transparent transparent transparent var(--primary-dark);
 }

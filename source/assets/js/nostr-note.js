@@ -89,7 +89,7 @@ function renderNote(event, profile, mentionProfiles = {}) {
     const img = document.createElement('img');
     img.src = profile.picture;
     img.alt = profile.name || 'NoGood';
-    img.className = 'nostr-note__avatar';
+    img.className = 'nostr-note__avatar no-blend';
     author.appendChild(img);
   }
 

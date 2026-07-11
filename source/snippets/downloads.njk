@@ -6,8 +6,8 @@
             {{ item.title }}
         </div>
         <div class="align-right">
-            <a href="{{ item.dtan_url }}" class="icon external-icon">details</a>|
-            <a href="{{ item.torrent_url }}" class="icon download-icon">download</a>
+            <a href="{{ item.dtan_url }}" class="icon external-icon" data-umami-event="torrent-details" data-umami-event-title="{{ item.title }}">details</a>|
+            <a href="{{ item.torrent_url }}" class="icon download-icon" data-umami-event="torrent-download" data-umami-event-title="{{ item.title }}">download</a>
         </div>
         <div class="row-border"></div>
     {% endfor %}

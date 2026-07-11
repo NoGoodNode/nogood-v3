@@ -7,7 +7,8 @@
         data-item-image="{{ snipcart.snipcartimage }}" data-item-name="{{ title }}"
         data-item-weight="{{ snipcart.weight }}" {% if snipcart.size_variant===true %}
         data-item-custom1-name="{{ snipcart.size_variant_name}}"
-        data-item-custom1-options="{{ snipcart.size_variant_options}}" data-item-custom1-required="true" {% endif %}>
+        data-item-custom1-options="{{ snipcart.size_variant_options}}" data-item-custom1-required="true" {% endif %}
+        data-umami-event="add-to-cart" data-umami-event-product="{{ title }}">
         {% if site.pre_order === true %}
         Pre-order
         {% else %}

@@ -26,7 +26,8 @@ BLEND MODES
 OVERRIDES
 ---------------- */
 .no-blend img,
-.no-blend picture {
+.no-blend picture,
+img.no-blend {
     mix-blend-mode: normal;
 }
 

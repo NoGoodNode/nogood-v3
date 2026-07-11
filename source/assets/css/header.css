@@ -1,7 +1,7 @@
 .top-banner.marquee {
     width: 100%;
     height: auto;
-    padding: 8px 0 4px;
+    padding: 12px 0 8px;
     margin-bottom: 0;
     background-color: var(--primary-dark);
     border-bottom: 1px solid var(--primary-dark);
@@ -246,7 +246,8 @@ MOBILE MENU
     cursor: pointer;
 }
 
-.mobile-menu-open-btn img {
+.mobile-menu-open-btn img,
+.mobile-menu-icon {
     margin-top: 2px;
     height: 1rem;
     width: auto;
