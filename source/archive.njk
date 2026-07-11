@@ -99,13 +99,17 @@ permalink: /archive/
     var trigger = document.querySelector('#archive .sticky-wrapper');
     if (!btn || !trigger) return;
 
-    var footer = document.querySelector('footer');
+    var archive = document.getElementById('archive');
     function checkVisibility() {
         var rect = trigger.getBoundingClientRect();
         btn.classList.toggle('is-visible', rect.top <= 0);
-        if (footer) {
-            var overlap = window.innerHeight - footer.getBoundingClientRect().top - 16;
-            btn.style.bottom = overlap > 0 ? (16 + overlap) + 'px' : '';
+        if (archive) {
+            var archiveBottom = archive.getBoundingClientRect().bottom;
+            if (archiveBottom < window.innerHeight - 16) {
+                btn.style.bottom = (window.innerHeight - archiveBottom + 16) + 'px';
+            } else {
+                btn.style.bottom = '';
+            }
         }
     }
 

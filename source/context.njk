@@ -182,9 +182,18 @@ intro: >
     var trigger = document.querySelector('#context-articles .sticky-wrapper');
     if (!btn || !trigger) return;
 
+    var container = document.getElementById('context-articles');
     function checkVisibility() {
         var rect = trigger.getBoundingClientRect();
         btn.classList.toggle('is-visible', rect.top <= 0);
+        if (container) {
+            var containerBottom = container.getBoundingClientRect().bottom;
+            if (containerBottom < window.innerHeight - 16) {
+                btn.style.bottom = (window.innerHeight - containerBottom + 16) + 'px';
+            } else {
+                btn.style.bottom = '';
+            }
+        }
     }
 
     window.addEventListener('scroll', checkVisibility, { passive: true });
