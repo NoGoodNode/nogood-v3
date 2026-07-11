@@ -81,6 +81,7 @@ eleventyConfig.ignores.add("source/snippets");
 			.filter(item => item.data.layout !== "product")
 			.filter(item => item.inputPath.includes("/posts/"))
 			.filter(item => !item.inputPath.includes("/posts/products/"))
+			.filter(item => !item.data.unlisted)
 
 			.sort((a, b) => b.date - a.date);
 	});
