@@ -29,6 +29,7 @@ LISTS
 
 .clippings-list a {
     text-decoration: underline;
+    line-height: 1.5rem;
 }
 
 /* three column list */
