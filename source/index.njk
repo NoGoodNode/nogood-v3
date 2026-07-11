@@ -15,10 +15,11 @@ bodyColor: bg-highlight
                 {% image "source/assets/img/nogood_sign.png", "NoGood sign" %}
                 <svg class="header-badge-text" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                     <defs>
-                        <path id="circle-path" d="M 50,50 m -35,0 a 35,35 0 1,1 70,0 a 35,35 0 1,1 -70,0"/>
+                        <path id="circle-path" d="M 50,50 m -35,0 a 35,35 0 1,1 70,0 a 35,35 0 1,1 -70,0" />
                     </defs>
                     <text>
-                        <textPath href="#circle-path" class="uppercase pixel-font">UP TO NOGOOD ⚡ UP TO NOGOOD ⚡</textPath>
+                        <textPath href="#circle-path" class="uppercase pixel-font">UP TO NOGOOD ⚡ UP TO NOGOOD ⚡
+                        </textPath>
                     </text>
                 </svg>
             </div>
@@ -35,16 +36,19 @@ bodyColor: bg-highlight
                 </div>
             </div>
         </div>
-                        
+
         {# CONTACT #}
         <div class="place-bottom">
             <div class="spacer-large"></div>
-            <span class="tag pixel-font self-center {% if status.available %}tag-available{% else %}tag-unavailable{% endif %}">
-                {% if status.available %}{{ status.availability_label }}{% else %}{{ status.unavailability_label }}{% endif %}
+            <span
+                class="tag pixel-font self-center {% if status.available %}tag-available{% else %}tag-unavailable{% endif %}">
+                {% if status.available %}{{ status.availability_label }}{% else %}{{ status.unavailability_label }}{%
+                endif %}
             </span>
             <div class="spacer-small"></div>
             <p>
-                Get in touch: <a href="mailto:{{ settings.metadata.site_email }}">{{ settings.metadata.site_email }}</a><br>
+                Get in touch: <a href="mailto:{{ settings.metadata.site_email }}">{{ settings.metadata.site_email
+                    }}</a><br>
                 Based in Amsterdam, The Netherlands — working worldwide.
             </p>
         </div>
@@ -52,14 +56,13 @@ bodyColor: bg-highlight
     {# STATUS #}
     <div class="section-column hide-small hide-medium sticky-two-rows">
         <div class="sticky-wrapper">
-            <div
-                class="sticky">
+            <div class="sticky">
                 {# NOW #}
                 <div class="now">
                     <h5 class="uppercase pixel-font">Now</h5>
                     <p>
-                        <a href="/the-nogood-book/">The NoGood Book</a>
-                        is done and out now! I can't wait to start shipping pre-orders and put it out into the world!
+                        Shipped all <a href="/the-nogood-book/">The NoGood Book</a> pre-orders and just finished a
+                        fairly large illustration project. Taking some time to step back and recharge.
                     </p>
                     <div class="spacer-small"></div>
                     <a href="/now/">Read more</a>
@@ -69,34 +72,33 @@ bodyColor: bg-highlight
                 <div class="latest-product">
                     <h5 class="uppercase pixel-font">
                         <a href="/shop/">Shop</a>
-                        > Latest addition</h5>
+                        > Latest addition
+                    </h5>
                     <div class="spacer-small"></div>
                     {% for post in collections.product | reverse %}
-                        {% if loop.index0 < 1 %}
-                            {# IMAGE #}
-                            <div class="shop-featured-image zoom bg-{{ post.data.site.background_color }} {% if
+                    {% if loop.index0 < 1 %} {# IMAGE #} <div class="shop-featured-image zoom bg-{{ post.data.site.background_color }} {% if
                                     post.data.site.override_blend_mode === true %}no-blend{% endif %}">
-                                <a href="{{ post.url }} ">
-                                    {% image post.data.site.featured_image_url, post.data.title %}
-                                </a>
-                            </div>
-                            <div class="spacer-small"></div>
-                            <div>
-                                <a href="{{ post.url }}">{{ post.data.title }}</a>
-                            </div>
-                        {% endif %}
-                    {% endfor %}
+                        <a href="{{ post.url }} ">
+                            {% image post.data.site.featured_image_url, post.data.title %}
+                        </a>
                 </div>
-                <div class="spacer-large line"></div>
+                <div class="spacer-small"></div>
+                <div>
+                    <a href="{{ post.url }}">{{ post.data.title }}</a>
+                </div>
+                {% endif %}
+                {% endfor %}
             </div>
-        </div>
-        {# RECENT ZAPS #}
-        <div class="place-bottom">
-            <h5 class="uppercase pixel-font">Recent supporters</h5>
-            <div class="spacer-small"></div>
-            <div id="home-zap-feed" class="zap-feed animate-in"></div>
+            <div class="spacer-large line"></div>
         </div>
     </div>
+    {# RECENT ZAPS #}
+    <div class="place-bottom">
+        <h5 class="uppercase pixel-font">Recent supporters</h5>
+        <div class="spacer-small"></div>
+        <div id="home-zap-feed" class="zap-feed animate-in"></div>
+    </div>
+</div>
 </div>
 {# PORTFOLIO #}
 <div id="portfolio" class="section bg-dark text-light">
@@ -108,18 +110,18 @@ bodyColor: bg-highlight
     <div class="section-column portfolio-carousel">
         <div class="portfolio-carousel-track">
             {% for item in featuredimg.items %}
-                <div class="inner-column portfolio-item">
-                    <div class="portfolio-featured-img bg-light">
-                        {% image item.src, item.alt %}
-                    </div>
+            <div class="inner-column portfolio-item">
+                <div class="portfolio-featured-img bg-light">
+                    {% image item.src, item.alt %}
                 </div>
+            </div>
             {% endfor %}
             {% for item in featuredimg.items %}
-                <div class="inner-column portfolio-item" aria-hidden="true">
-                    <div class="portfolio-featured-img">
-                        {% image item.src, item.alt %}
-                    </div>
+            <div class="inner-column portfolio-item" aria-hidden="true">
+                <div class="portfolio-featured-img">
+                    {% image item.src, item.alt %}
                 </div>
+            </div>
             {% endfor %}
         </div>
     </div>
@@ -130,7 +132,8 @@ bodyColor: bg-highlight
         <div class="sticky-wrapper">
             <div class="sticky">
                 <h1>
-                    My illustrations, through the rickety hardware and clunky modded devices they feature, are informed by notions of ownership and control.
+                    My illustrations, through the rickety hardware and clunky modded devices they feature, are informed
+                    by notions of ownership and control.
                 </h1>
             </div>
         </div>
@@ -144,10 +147,13 @@ bodyColor: bg-highlight
             </p>
             <div class="spacer-small"></div>
             <div class="flex-row flex-align-center gap-large">
-                <span class="tag pixel-font self-center {% if status.available %}tag-available{% else %}tag-unavailable{% endif %}">
-                    {% if status.available %}{{ status.availability_label }}{% else %}{{ status.unavailability_label }}{% endif %}
+                <span
+                    class="tag pixel-font self-center {% if status.available %}tag-available{% else %}tag-unavailable{% endif %}">
+                    {% if status.available %}{{ status.availability_label }}{% else %}{{ status.unavailability_label
+                    }}{% endif %}
                 </span>
-                <span class="text-small">Get in touch: <a href="mailto:{{ settings.metadata.site_email }}">{{ settings.metadata.site_email }}</a></span>
+                <span class="text-small">Get in touch: <a href="mailto:{{ settings.metadata.site_email }}">{{
+                        settings.metadata.site_email }}</a></span>
             </div>
         </div>
     </div>
@@ -194,8 +200,7 @@ bodyColor: bg-highlight
     </div>
 </div>
 {# SHOP #}
-<div
-    class="section home-shop large-grid">
+<div class="section home-shop large-grid">
     {# INTRO #}
     <div class="section-column sticky-two-rows">
         <div class="sticky-wrapper">
@@ -215,10 +220,8 @@ bodyColor: bg-highlight
             {# NOTE #}
             <div class="note bg-offwhite padding-small">
                 <p class="">Rocking the wallpapers? Zap torrent-files on
-                    <a
-                        href="https://dtan.xyz/p/nprofile1qqs9tuz9jpn57djg7nxunhyvuvk69g5zqaxdpvpqt9hwqv7395u9rpg6zq5uw"
-                        target="_blank" rel="noopener"
-                        class="">dtan.xyz</a>
+                    <a href="https://dtan.xyz/p/nprofile1qqs9tuz9jpn57djg7nxunhyvuvk69g5zqaxdpvpqt9hwqv7395u9rpg6zq5uw"
+                        target="_blank" rel="noopener" class="">dtan.xyz</a>
                 </p>
             </div>
         </div>
@@ -228,7 +231,8 @@ bodyColor: bg-highlight
         {# BOOK FEATURE #}
         <div id="shop-header" class="no-blend zoom fade-in">
             <a href="/the-nogood-book/">
-                {% image "source/assets/img/book/NG_Shoot_Book_Cover_Featured.jpg", "The NoGood Book", [720, 1400, 2000], "100vw" %}
+                {% image "source/assets/img/book/NG_Shoot_Book_Cover_Featured.jpg", "The NoGood Book", [720, 1400,
+                2000], "100vw" %}
             </a>
         </div>
         <div class="item-info">
@@ -236,7 +240,8 @@ bodyColor: bg-highlight
                 <a href="/the-nogood-book/">The NoGood Book — €70</a>
             </h4>
             <div class="spacer-small hide-small"></div>
-            <p class="text-large hide-small">A monograph bringing together five years worth of NoGood illustration projects, outlining the backdrop for and context within which my work was created.</p>
+            <p class="text-large hide-small">A monograph bringing together five years worth of NoGood illustration
+                projects, outlining the backdrop for and context within which my work was created.</p>
         </div>
         <div class="inner-column"></div>
         <div class="grid-span-full border-bottom"></div>
@@ -259,16 +264,16 @@ bodyColor: bg-highlight
             </div>
         </div>
     </div>
-    <div class="section-column sticky">
-        <video autoplay muted loop playsinline poster="/assets/img/book/Book_Promo_Poster.jpg">
-            <source src="/assets/img/book-promo.mp4" type="video/mp4">
-        </video>
-        <div class="inner-column">
+    <div class="section-column">
+        <div class="inner-column sticky">
+            <video autoplay muted loop playsinline poster="/assets/img/book/Book_Promo_Poster.jpg">
+                <source src="/assets/img/book-promo.mp4" type="video/mp4">
+            </video>
             <h4 class="uppercase pixel-font">Blog</h4>
             <div class="spacer-large"></div>
             <div class="list tag-list">
                 {% for post in collections.feedPosts %}
-                    {% include "source/snippets/list-tag.njk" %}
+                {% include "source/snippets/list-tag.njk" %}
                 {% endfor %}
             </div>
         </div>
