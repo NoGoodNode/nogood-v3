@@ -1,9 +1,4 @@
 <div class="outline padding-small{% if loop.first %} bg-offwhite{% endif %}">
-    <div class="tag-row">
-        <span class="tag tag-dark pixel-font uppercase">{{ item.category }}</span>
-        <span class="text-small text-tabular">{{ item.date | postDate }}</span>
-    </div>
-    <div class="spacer-small"></div>
     <a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.title }}</a>
     <div class="spacer"></div>
     {% if item.intro %}
@@ -19,6 +14,12 @@
         <button class="embed-play" aria-label="Load embed"></button>
     </div>
     {% endif %}
-    <div class="spacer-small"></div>
-    <a href="{{ item.url }}" target="_blank" rel="noopener" class="text-small">Link →</a>
+    <div class="spacer"></div>
+    <div class="flex-space-between">
+        <div class="tag-row">
+            <span class="tag tag-dark pixel-font uppercase">{{ item.category }}</span>
+            <span class="text-small text-tabular">{{ item.date | postDate }}</span>
+        </div>
+        <a href="{{ item.url }}" target="_blank" rel="noopener" class="text-small">Source</a>
+    </div>
 </div>

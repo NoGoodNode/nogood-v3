@@ -27,6 +27,10 @@ LISTS
     text-decoration: underline;
 }
 
+.clippings-list a {
+    text-decoration: underline;
+}
+
 /* three column list */
 .three-col-list {
     grid-template-columns: auto 1fr auto;

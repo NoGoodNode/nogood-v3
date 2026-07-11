@@ -35,6 +35,10 @@ TAGS
     flex-wrap: wrap;
 }
 
+.clippings-list .flex-space-between {
+    align-items: center;
+}
+
 .clippings-list .tag-row span:last-child {
     margin-top: 2px;
 }
