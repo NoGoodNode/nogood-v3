@@ -1,5 +1,5 @@
 <div class="outline padding-small{% if loop.first %} bg-offwhite{% endif %}">
-    <a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.title }}</a>
+    <a href="{{ item.url }}" target="_blank" rel="noopener">{% if item.category == "podcast" %}<span class="play-circle"></span>{% endif %}{{ item.title }}</a>
     <div class="spacer"></div>
     {% if item.intro %}
     <p class="">{{ item.intro }}</p>
