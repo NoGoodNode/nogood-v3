@@ -11,35 +11,69 @@ module.exports.config = {
 	templateFormats: ["html", "njk", "md"],
 };
 
-function readClippings() {
-	const vaultDir = path.join(__dirname, "obsidian-vault");
-	return fs.readdirSync(vaultDir)
-		.filter(filename => filename.endsWith(".md"))
-		.map(filename => {
-			const raw = fs.readFileSync(path.join(vaultDir, filename), "utf8");
-			const { data, content } = matter(raw);
-			const tags = data.tags || [];
-			const categoryTag = tags.find(tag => tag.startsWith("category/"));
-			return {
-				title: data.title,
-				url: data.url,
-				date: data.date,
-				tags: tags.filter(tag => tag !== categoryTag),
-				category: categoryTag ? categoryTag.split("/")[1] : "default",
-				intro: content.trim(),
-				quote: data.quote || null,
-				embed: data.embed || null,
-				embed_thumb: data.embed_thumb || null,
-			};
-		})
-		.sort((a, b) => b.date - a.date);
+const THUMB_DIR = path.join(__dirname, "source/assets/img/clippings");
+
+function youtubeId(url) {
+	const m = url.match(/youtube\.com\/embed\/([^?&/]+)/);
+	return m ? m[1] : null;
+}
+
+async function fetchThumb(videoId) {
+	const dest = path.join(THUMB_DIR, `${videoId}.jpg`);
+	if (fs.existsSync(dest)) return `/assets/img/clippings/${videoId}.jpg`;
+	fs.mkdirSync(THUMB_DIR, { recursive: true });
+	for (const quality of ["maxresdefault", "hqdefault"]) {
+		const res = await fetch(`https://i.ytimg.com/vi/${videoId}/${quality}.jpg`);
+		if (res.ok) {
+			fs.writeFileSync(dest, Buffer.from(await res.arrayBuffer()));
+			return `/assets/img/clippings/${videoId}.jpg`;
+		}
+	}
+	return null;
+}
+
+let clippingsPromise = null;
+
+async function readClippings() {
+	if (clippingsPromise) return clippingsPromise;
+	clippingsPromise = (async () => {
+		const vaultDir = path.join(__dirname, "obsidian-vault");
+		const items = await Promise.all(
+			fs.readdirSync(vaultDir)
+				.filter(filename => filename.endsWith(".md"))
+				.map(async filename => {
+					const raw = fs.readFileSync(path.join(vaultDir, filename), "utf8");
+					const { data, content } = matter(raw);
+					const tags = data.tags || [];
+					const categoryTag = tags.find(tag => tag.startsWith("category/"));
+					let embedThumb = data.embed_thumb || null;
+					if (!embedThumb && data.embed) {
+						const id = youtubeId(data.embed);
+						if (id) embedThumb = await fetchThumb(id);
+					}
+					return {
+						title: data.title,
+						url: data.url,
+						date: data.date,
+						tags: tags.filter(tag => tag !== categoryTag),
+						category: categoryTag ? categoryTag.split("/")[1] : "default",
+						intro: content.trim(),
+						quote: data.quote || null,
+						embed: data.embed || null,
+						embed_thumb: embedThumb,
+					};
+				})
+		);
+		return items.sort((a, b) => b.date - a.date);
+	})();
+	return clippingsPromise;
 }
 
 module.exports = async function (eleventyConfig) {
 eleventyConfig.ignores.add("source/snippets");
 
-	eleventyConfig.addCollection("clippingsHome", () => readClippings().slice(0, 3));
-	eleventyConfig.addCollection("clippingsNow", () => readClippings().slice(0, 10));
+	eleventyConfig.addCollection("clippingsHome", async () => (await readClippings()).slice(0, 3));
+	eleventyConfig.addCollection("clippingsNow", async () => (await readClippings()).slice(0, 10));
 
 	eleventyConfig.addCollection("feedPosts", function (collectionApi) {
 		return collectionApi.getAll()
@@ -102,6 +136,8 @@ eleventyConfig.ignores.add("source/snippets");
 	eleventyConfig.addPassthroughCopy({ "source/assets/img/og": "assets/img/og" });
 	// Torrent files
 	eleventyConfig.addPassthroughCopy({ "source/assets/downloads": "assets/downloads" });
+	// Auto-downloaded clipping thumbnails
+	eleventyConfig.addPassthroughCopy({ "source/assets/img/clippings": "assets/img/clippings" });
 	// GIFs (excluded from image plugin)
 	eleventyConfig.addPassthroughCopy({ "source/assets/img/NG_Zap_Animation.gif": "assets/img/NG_Zap_Animation.gif" });
 	// Videos
