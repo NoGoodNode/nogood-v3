@@ -3,7 +3,7 @@ layout: base.njk
 title: Now
 description: "What's NoGood currently up to."
 
-date: 2026-09-06
+date: 2026-07-11
 ---
 
 <div class="section">
@@ -29,9 +29,7 @@ date: 2026-09-06
                     in my local bookshop and immediately bought it. I knew about MSCHF because my friend <a href="https://niekdekker.com/" target="_blank" rel="noopener">Niek</a> is part of the collective. It's beautifully designed, and one of those books that quietly raises the bar for The NoGood Book.</p>
                 <div class="spacer"></div>
                 <h4 class="uppercase pixel-font">Nerding out</h4>
-                <p class="text-large">Had a call with
-                    <a href="https://trustrevolution.co" target="_blank" rel="noopener">Shawn Yeager</a>
-                    last week. Watching him use AI to rapidly build and experiment was an eye-opener. I'm still wary of it — not for illustration, that's not happening — but I'm starting to think there's a place for it. Maybe it'll even help me update this site more often.</p>
+                <p class="text-large">Moved the whole site to GitHub. Now I can clip something in Obsidian and it automatically shows up here, thumbnail and all. Next up: a bot that pushes those same clippings to Nostr and Bluesky.</p>
             </div>
         </div>
         <div class="note bg-offwhite padding-small place-bottom">
@@ -122,6 +120,7 @@ date: 2026-09-06
     <div class="section-column">
         <div class="sticky">
             {% set clippingsItems = collections.clippingsNow %}
+            {% set showArchiveLink = true %}
             {% include "source/snippets/clippings.njk" %}
         </div>
     </div>
