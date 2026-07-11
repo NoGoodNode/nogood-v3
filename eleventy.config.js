@@ -74,6 +74,7 @@ eleventyConfig.ignores.add("source/snippets");
 
 	eleventyConfig.addCollection("clippingsHome", async () => (await readClippings()).slice(0, 3));
 	eleventyConfig.addCollection("clippingsNow", async () => (await readClippings()).slice(0, 10));
+	eleventyConfig.addCollection("clippingsAll", async () => await readClippings());
 
 	eleventyConfig.addCollection("feedPosts", function (collectionApi) {
 		return collectionApi.getAll()
