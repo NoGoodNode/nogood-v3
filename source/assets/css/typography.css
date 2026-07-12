@@ -172,3 +172,23 @@ CLIPPING QUOTE
     padding-left: 0.75rem;
     font-style: italic;
 }
+
+.clipping-podcast {
+    display: grid;
+    grid-template-columns: 3rem 1fr;
+    gap: 0.75rem;
+    align-items: start;
+}
+
+.clipping-podcast-cover {
+    width: 3rem;
+    height: 3rem;
+    object-fit: cover;
+    border-radius: 2px;
+}
+
+.clipping-podcast-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}

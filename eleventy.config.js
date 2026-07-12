@@ -1,6 +1,7 @@
 // Import Modules
 const fs = require("fs");
 const path = require("path");
+const crypto = require("crypto");
 const { DateTime } = require("luxon");
 const Image = require("@11ty/eleventy-img");
 const YAML = require("yaml");
@@ -16,6 +17,22 @@ const THUMB_DIR = path.join(__dirname, "source/assets/img/clippings");
 function youtubeId(url) {
 	const m = url.match(/youtube\.com\/embed\/([^?&/]+)/);
 	return m ? m[1] : null;
+}
+
+async function fetchCover(coverUrl, clippingUrl) {
+	const hash = crypto.createHash('md5').update(clippingUrl).digest('hex');
+	const ext = coverUrl.match(/\.(png|webp|jpg|jpeg)(\?|$)/i)?.[1] || 'jpg';
+	const dest = path.join(THUMB_DIR, `${hash}.${ext}`);
+	if (fs.existsSync(dest)) return `/assets/img/clippings/${hash}.${ext}`;
+	fs.mkdirSync(THUMB_DIR, { recursive: true });
+	try {
+		const res = await fetch(coverUrl);
+		if (res.ok) {
+			fs.writeFileSync(dest, Buffer.from(await res.arrayBuffer()));
+			return `/assets/img/clippings/${hash}.${ext}`;
+		}
+	} catch {}
+	return null;
 }
 
 async function fetchThumb(videoId) {
@@ -51,6 +68,10 @@ async function readClippings() {
 						const id = youtubeId(data.embed);
 						if (id) embedThumb = await fetchThumb(id);
 					}
+					let cover = null;
+					if (data.cover) {
+						cover = await fetchCover(data.cover, data.url);
+					}
 					return {
 						title: data.title,
 						url: data.url,
@@ -61,6 +82,8 @@ async function readClippings() {
 						quote: data.quote || null,
 						embed: data.embed || null,
 						embed_thumb: embedThumb,
+						cover,
+						show: data.show || null,
 					};
 				})
 		);

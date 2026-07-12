@@ -1,5 +1,16 @@
 <div class="outline padding-small">
-    <a href="{{ item.url }}" target="_blank" rel="noopener" data-umami-event="clipping-click" data-umami-event-title="{{ item.title }}">{% if item.category == "podcast" %}<span class="play-circle"></span>{% endif %}{{ item.title }}</a>
+    {% if item.category == "podcast" %}
+    <div class="clipping-podcast">
+        {% if item.cover %}
+        <img src="{{ item.cover }}" alt="{{ item.title }}" class="no-blend clipping-podcast-cover">
+        {% endif %}
+        <div class="clipping-podcast-info">
+            <a href="{{ item.url }}" target="_blank" rel="noopener" data-umami-event="clipping-click" data-umami-event-title="{{ item.title }}">{{ item.title }}</a>
+            {% if item.show %}<p class="text-small">{{ item.show }}</p>{% endif %}
+        </div>
+    </div>
+    {% else %}
+    <a href="{{ item.url }}" target="_blank" rel="noopener" data-umami-event="clipping-click" data-umami-event-title="{{ item.title }}">{{ item.title }}</a>
     <div class="spacer"></div>
     {% if item.intro %}
     <p class="">{{ item.intro }}</p>
@@ -13,6 +24,10 @@
     <div class="embed-facade" data-src="{{ item.embed }}"{% if item.embed_thumb %} style="background-image: url('{{ item.embed_thumb }}')"{% endif %}>
         <button class="embed-play" aria-label="Load embed"></button>
     </div>
+    {% elif item.cover %}
+    <div class="spacer-small"></div>
+    <img src="{{ item.cover }}" alt="{{ item.title }}" class="no-blend">
+    {% endif %}
     {% endif %}
     <div class="spacer"></div>
     <div class="flex-space-between">
