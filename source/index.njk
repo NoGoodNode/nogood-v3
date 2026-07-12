@@ -281,8 +281,10 @@ bodyColor: bg-highlight
         </div>
     </div>
     <div class="section-column">
+        <div class="inner-column sticky">
         {% set clippingsItems = collections.clippingsHome %}
         {% include "source/snippets/clippings.njk" %}
+        </div>
     </div>
 </div>
 <script type="module" src="/assets/js/zap-feed.js"></script>
