@@ -14,7 +14,7 @@
     <p>{{ item.intro }}</p>
     {% endif %}
     {% else %}
-    <a href="{{ item.url }}" target="_blank" rel="noopener" data-umami-event="clipping-click" data-umami-event-title="{{ item.title }}">{{ item.title }}</a>
+    <a href="{{ item.url }}" target="_blank" rel="noopener" data-umami-event="clipping-click" data-umami-event-title="{{ item.title }}">{{ item.title }}</a>{% if item.domain and item.category != "video" and item.category != "music" %} <span class="clipping-domain">— {{ item.domain }}</span>{% endif %}
     <div class="spacer"></div>
     {% if item.intro %}
     <p class="">{{ item.intro }}</p>
@@ -39,6 +39,6 @@
             <span class="tag tag-dark pixel-font uppercase">{{ item.category }}</span>
             <span class="text-small text-tabular">{{ item.date | postDate }}</span>
         </div>
-        <a href="{{ item.url }}" target="_blank" rel="noopener" class="text-small" data-umami-event="clipping-click" data-umami-event-title="{{ item.title }}">Source</a>
+        <span class="text-small">source:&nbsp;<a href="{{ item.url }}" target="_blank" rel="noopener" data-umami-event="clipping-click" data-umami-event-title="{{ item.title }}">{% if item.domain %}{{ item.domain }}{% else %}link{% endif %}</a></span>
     </div>
 </div>

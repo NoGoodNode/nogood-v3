@@ -76,10 +76,13 @@ async function readClippings() {
 					const episode = (show && data.title.includes(' • '))
 						? data.title.split(' • ').slice(1).join(' • ')
 						: data.title;
+					let domain = null;
+					try { domain = new URL(data.url).hostname.replace(/^www\./, ''); } catch {}
 					return {
 						title: data.title,
 						episode,
 						show,
+						domain,
 						url: data.url,
 						date: data.date,
 						tags: tags.filter(tag => tag !== categoryTag),

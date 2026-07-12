@@ -195,6 +195,10 @@ DARK SECTION OVERRIDES
     background-image: url("/assets/icons/nogood_external-link-white.svg");
 }
 
+.bg-dark .clipping-domain {
+    color: var(--muted-hover);
+}
+
 .bg-dark .nostr-note__stats {
     color: var(--primary-light);
 }

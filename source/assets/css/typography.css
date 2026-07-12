@@ -167,11 +167,23 @@ OTHER
 /* ----------------
 CLIPPING QUOTE
 ---------------- */
-.clipping-quote {
-    border-left: 2px solid var(--border);
-    padding-left: 0.75rem;
-    font-style: italic;
+.clipping-domain {
+    color: var(--primary-dark-hover);
+    opacity: 0;
+    transition: opacity 0.2s ease;
 }
+
+a:hover + .clipping-domain {
+    opacity: 1;
+}
+
+.clipping-quote {
+    font-style: italic;
+    line-height: 1.5rem;
+}
+
+.clipping-quote::before { content: '\201C'; }
+.clipping-quote::after  { content: '\201D'; }
 
 .clipping-podcast {
     display: grid;
