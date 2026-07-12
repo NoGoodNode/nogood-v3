@@ -5,10 +5,14 @@
         <img src="{{ item.cover }}" alt="{{ item.title }}" class="no-blend clipping-podcast-cover">
         {% endif %}
         <div class="clipping-podcast-info">
-            <a href="{{ item.url }}" target="_blank" rel="noopener" data-umami-event="clipping-click" data-umami-event-title="{{ item.title }}">{{ item.title }}</a>
+            <a href="{{ item.url }}" target="_blank" rel="noopener" data-umami-event="clipping-click" data-umami-event-title="{{ item.title }}">{{ item.episode }}</a>
             {% if item.show %}<p class="text-small">{{ item.show }}</p>{% endif %}
         </div>
     </div>
+    {% if item.intro %}
+    <div class="spacer-small"></div>
+    <p>{{ item.intro }}</p>
+    {% endif %}
     {% else %}
     <a href="{{ item.url }}" target="_blank" rel="noopener" data-umami-event="clipping-click" data-umami-event-title="{{ item.title }}">{{ item.title }}</a>
     <div class="spacer"></div>

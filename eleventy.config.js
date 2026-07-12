@@ -72,8 +72,14 @@ async function readClippings() {
 					if (data.cover) {
 						cover = await fetchCover(data.cover, data.url);
 					}
+					const show = data.show || null;
+					const episode = (show && data.title.includes(' • '))
+						? data.title.split(' • ').slice(1).join(' • ')
+						: data.title;
 					return {
 						title: data.title,
+						episode,
+						show,
 						url: data.url,
 						date: data.date,
 						tags: tags.filter(tag => tag !== categoryTag),
@@ -83,7 +89,6 @@ async function readClippings() {
 						embed: data.embed || null,
 						embed_thumb: embedThumb,
 						cover,
-						show: data.show || null,
 					};
 				})
 		);
