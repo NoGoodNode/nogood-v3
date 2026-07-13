@@ -1,0 +1,43 @@
+name: Bluesky — Post
+
+on:
+  workflow_dispatch:
+    inputs:
+      file:
+        description: 'Queue entry filename'
+        required: true
+      action:
+        description: 'post or skip'
+        required: true
+        default: 'post'
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - run: pip install python-dotenv PyYAML
+
+      - name: Post or skip
+        env:
+          BLUESKY_HANDLE: ${{ secrets.BLUESKY_HANDLE }}
+          BLUESKY_APP_PASSWORD: ${{ secrets.BLUESKY_APP_PASSWORD }}
+        run: |
+          if [ "${{ github.event.inputs.action }}" = "post" ]; then
+            python obsidian-vault/_bluesky/post.py "${{ github.event.inputs.file }}"
+          else
+            python obsidian-vault/_bluesky/post.py --skip "${{ github.event.inputs.file }}"
+          fi
+
+      - name: Commit updated queue
+        run: |
+          git config user.name "NoGoodBot"
+          git config user.email "bot@nogood.studio"
+          git add obsidian-vault/_bluesky/queue.json
+          git diff --staged --quiet || git commit -m "Bluesky: ${{ github.event.inputs.action }} [skip ci]"
+          git push
