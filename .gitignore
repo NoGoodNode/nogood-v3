@@ -7,3 +7,4 @@ external-scripts/
 CLAUDE.md
 .claude/
 .vscode/
+workers/
