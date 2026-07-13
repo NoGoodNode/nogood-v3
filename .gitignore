@@ -4,3 +4,5 @@ _build/
 .DS_Store
 .env
 external-scripts/
+CLAUDE.md
+.claude/
