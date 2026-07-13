@@ -173,6 +173,7 @@ eleventyConfig.ignores.add("source/snippets");
 	eleventyConfig.addPassthroughCopy({ "source/assets/img/clippings": "assets/img/clippings" });
 	// GIFs (excluded from image plugin)
 	eleventyConfig.addPassthroughCopy({ "source/assets/img/NG_Zap_Animation.gif": "assets/img/NG_Zap_Animation.gif" });
+	eleventyConfig.addPassthroughCopy({ "source/assets/img/NG_Block_Animation.gif": "assets/img/NG_Block_Animation.gif" });
 	// Videos
 	eleventyConfig.addPassthroughCopy({ "source/assets/img/about-opener.mp4": "assets/img/about-opener.mp4" });
 	eleventyConfig.addPassthroughCopy({ "source/assets/img/radio-bg.mp4": "assets/img/radio-bg.mp4" });
