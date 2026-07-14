@@ -47,6 +47,18 @@ bodyColor: bg-muted
 
             <div class="spacer-extralarge"></div>
 
+            <h4 class="uppercase pixel-font">Podcast appearances</h4>
+            <div class="spacer"></div>
+            <div class="list two-col-list">
+                {% for episode in podcasts.episodes | reverse %}
+                    <div><a href="{{ episode.url }}" target="_blank" rel="noopener">{{ episode.show }} — {{ episode.title }}</a></div>
+                    <div class="align-right text-tabular">{{ episode.date | postDate }}</div>
+                    <div class="row-border"></div>
+                {% endfor %}
+            </div>
+
+            <div class="spacer-extralarge"></div>
+
             <h4 class="uppercase pixel-font">Products</h4>
             <div class="spacer"></div>
             <div class="list two-col-list">
@@ -79,6 +91,7 @@ bodyColor: bg-muted
                     <div class="row-border"></div>
                 {% endfor %}
             </div>
+
         </div>
     </div>
 
