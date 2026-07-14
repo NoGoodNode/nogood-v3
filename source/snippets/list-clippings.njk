@@ -3,6 +3,8 @@
     <div class="clipping-podcast">
         {% if item.cover %}
         <img src="{{ item.cover }}" alt="{{ item.title }}" class="no-blend clipping-podcast-cover">
+        {% else %}
+        <div></div>
         {% endif %}
         <div class="clipping-podcast-info">
             <a href="{{ item.url }}" target="_blank" rel="noopener" data-umami-event="clipping-click" data-umami-event-title="{{ item.title }}">{{ item.episode }}</a>
