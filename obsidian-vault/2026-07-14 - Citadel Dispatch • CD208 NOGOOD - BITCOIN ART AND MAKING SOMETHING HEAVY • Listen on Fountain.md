@@ -9,4 +9,4 @@ show: Citadel Dispatch
 embed:
 quote:
 ---
-I've been listening to Citadel Dispatch for years, so it was an honour to be on the show. We discussed The NoGood Book, building No Good Radio, integrating open protocols, and why physical art matters in an increasingly digital world.
+I've been listening to Citadel Dispatch for years, so it was an honour to be a guest on the show. We discussed The NoGood Book, building NoGood Radio, integrating open protocols, and why physical art matters in an increasingly digital world.

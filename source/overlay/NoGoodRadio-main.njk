@@ -51,7 +51,7 @@ eleventyExcludeFromCollections: true
     font-style: normal;
   }
 
-#zap-bar, #name-bar {
+#zap-bar {
     position: absolute;
     bottom: 15px;
     height: 30px;
@@ -61,9 +61,6 @@ eleventyExcludeFromCollections: true
     padding: 0 10px;
     background: rgba(28, 28, 28, 0.75);
     transition: opacity 0.4s ease;
-  }
-
-  #zap-bar {
     right: 15px;
     width: 220px;
     overflow: hidden;
@@ -71,13 +68,6 @@ eleventyExcludeFromCollections: true
     opacity: 0;
     transform: translateY(8px);
     transition: opacity 0.4s ease, transform 0.4s ease, background-color 0.4s ease;
-  }
-
-  #name-bar {
-    left: 15px;
-    width: 30%;
-    overflow: hidden;
-    background: rgb(28, 28, 28);
   }
 
   #mempool-wrap {
@@ -161,47 +151,6 @@ eleventyExcludeFromCollections: true
     color: rgb(251, 250, 243);
   }
 
-  #name-scroll {
-    flex: 1;
-    overflow: hidden;
-    min-width: 0;
-    transform: translateY(2px);
-  }
-
-  #name-track {
-    display: flex;
-    gap: 20px;
-    white-space: nowrap;
-    will-change: transform;
-  }
-
-  @keyframes scrollNames {
-    from { transform: translateX(0); }
-    to   { transform: translateX(var(--scroll-width)); }
-  }
-
-  #name-bar-label {
-    font-family: 'PPSupplyMono', monospace;
-    font-weight: 400;
-    font-size: 1rem;
-    color: rgb(248, 194, 40);
-    letter-spacing: 0.04em;
-    line-height: 1;
-    white-space: nowrap;
-    flex-shrink: 0;
-    padding-right: 5px;
-    transform: translateY(2px);
-  }
-
-  .name-item {
-    font-family: 'PPSupplyMono', monospace;
-    font-weight: 400;
-    font-size: 1rem;
-    color: rgb(251, 250, 243);
-    letter-spacing: 0.04em;
-    line-height: 1;
-    flex-shrink: 0;
-  }
 
   @keyframes zapTickerScroll {
     from { transform: translateX(0); }
@@ -251,7 +200,7 @@ eleventyExcludeFromCollections: true
     left: 15px;
     bottom: 65px;
     width: 340px;
-    max-height: 520px;
+    max-height: 620px;
     overflow-y: hidden;
     display: flex;
     flex-direction: column;
@@ -470,10 +419,16 @@ eleventyExcludeFromCollections: true
   .follow-notif.is-in  { opacity: 1; }
   .follow-notif.is-out { opacity: 0; }
 
-  #node-bar {
+  #status-wrap {
     position: absolute;
-    bottom: 605px;
+    bottom: 15px;
     left: 15px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .status-pill {
     opacity: 0;
     transition: opacity 0.4s ease;
     background: transparent;
@@ -491,9 +446,9 @@ eleventyExcludeFromCollections: true
     border: 1px solid;
   }
 
-  #node-bar span:not(.node-dot) { transform: translateY(1px); display: inline-block; }
-  #node-bar.node-online  { color: rgb(216, 255, 124); border-color: rgb(216, 255, 124); background: rgba(216, 255, 124, 0.2); }
-  #node-bar.node-offline { color: #e57373;           border-color: #e57373;           background: rgba(229, 115, 115, 0.2); }
+  .status-pill span:not(.node-dot) { transform: translateY(1px); display: inline-block; }
+  .status-pill.node-online  { color: rgb(216, 255, 124); border-color: rgb(216, 255, 124); background: rgba(216, 255, 124, 0.2); }
+  .status-pill.node-offline { color: #e57373;           border-color: #e57373;           background: rgba(229, 115, 115, 0.2); }
 
   @keyframes nodeBlink {
     0%, 100% { opacity: 1; }
@@ -624,19 +579,18 @@ eleventyExcludeFromCollections: true
     position: absolute;
     bottom: 15px;
     left: 42%;
-    width: 160px;
+    width: 192px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 14px;
+    gap: 16.8px;
     background: rgb(216, 255, 124);
-    padding: 15px 15px 10px 15px;
+    padding: 18px 18px 12px 18px;
     opacity: 0;
     transition: opacity 0.4s ease;
   }
 
-  #book-sale-bar picture { display: block; width: 100%; opacity: 0; }
-  #book-sale-bar img { width: 100%; height: auto; display: block; }
+  #book-sale-bar img { width: 100%; height: auto; display: block; opacity: 0; }
 
   @keyframes bookItemIn {
     from { opacity: 0; transform: translateY(10px); }
@@ -649,12 +603,12 @@ eleventyExcludeFromCollections: true
   #book-sale-info {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 4.8px;
   }
 
   #book-sale-label {
     font-family: 'PPSupplyMono', monospace;
-    font-size: 1rem;
+    font-size: 1.2rem;
     font-weight: 400;
     color: rgb(28, 28, 28);
     letter-spacing: 0.06em;
@@ -675,6 +629,35 @@ eleventyExcludeFromCollections: true
     white-space: nowrap;
     opacity: 0;
   }
+
+  #book-promo-bar {
+    position: absolute;
+    bottom: 268px;
+    right: 15px;
+    width: 192px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16.8px;
+    background: rgba(28, 28, 28, 0.75);
+    padding: 18px 18px 12px 18px;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  #book-promo-bar img { width: 100%; height: auto; display: block; }
+
+  #book-promo-text {
+    font-family: 'PPSupplyMono', monospace;
+    font-size: 1rem;
+    font-weight: 400;
+    color: rgb(251, 250, 243);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: 1;
+    white-space: nowrap;
+    opacity: 0;
+  }
 </style>
 
 <div id="overlay-badge">
@@ -689,7 +672,10 @@ eleventyExcludeFromCollections: true
 <div id="now-playing-bar"><div id="np-scroll"><div id="np-track"></div></div></div>
 <div id="viewers-bar"></div>
 <div id="follow-feed"></div>
-<div id="node-bar"></div>
+<div id="status-wrap">
+  <div id="node-bar" class="status-pill"></div>
+  <div id="relay-bar" class="status-pill"></div>
+</div>
 <div id="mempool-wrap">
   <div id="mempool-bar"></div>
   <div id="block-bar">
@@ -700,16 +686,16 @@ eleventyExcludeFromCollections: true
 <div id="chat-box"></div>
 <div id="zap-bar"></div>
 <div id="zap-floats"></div>
-<div id="name-bar">
-  <span id="name-bar-label">BOOK PRE-ORDERS</span>
-  <div id="name-scroll"><div id="name-track"></div></div>
-</div>
 <div id="book-sale-bar">
-  {% imageFast "source/assets/img/shop/NoGoodBook_Collectors.png", "The NoGood Book", [320], "160px" %}
+  {% imageFast "source/assets/img/shop/NoGoodBook_Collectors.png", "The NoGood Book", [384], "192px" %}
   <div id="book-sale-info">
     <span id="book-sale-label">New Order</span>
-    <span id="book-sale-counter">— / {{ booksales.total_print_run }}</span>
+    <span id="book-sale-counter">— / 400</span>
   </div>
+</div>
+<div id="book-promo-bar">
+  {% imageFast "source/assets/img/shop/NoGoodBook_Collectors.png", "The NoGood Book", [384], "192px" %}
+  <span id="book-promo-text"></span>
 </div>
 
 <script>
@@ -718,12 +704,10 @@ eleventyExcludeFromCollections: true
   // ----------------
   const MAX_ZAPS = 5;
   const bar = document.getElementById('zap-bar');
-  let resolveNamesReady, resolveMempoolReady, resolveChatReady;
-  const namesReady   = new Promise(r => { resolveNamesReady   = r; });
+  let resolveMempoolReady, resolveChatReady;
   const mempoolReady = new Promise(r => { resolveMempoolReady = r; });
   const chatReady    = new Promise(r => { resolveChatReady    = r; window.__resolveChatReady = r; });
 
-  namesReady.then(()   => { document.getElementById('name-bar').style.opacity    = '1'; });
   mempoolReady.then(() => { document.getElementById('mempool-bar').style.opacity = '1'; });
   chatReady.then(()    => { document.getElementById('chat-box').style.opacity    = '1'; });
 
@@ -869,33 +853,6 @@ eleventyExcludeFromCollections: true
     zapQueue.push(zap);
     if (!zapShowing) showNextZap();
   }
-
-  // ----------------
-  // NAMES BAR
-  // ----------------
-  (async function() {
-    const track = document.getElementById('name-track');
-    const res = await fetch('/overlay/names.txt').catch(() => null);
-    if (!res || !res.ok) { resolveNamesReady(); return; }
-    const names = (await res.text()).split('\n').map(n => n.trim()).filter(Boolean);
-    if (!names.length) { resolveNamesReady(); return; }
-
-    const doubled = [...names, ...names];
-    doubled.forEach(name => {
-      const span = document.createElement('span');
-      span.className = 'name-item';
-      span.textContent = name;
-      track.appendChild(span);
-    });
-
-    requestAnimationFrame(() => {
-      const singleWidth = track.scrollWidth / 2;
-      const duration = singleWidth / 12;
-      track.style.setProperty('--scroll-width', `-${singleWidth}px`);
-      track.style.animation = `scrollNames ${duration}s linear infinite`;
-      resolveNamesReady();
-    });
-  })();
 
   // ----------------
   // MEMPOOL BAR
@@ -1087,7 +1044,7 @@ eleventyExcludeFromCollections: true
 
   function setNodeOnline() {
     nodeOfflineCount = 0;
-    nodeBar.className = 'node-online';
+    nodeBar.className = 'status-pill node-online';
     nodeBar.innerHTML = '<span>NOGOODNODE ONLINE</span><span class="node-dot"></span>';
     if (!nodeInitialized) { nodeInitialized = true; nodeBar.style.opacity = '1'; }
   }
@@ -1095,7 +1052,7 @@ eleventyExcludeFromCollections: true
   function setNodeOffline(force = false) {
     nodeOfflineCount++;
     if (force || nodeOfflineCount >= NODE_OFFLINE_THRESHOLD) {
-      nodeBar.className = 'node-offline';
+      nodeBar.className = 'status-pill node-offline';
       nodeBar.innerHTML = '<span>NOGOODNODE OFFLINE</span><span class="node-dot"></span>';
       if (!nodeInitialized) { nodeInitialized = true; nodeBar.style.opacity = '1'; }
     }
@@ -1118,11 +1075,73 @@ eleventyExcludeFromCollections: true
   setInterval(checkNode, 120000);
 
   // ----------------
+  // RELAY STATUS
+  // ----------------
+  const relayBar = document.getElementById('relay-bar');
+  const RELAY_URL = 'wss://relay.nogood.tech/';
+  let relayOfflineCount = 0;
+  let relayInitialized = false;
+  const RELAY_OFFLINE_THRESHOLD = 3; // 3 × 600s = 30 minutes
+
+  function setRelayOnline() {
+    relayOfflineCount = 0;
+    relayBar.className = 'status-pill node-online';
+    relayBar.innerHTML = '<span>NoGoodRelay Online</span><span class="node-dot"></span>';
+    if (!relayInitialized) { relayInitialized = true; relayBar.style.opacity = '1'; }
+  }
+
+  function setRelayOffline(force = false) {
+    relayOfflineCount++;
+    if (force || relayOfflineCount >= RELAY_OFFLINE_THRESHOLD) {
+      relayBar.className = 'status-pill node-offline';
+      relayBar.innerHTML = '<span>NoGoodRelay Offline</span><span class="node-dot"></span>';
+      if (!relayInitialized) { relayInitialized = true; relayBar.style.opacity = '1'; }
+    }
+  }
+
+  function checkRelay() {
+    let settled = false;
+    let ws;
+    const timeout = setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      if (ws) ws.close();
+      setRelayOffline(!relayInitialized);
+    }, 5000);
+
+    try {
+      ws = new WebSocket(RELAY_URL);
+    } catch {
+      clearTimeout(timeout);
+      setRelayOffline(!relayInitialized);
+      return;
+    }
+
+    ws.onopen = () => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timeout);
+      setRelayOnline();
+      ws.close();
+    };
+
+    ws.onerror = () => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timeout);
+      setRelayOffline(!relayInitialized);
+    };
+  }
+
+  checkRelay();
+  setInterval(checkRelay, 600000);
+
+  // ----------------
   // BOOK SALES
   // ----------------
   const GEYSER_SALES  = {{ booksales.geyser_sales }};
   const WP_SALES      = {{ booksales.wordpress_sales }};
-  const PRINT_RUN     = {{ booksales.total_print_run }};
+  const PRINT_RUN     = 400; // overlay-only total, intentionally decoupled from booksales.yaml
   const bookBar         = document.getElementById('book-sale-bar');
   const bookSaleCounter = document.getElementById('book-sale-counter');
   let lastBookOrderDate = null;
@@ -1131,7 +1150,7 @@ eleventyExcludeFromCollections: true
 
   function displayBookBar(sold) {
     bookBarActive = true;
-    const bookPicture = bookBar.querySelector('picture');
+    const bookPicture = bookBar.querySelector('img');
     const bookLabel   = document.getElementById('book-sale-label');
     if (sold !== null) {
       bookSaleCounter.textContent = sold + ' / ' + PRINT_RUN + ' sold';
@@ -1170,12 +1189,20 @@ eleventyExcludeFromCollections: true
     if (bookBarActive) { bookBarQueue.push(sold); } else { displayBookBar(sold); }
   }
 
+  async function fetchTotalSold() {
+    const [bookData, printData] = await Promise.all([
+      fetch('https://book-stats.hello-5b9.workers.dev/book-sales').then(r => r.json()),
+      fetch('https://book-stats.hello-5b9.workers.dev/print-sales').then(r => r.json()),
+    ]);
+    const sold = (bookData.total ?? 0) + (printData.total ?? 0) + GEYSER_SALES + WP_SALES;
+    return { sold, lastOrderDate: bookData.lastOrderDate };
+  }
+
   async function waitForUpdatedCount(knownSold) {
     for (let i = 0; i < 4; i++) {
       await new Promise(r => setTimeout(r, 3000));
       try {
-        const fresh = await fetch('https://book-stats.hello-5b9.workers.dev/book-sales').then(r => r.json());
-        const freshSold = (fresh.total ?? 0) + GEYSER_SALES + WP_SALES;
+        const { sold: freshSold } = await fetchTotalSold();
         if (freshSold > knownSold) {
           bookSaleCounter.textContent = freshSold + ' / ' + PRINT_RUN + ' sold';
           showBookSale(freshSold);
@@ -1188,14 +1215,13 @@ eleventyExcludeFromCollections: true
 
   async function pollBookSales() {
     try {
-      const data = await fetch('https://book-stats.hello-5b9.workers.dev/book-sales').then(r => r.json());
-      const sold = (data.total ?? 0) + GEYSER_SALES + WP_SALES;
+      const { sold, lastOrderDate } = await fetchTotalSold();
       bookSaleCounter.textContent = sold + ' / ' + PRINT_RUN + ' sold';
-      if (lastBookOrderDate !== null && data.lastOrderDate !== lastBookOrderDate) {
-        lastBookOrderDate = data.lastOrderDate;
+      if (lastBookOrderDate !== null && lastOrderDate !== lastBookOrderDate) {
+        lastBookOrderDate = lastOrderDate;
         waitForUpdatedCount(sold);
       } else {
-        lastBookOrderDate = data.lastOrderDate;
+        lastBookOrderDate = lastOrderDate;
       }
     } catch {}
   }
@@ -1203,6 +1229,48 @@ eleventyExcludeFromCollections: true
   pollBookSales();
 
   setInterval(pollBookSales, 300000);
+
+  // ----------------
+  // BOOK PROMO
+  // ----------------
+  const bookPromoBar  = document.getElementById('book-promo-bar');
+  const bookPromoText = document.getElementById('book-promo-text');
+  const BOOK_PROMO_TEXTS    = ['The NoGood Book', 'OUT NOW!', 'nogood.studio'];
+  const BOOK_PROMO_TEXT_MS  = 5000;
+  const BOOK_PROMO_SHOW_MS  = 60000;
+  const BOOK_PROMO_EVERY_MS = 10 * 60 * 1000;
+  let bookPromoTextTimer = null;
+
+  function setBookPromoText(text) {
+    bookPromoText.textContent = text;
+    bookPromoText.classList.remove('book-item-in');
+    void bookPromoText.offsetWidth;
+    bookPromoText.classList.add('book-item-in');
+  }
+
+  function showBookPromo() {
+    let textIndex = 0;
+    setBookPromoText(BOOK_PROMO_TEXTS[textIndex]);
+    bookPromoBar.style.opacity = '1';
+
+    bookPromoTextTimer = setInterval(() => {
+      textIndex = (textIndex + 1) % BOOK_PROMO_TEXTS.length;
+      setBookPromoText(BOOK_PROMO_TEXTS[textIndex]);
+    }, BOOK_PROMO_TEXT_MS);
+
+    setTimeout(() => {
+      clearInterval(bookPromoTextTimer);
+      bookPromoText.classList.remove('book-item-in');
+      void bookPromoText.offsetWidth;
+      bookPromoText.classList.add('book-item-out');
+      setTimeout(() => {
+        bookPromoBar.style.opacity = '0';
+        bookPromoText.classList.remove('book-item-out');
+      }, 300);
+    }, BOOK_PROMO_SHOW_MS);
+  }
+
+  setInterval(showBookPromo, BOOK_PROMO_EVERY_MS);
 
 </script>
 
