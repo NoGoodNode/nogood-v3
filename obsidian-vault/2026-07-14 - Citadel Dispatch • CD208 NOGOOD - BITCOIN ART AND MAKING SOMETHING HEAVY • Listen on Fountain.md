@@ -3,6 +3,7 @@ title: Bitcoin art and making something heavy
 url: https://fountain.fm/episode/ADC8esvhU6sK2R70VI4B
 date: 2026-07-14
 tags:
+  - category/podcast
 cover:
 show: Citadel Dispatch
 embed:
