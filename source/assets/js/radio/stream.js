@@ -13,6 +13,7 @@ const ICON_FS_EXIT  = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor
 export function initStream(hlsUrl, fallbackImage) {
   const video = document.getElementById('stream-video');
   const fallback = document.getElementById('stream-fallback');
+  const playOverlay = document.getElementById('stream-play-overlay');
   const unmuteOverlay = document.getElementById('unmute-overlay');
   const liveDots = document.querySelectorAll('.nav-live-dot');
   const offlineEl = document.getElementById('stream-offline');
@@ -95,7 +96,16 @@ export function initStream(hlsUrl, fallbackImage) {
     document.addEventListener('webkitfullscreenchange', updateFsBtn);
   }
 
-  video.addEventListener('playing', hideFallback);
+  video.addEventListener('playing', () => {
+    hideFallback();
+    if (playOverlay) playOverlay.hidden = true;
+  });
+
+  if (playOverlay) {
+    playOverlay.addEventListener('click', () => {
+      video.play().catch(() => {});
+    });
+  }
 
   setupControls();
 
@@ -118,13 +128,14 @@ export function initStream(hlsUrl, fallbackImage) {
   if (Hls.isSupported()) {
     hls = new Hls({
       enableWorker: true,
-      lowLatencyMode: false,
+      lowLatencyMode: true,
     });
 
     hls.loadSource(hlsUrl);
     hls.attachMedia(video);
 
     hls.on(Hls.Events.MANIFEST_PARSED, () => {
+      if (hls.audioTracks.length > 0) hls.audioTrack = 0;
       video.play().catch(() => {});
       hideFallback();
       buildQualitySelector(hls);

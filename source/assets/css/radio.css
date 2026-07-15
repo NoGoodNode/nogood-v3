@@ -39,6 +39,36 @@ VIDEO PLAYER
 }
 
 /* ----------------
+STREAM PLAY OVERLAY
+---------------- */
+.player__play-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+}
+
+.player__play-overlay[hidden] {
+    display: none;
+}
+
+.player.is-offline .player__play-overlay {
+    display: none;
+}
+
+.player__play-overlay .embed-play {
+    width: 72px;
+    height: 72px;
+}
+
+.player__play-overlay .embed-play::before {
+    border-width: 12px 0 12px 22px;
+    margin-left: 4px;
+}
+
+/* ----------------
 VIDEO PLAYER CONTROLS
 ---------------- */
 .player__controls {

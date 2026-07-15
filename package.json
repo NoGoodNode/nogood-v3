@@ -21,7 +21,7 @@
     "yaml": "^2.8.1"
   },
   "devDependencies": {
-    "hls.js": "^1.6.15",
+    "hls.js": "^1.6.16",
     "nostr-tools": "^2.23.3",
     "qrcode": "^1.5.4",
     "terser": "^5.46.1"
