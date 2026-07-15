@@ -180,6 +180,7 @@ eleventyConfig.ignores.add("source/snippets");
 	eleventyConfig.addPassthroughCopy({ "source/assets/img/book-promo.mp4": "assets/img/book-promo.mp4" });
 	eleventyConfig.addPassthroughCopy({ "source/assets/img/book/Book_Promo_Poster.jpg": "assets/img/book/Book_Promo_Poster.jpg" });
 	eleventyConfig.addPassthroughCopy({ "source/assets/img/book/book-shoot.mp4": "assets/img/book/book-shoot.mp4" });
+	eleventyConfig.addPassthroughCopy({ "source/assets/img/book/NG_Shoot_Book_Cover.jpg": "assets/img/book/NG_Shoot_Book_Cover.jpg" });
 	// YAML
 	eleventyConfig.addDataExtension("yaml", (contents) => YAML.parse(contents));
 

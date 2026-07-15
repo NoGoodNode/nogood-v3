@@ -6,6 +6,9 @@ eleventyExcludeFromCollections: true
 ---
 
 <style>
+  /* TEST ONLY */
+  body { background: transparent; }
+
   * {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -51,23 +54,15 @@ eleventyExcludeFromCollections: true
     font-style: normal;
   }
 
-#zap-bar {
+  #zap-incoming {
     position: absolute;
-    bottom: 15px;
-    height: 30px;
+    inset: 0;
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 0 10px;
-    background: rgba(28, 28, 28, 0.75);
-    transition: opacity 0.4s ease;
-    right: 15px;
-    width: 220px;
     overflow: hidden;
-    padding: 0;
+    padding: 0 14px;
     opacity: 0;
-    transform: translateY(8px);
-    transition: opacity 0.4s ease, transform 0.4s ease, background-color 0.4s ease;
+    transition: opacity 0.4s ease;
   }
 
   #mempool-wrap {
@@ -152,48 +147,7 @@ eleventyExcludeFromCollections: true
   }
 
 
-  @keyframes zapTickerScroll {
-    from { transform: translateX(0); }
-    to   { transform: translateX(var(--scroll-width)); }
-  }
 
-  .zap-text-base {
-    font-family: 'PPSupplyMono', monospace;
-    font-size: 1rem;
-    font-weight: 400;
-    letter-spacing: 0.08em;
-    line-height: 1;
-    display: inline-block;
-    transform: translateY(1px);
-    white-space: nowrap;
-    text-transform: uppercase;
-  }
-
-  .zap-text-announce { color: rgb(28, 28, 28); }
-  .zap-text-message  { color: rgb(251, 250, 243); }
-
-  .zap-text-amount,
-  .zap-text-thanks {
-    font-family: 'PPSupplyMono', monospace;
-    font-size: 1rem;
-    font-weight: 400;
-    color: rgb(248, 194, 40);
-    letter-spacing: 0.08em;
-    line-height: 1;
-    display: block;
-    width: 100%;
-    text-align: center;
-    text-transform: uppercase;
-    transform: translateY(1px);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .zap-text-thanks {
-    color: rgb(251, 250, 243);
-    letter-spacing: 0.04em;
-  }
 
 #chat-box {
     position: absolute;
@@ -390,7 +344,7 @@ eleventyExcludeFromCollections: true
 
   #follow-feed {
     position: absolute;
-    bottom: 20%;
+    bottom: 65px;
     right: 0;
     width: 300px;
     display: flex;
@@ -414,6 +368,16 @@ eleventyExcludeFromCollections: true
     text-overflow: ellipsis;
     text-align: right;
     opacity: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+
+  .follow-notif-time {
+    font-size: 0.75rem;
+    opacity: 0.45;
+    flex-shrink: 0;
   }
 
   .follow-notif.is-in  { opacity: 1; }
@@ -422,7 +386,7 @@ eleventyExcludeFromCollections: true
   #status-wrap {
     position: absolute;
     bottom: 15px;
-    left: 15px;
+    right: 15px;
     display: flex;
     align-items: center;
     gap: 12px;
@@ -446,9 +410,9 @@ eleventyExcludeFromCollections: true
     border: 1px solid;
   }
 
-  .status-pill span:not(.node-dot) { transform: translateY(1px); display: inline-block; }
-  .status-pill.node-online  { color: rgb(216, 255, 124); border-color: rgb(216, 255, 124); background: rgba(216, 255, 124, 0.2); }
-  .status-pill.node-offline { color: #e57373;           border-color: #e57373;           background: rgba(229, 115, 115, 0.2); }
+  .status-pill span:not(.node-dot) { transform: translateY(0px); display: inline-block; }
+  .status-pill.node-online  { color: rgb(28, 28, 28);  border-color: rgb(216, 255, 124); background: rgb(216, 255, 124); }
+  .status-pill.node-offline { color: rgb(28, 28, 28);  border-color: #e57373;           background: #e57373; }
 
   @keyframes nodeBlink {
     0%, 100% { opacity: 1; }
@@ -466,8 +430,8 @@ eleventyExcludeFromCollections: true
     vertical-align: middle;
   }
 
-  .node-online  .node-dot { background: rgb(216, 255, 124); }
-  .node-offline .node-dot { background: #e57373; }
+  .node-online  .node-dot { background: rgb(28, 28, 28); }
+  .node-offline .node-dot { background: rgb(28, 28, 28); }
 
   #np-scroll {
     flex: 1;
@@ -509,31 +473,81 @@ eleventyExcludeFromCollections: true
     padding: 0 14px;
   }
 
-  #zap-floats {
+  #zl-wrap {
     position: absolute;
-    right: 0;
-    top: 0;
-    width: 500px;
-    height: 1080px;
-    pointer-events: none;
+    bottom: 15px;
+    left: 15px;
+    display: flex;
+    gap: 20px;
+    align-items: stretch;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  #zl-top {
+    height: 36px;
+    background: rgb(248, 194, 40);
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    white-space: nowrap;
+    font-family: 'PPSupplyMono', monospace;
+    font-size: 0.9rem;
+    color: rgb(28, 28, 28);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    flex-shrink: 0;
+    gap: 0;
+  }
+
+  #zl-top .zl-name   { color: rgb(28, 28, 28); margin-left: 6px; }
+  #zl-top .zl-amount { color: rgb(28, 28, 28); }
+  #zl-top .zl-name span,
+  #zl-top .zl-amount span { display: inline-block; animation: letterBounce 2.5s ease infinite; }
+
+  #zap-leader-bar {
+    width: 520px;
+    height: 36px;
     overflow: hidden;
+    background: rgba(28, 28, 28, 0.9);
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    box-sizing: border-box;
+    position: relative;
+    transition: background 0.4s ease;
   }
 
-  @keyframes floatUp {
-    0%   { transform: translateY(0)      translateX(0);                          opacity: 0; }
-    8%   {                                                                        opacity: 1; }
-    50%  { transform: translateY(-600px) translateX(calc(var(--drift, 80px) * 0.5)); }
-    85%  {                                                                        opacity: 1; }
-    100% { transform: translateY(-1200px) translateX(var(--drift, 80px));         opacity: 0; }
+  #zl-scroll {
+    flex: 1;
+    overflow: hidden;
+    min-width: 0;
+    transform: translateY(1px);
+    padding: 0;
   }
 
-  .zap-float {
-    position: absolute;
-    border-radius: 50%;
-    object-fit: cover;
-    font-size: 60%;
-    animation: floatUp linear forwards;
+  @keyframes scrollZapLeader {
+    from { transform: translateX(0); }
+    to   { transform: translateX(var(--zl-scroll-width)); }
   }
+
+  #zl-track {
+    display: flex;
+    white-space: nowrap;
+    will-change: transform;
+    align-items: center;
+  }
+
+  .zl-name   { font-family: 'PPSupplyMono', monospace; font-size: 0.9rem; color: rgb(251, 250, 243); letter-spacing: 0.06em; flex-shrink: 0; text-transform: uppercase; }
+  .zl-amount { font-family: 'PPSupplyMono', monospace; font-size: 0.9rem; color: rgb(248, 194, 40);  letter-spacing: 0.06em; flex-shrink: 0; margin-left: 8px; }
+  .zl-sep    { font-family: 'PPSupplyMono', monospace; font-size: 0.9rem; color: rgba(251, 250, 243, 0.3); flex-shrink: 0; padding: 0 14px; }
+  .zl-message { font-family: 'PPSupplyMono', monospace; font-size: 0.9rem; letter-spacing: 0.06em; flex-shrink: 0; text-transform: uppercase; }
+
+  #zap-incoming .zl-name,
+  #zap-incoming .zl-amount,
+  #zap-incoming .zl-sep   { color: rgb(28, 28, 28); margin-left: 0; padding: 0; }
+  #zap-incoming .zl-message { color: rgb(251, 250, 243); }
+
 
   #overlay-badge {
     position: absolute;
@@ -578,7 +592,8 @@ eleventyExcludeFromCollections: true
   #book-sale-bar {
     position: absolute;
     bottom: 15px;
-    left: 42%;
+    left: 50%;
+    transform: translateX(calc(-50% + 100px));
     width: 192px;
     display: flex;
     flex-direction: column;
@@ -597,8 +612,8 @@ eleventyExcludeFromCollections: true
     to   { opacity: 1; transform: translateY(0); }
   }
 
-  .book-item-in  { animation: bookItemIn 0.4s ease both; }
-  .book-item-out { animation: bookItemIn 0.3s ease reverse both; }
+  .book-item-in  { animation: bookItemIn 0.8s ease both; }
+  .book-item-out { animation: bookItemIn 0.6s ease reverse both; }
 
   #book-sale-info {
     display: flex;
@@ -632,20 +647,26 @@ eleventyExcludeFromCollections: true
 
   #book-promo-bar {
     position: absolute;
-    bottom: 268px;
+    bottom: 190px;
     right: 15px;
     width: 192px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 16.8px;
+    gap: 0;
     background: rgba(28, 28, 28, 0.9);
-    padding: 18px 18px 12px 18px;
+    padding: 0;
     opacity: 0;
     transition: opacity 0.4s ease;
+    overflow: hidden;
   }
 
-  #book-promo-bar img { width: 100%; height: auto; display: block; }
+  #book-promo-bar video {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    display: block;
+  }
 
   #book-promo-text {
     font-family: 'PPSupplyMono', monospace;
@@ -657,8 +678,16 @@ eleventyExcludeFromCollections: true
     line-height: 1;
     white-space: nowrap;
     opacity: 0;
+    padding: 12px 18px;
   }
 </style>
+
+<div id="test-controls" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:flex;gap:8px;z-index:999;display:none">
+  <button onclick="showBookPromo()" style="font-family:monospace;padding:6px 12px;background:rgb(248,194,40);border:none;cursor:pointer">Book Promo</button>
+  <button onclick="showBookSale(140)" style="font-family:monospace;padding:6px 12px;background:rgb(216,255,124);border:none;cursor:pointer">Book Sale</button>
+  <button onclick="window.__testNotification()" style="font-family:monospace;padding:6px 12px;background:rgb(216,255,124);border:none;cursor:pointer">Notification</button>
+  <button onclick="window.__testZap()" style="font-family:monospace;padding:6px 12px;background:rgb(251,250,243);border:none;cursor:pointer">Incoming Zap</button>
+</div>
 
 <div id="overlay-badge">
   <img id="badge-sign" src="/assets/img/nogood_sign.png" alt="NoGood sign">
@@ -672,6 +701,10 @@ eleventyExcludeFromCollections: true
 <div id="now-playing-bar"><div id="np-scroll"><div id="np-track"></div></div></div>
 <div id="viewers-bar"></div>
 <div id="follow-feed"></div>
+<div id="zl-wrap">
+  <div id="zl-top"></div>
+  <div id="zap-leader-bar"><div id="zl-scroll"><div id="zl-track"></div></div><div id="zap-incoming"></div></div>
+</div>
 <div id="status-wrap">
   <div id="node-bar" class="status-pill"></div>
   <div id="relay-bar" class="status-pill"></div>
@@ -684,8 +717,6 @@ eleventyExcludeFromCollections: true
   </div>
 </div>
 <div id="chat-box"></div>
-<div id="zap-bar"></div>
-<div id="zap-floats"></div>
 <div id="book-sale-bar">
   {% imageFast "source/assets/img/shop/NoGoodBook_Collectors.png", "The NoGood Book", [384], "192px" %}
   <div id="book-sale-info">
@@ -694,7 +725,9 @@ eleventyExcludeFromCollections: true
   </div>
 </div>
 <div id="book-promo-bar">
-  {% imageFast "source/assets/img/shop/NoGoodBook_Collectors.png", "The NoGood Book", [384], "192px" %}
+  <video autoplay muted loop playsinline>
+    <source src="/assets/img/book/book-shoot.mp4" type="video/mp4">
+  </video>
   <span id="book-promo-text"></span>
 </div>
 
@@ -702,8 +735,6 @@ eleventyExcludeFromCollections: true
   // ----------------
   // ZAP BAR
   // ----------------
-  const MAX_ZAPS = 5;
-  const bar = document.getElementById('zap-bar');
   let resolveMempoolReady, resolveChatReady;
   const mempoolReady = new Promise(r => { resolveMempoolReady = r; });
   const chatReady    = new Promise(r => { resolveChatReady    = r; window.__resolveChatReady = r; });
@@ -711,142 +742,85 @@ eleventyExcludeFromCollections: true
   mempoolReady.then(() => { document.getElementById('mempool-bar').style.opacity = '1'; });
   chatReady.then(()    => { document.getElementById('chat-box').style.opacity    = '1'; });
 
-  const zapQueue = [];
-  let zapShowing = false;
-  const ZAP_GAP = 30;
-
-  function phaseScroll(text, cssClass) {
-    return new Promise(resolve => {
-      bar.innerHTML = '';
-      const track = document.createElement('div');
-      track.style.cssText = 'display:flex;white-space:nowrap;will-change:transform;opacity:0;transition:opacity 0.4s ease';
-      [text, text, text, text, text, text].forEach(t => {
-        const s = document.createElement('span');
-        s.className = cssClass;
-        s.textContent = t;
-        s.style.marginRight = ZAP_GAP + 'px';
-        track.appendChild(s);
-      });
-      bar.appendChild(track);
-      requestAnimationFrame(() => {
-        const hw = track.scrollWidth / 2;
-        track.style.setProperty('--scroll-width', `-${hw}px`);
-        track.style.animation = `zapTickerScroll ${Math.max(hw / 35, 2).toFixed(2)}s linear infinite`;
-        requestAnimationFrame(() => {
-          track.style.opacity = '1';
-          setTimeout(() => { track.style.opacity = '0'; setTimeout(resolve, 400); }, 4000);
-        });
-      });
-    });
-  }
-
-  function phaseStatic(text, cssClass) {
-    return new Promise(resolve => {
-      bar.innerHTML = '';
-      const el = document.createElement('span');
-      el.className = cssClass;
-      el.textContent = text;
-      el.style.cssText = 'opacity:0;transition:opacity 0.4s ease';
-      bar.appendChild(el);
-      requestAnimationFrame(() => requestAnimationFrame(() => {
-        el.style.opacity = '1';
-        setTimeout(() => { el.style.opacity = '0'; setTimeout(resolve, 400); }, 4000);
-      }));
-    });
-  }
+  const zlScroll     = document.getElementById('zl-scroll');
+  const zapIncoming  = document.getElementById('zap-incoming');
+  const zapQueue     = [];
+  let zapShowing     = false;
 
   function showNextZap() {
     if (zapQueue.length === 0) { zapShowing = false; return; }
     zapShowing = true;
     const zap = zapQueue.shift();
 
-    bar.innerHTML = '';
-    launchFloats(zap);
+    const fmtAmt = n => n >= 1000000 ? (n/1000000).toFixed(1)+'M' : n >= 1000 ? Math.round(n/1000)+'K' : String(n);
+    const name   = (zap.name || 'ANON').toUpperCase().slice(0, 20);
+    const amount = fmtAmt(zap.sats);
 
-    setTimeout(() => {
-      bar.style.backgroundColor = 'rgb(248, 194, 40)';
-      requestAnimationFrame(() => requestAnimationFrame(() => {
-        bar.style.opacity = '1';
-        bar.style.transform = 'translateY(0)';
-      }));
+    const track = document.createElement('div');
+    track.style.cssText = 'display:flex;white-space:nowrap;will-change:transform;align-items:center;gap:20px;';
 
-      let chain = phaseScroll('ZAP RECEIVED', 'zap-text-base zap-text-announce')
-        .then(() => new Promise(r => {
-          bar.style.backgroundColor = 'rgb(28, 28, 28)';
-          setTimeout(r, 400);
-        }))
-        .then(() => phaseStatic(`⚡ ${zap.sats.toLocaleString()} sats`, 'zap-text-amount'));
-      if (zap.message) chain = chain.then(() => phaseScroll(zap.message, 'zap-text-base zap-text-message'));
-      chain
-        .then(() => new Promise(resolve => {
-          bar.innerHTML = '';
-          const el = document.createElement('span');
-          el.className = 'zap-text-thanks';
-          el.textContent = zap.name || 'anon';
-          el.style.cssText = 'opacity:0;transition:opacity 0.4s ease';
-          bar.appendChild(el);
-          requestAnimationFrame(() => requestAnimationFrame(() => {
-            el.style.opacity = '1';
-            setTimeout(resolve, 4000);
-          }));
-        }))
-        .then(() => setTimeout(() => {
-          bar.style.opacity = '0';
-          bar.style.transform = 'translateY(8px)';
-          setTimeout(showNextZap, 400);
-        }, 1000));
-    }, 3000);
-  }
-
-  function getFloatCount(sats) {
-    if (sats >= 10000) return 120;
-    if (sats >= 5000)  return 80;
-    if (sats >= 1000)  return 50;
-    if (sats >= 500)   return 30;
-    if (sats >= 100)   return 18;
-    return 10;
-  }
-
-  function launchFloats(zap) {
-    const container = document.getElementById('zap-floats');
-    const count = getFloatCount(zap.sats);
-    const spread = Math.min(count * 200, 4000);
-
-    for (let i = 0; i < count; i++) {
-      setTimeout(() => {
-        let el;
-        if (zap.avatar) {
-          el = document.createElement('img');
-          el.src = zap.avatar;
-          el.onerror = function() {
-            const fallback = document.createElement('div');
-            fallback.textContent = '⚡';
-            fallback.style.cssText = this.style.cssText + ';display:flex;align-items:center;justify-content:center;border-radius:0;background:none;';
-            this.replaceWith(fallback);
-          };
+    const mkSpan = (cls, text) => { const s = document.createElement('span'); s.className = cls; s.textContent = text; return s; };
+    const mkAmount = () => {
+      const wrap = document.createElement('span');
+      wrap.className = 'zl-amount';
+      wrap.style.cssText = 'display:inline-flex;align-items:center;gap:8px;';
+      ['⚡', amount, '⚡'].forEach((t, i) => {
+        if (i !== 1) {
+          const s = document.createElement('span');
+          s.style.cssText = "font-family:'Offbit-Bold',monospace;transform:translateY(3px);display:inline-block;";
+          s.textContent = t;
+          wrap.appendChild(s);
         } else {
-          el = document.createElement('div');
-          el.textContent = '⚡';
-          el.style.cssText = 'display:flex;align-items:center;justify-content:center;border-radius:0;';
+          const amtInner = document.createElement('span');
+          [...t].forEach((ch, j) => {
+            const s = document.createElement('span');
+            s.style.cssText = 'display:inline-block;animation:letterBounce 2.5s ease infinite;';
+            s.style.animationDelay = `${j * 0.06}s`;
+            s.textContent = ch;
+            amtInner.appendChild(s);
+          });
+          wrap.appendChild(amtInner);
         }
-        el.className = 'zap-float';
+      });
+      return wrap;
+    };
+    const buildCopy = () => {
+      track.appendChild(mkSpan('zl-name', 'INCOMING ZAP'));
+      track.appendChild(mkAmount());
+      track.appendChild(mkSpan('zl-name', name));
+      if (zap.message) track.appendChild(mkSpan('zl-message', zap.message.toUpperCase().slice(0, 80)));
+      track.appendChild(mkSpan('zl-sep', '//'));
+    };
+    for (let i = 0; i < 6; i++) buildCopy();
 
-        const size  = 20 + Math.random() * 16;
-        const x     = Math.random() * (500 - size);
-        const dur   = 6 + Math.random() * 4;
-        const drift = (80 + Math.random() * 80) + 'px';
+    zapIncoming.innerHTML = '';
+    zapIncoming.appendChild(track);
 
-        el.style.width             = size + 'px';
-        el.style.height            = size + 'px';
-        el.style.left              = x + 'px';
-        el.style.top               = '1080px';
-        el.style.animationDuration = dur + 's';
-        el.style.setProperty('--drift', drift);
-
-        container.appendChild(el);
-        setTimeout(() => el.remove(), dur * 1000 + 200);
-      }, (i / count) * spread);
-    }
+    const leaderBar = document.getElementById('zap-leader-bar');
+    zlScroll.style.transition = 'opacity 0.4s ease';
+    zlScroll.style.opacity = '0';
+    setTimeout(() => {
+      leaderBar.style.background = 'rgb(248, 194, 40)';
+      setTimeout(() => {
+        requestAnimationFrame(() => {
+          const singleWidth = track.scrollWidth / 6;
+          track.style.setProperty('--zl-scroll-width', `-${singleWidth}px`);
+          track.style.animation = `scrollZapLeader ${singleWidth / 12}s linear infinite`;
+          zapIncoming.style.opacity = '1';
+          setTimeout(() => {
+            zapIncoming.style.opacity = '0';
+            setTimeout(() => {
+              zapIncoming.innerHTML = '';
+              leaderBar.style.background = 'rgba(28, 28, 28, 0.9)';
+              setTimeout(() => {
+                zlScroll.style.opacity = '1';
+                setTimeout(showNextZap, 10000);
+              }, 900);
+            }, 400);
+          }, 30000);
+        });
+      }, 900);
+    }, 400);
   }
 
   function addZap(zap) {
@@ -1040,21 +1014,28 @@ eleventyExcludeFromCollections: true
   const nodeBar = document.getElementById('node-bar');
   let nodeOfflineCount = 0;
   let nodeInitialized = false;
+  let nodeStatus = null;
   const NODE_OFFLINE_THRESHOLD = 3; // 3 × 120s = 6 minutes
 
   function setNodeOnline() {
     nodeOfflineCount = 0;
+    const prev = nodeStatus;
+    nodeStatus = 'online';
     nodeBar.className = 'status-pill node-online';
     nodeBar.innerHTML = '<span>NOGOODNODE ONLINE</span><span class="node-dot"></span>';
     if (!nodeInitialized) { nodeInitialized = true; nodeBar.style.opacity = '1'; }
+    else if (prev !== 'online') window.__addOverlayNotification?.('NOGOODNODE', 'node_online');
   }
 
   function setNodeOffline(force = false) {
     nodeOfflineCount++;
     if (force || nodeOfflineCount >= NODE_OFFLINE_THRESHOLD) {
+      const prev = nodeStatus;
+      nodeStatus = 'offline';
       nodeBar.className = 'status-pill node-offline';
       nodeBar.innerHTML = '<span>NOGOODNODE OFFLINE</span><span class="node-dot"></span>';
       if (!nodeInitialized) { nodeInitialized = true; nodeBar.style.opacity = '1'; }
+      else if (prev !== 'offline') window.__addOverlayNotification?.('NOGOODNODE', 'node_offline');
     }
   }
 
@@ -1081,21 +1062,28 @@ eleventyExcludeFromCollections: true
   const RELAY_URL = 'wss://relay.nogood.tech/';
   let relayOfflineCount = 0;
   let relayInitialized = false;
+  let relayStatus = null;
   const RELAY_OFFLINE_THRESHOLD = 3; // 3 × 600s = 30 minutes
 
   function setRelayOnline() {
     relayOfflineCount = 0;
+    const prev = relayStatus;
+    relayStatus = 'online';
     relayBar.className = 'status-pill node-online';
     relayBar.innerHTML = '<span>NoGoodRelay Online</span><span class="node-dot"></span>';
     if (!relayInitialized) { relayInitialized = true; relayBar.style.opacity = '1'; }
+    else if (prev !== 'online') window.__addOverlayNotification?.('NOGOODRELAY', 'relay_online');
   }
 
   function setRelayOffline(force = false) {
     relayOfflineCount++;
     if (force || relayOfflineCount >= RELAY_OFFLINE_THRESHOLD) {
+      const prev = relayStatus;
+      relayStatus = 'offline';
       relayBar.className = 'status-pill node-offline';
       relayBar.innerHTML = '<span>NoGoodRelay Offline</span><span class="node-dot"></span>';
       if (!relayInitialized) { relayInitialized = true; relayBar.style.opacity = '1'; }
+      else if (prev !== 'offline') window.__addOverlayNotification?.('NOGOODRELAY', 'relay_offline');
     }
   }
 
@@ -1180,8 +1168,10 @@ eleventyExcludeFromCollections: true
           el.style.display = '';
         });
         bookBarActive = false;
-        if (bookBarQueue.length > 0) displayBookBar(bookBarQueue.shift());
-      }, 3 * 150 + 300);
+        if (bookBarQueue.length > 0) {
+          displayBookBar(bookBarQueue.shift());
+        }
+      }, 3 * 150 + 600);
     }, 60000);
   }
 
@@ -1219,6 +1209,7 @@ eleventyExcludeFromCollections: true
       bookSaleCounter.textContent = sold + ' / ' + PRINT_RUN + ' sold';
       if (lastBookOrderDate !== null && lastOrderDate !== lastBookOrderDate) {
         lastBookOrderDate = lastOrderDate;
+        window.__addOverlayNotification?.('someone', 'sale');
         waitForUpdatedCount(sold);
       } else {
         lastBookOrderDate = lastOrderDate;
@@ -1249,6 +1240,7 @@ eleventyExcludeFromCollections: true
   }
 
   function showBookPromo() {
+    bookPromoBar.querySelector('video')?.play();
     let textIndex = 0;
     setBookPromoText(BOOK_PROMO_TEXTS[textIndex]);
     bookPromoBar.style.opacity = '1';
@@ -1266,7 +1258,7 @@ eleventyExcludeFromCollections: true
       setTimeout(() => {
         bookPromoBar.style.opacity = '0';
         bookPromoText.classList.remove('book-item-out');
-      }, 300);
+      }, 600);
     }, BOOK_PROMO_SHOW_MS);
   }
 
@@ -1275,21 +1267,21 @@ eleventyExcludeFromCollections: true
 </script>
 
 <script type="module">
-  import { initNostr, subscribeStreamInfo, subscribeZaps, subscribeChat, subscribeRaids, subscribeNotifications, fetchProfile } from '/assets/js/radio/nostr.js';
+  import { initNostr, subscribeStreamInfo, subscribeZaps, subscribeChat, subscribeRaids, subscribeNotifications, fetchProfile, getPool, getStreamATag } from '/assets/js/radio/nostr.js';
   import * as nip19 from '/assets/js/vendor/nostr-nip19.js';
 
   // ----------------
   // CONFIG
   // ----------------
   const NADDR     = 'naddr1qqjr2vehvyenvdtr94nrzetr956rgctr94skvvfs95eryep3x3snwve389nxyqgwwaehxw309ahx7uewd3hkctczyr85tf46zd366lkjzws83ecs6fq3ttnjrjd500g7haz936h0knp22qcyqqq8vecjrlda8';
-  const RELAYS    = ['wss://relay.primal.net', 'wss://nos.lol', 'wss://relay.damus.io'];
+  const RELAYS    = ['wss://relay.nogood.tech', 'wss://relay.primal.net', 'wss://nos.lol', 'wss://relay.damus.io'];
   const MY_PUBKEY = '55f04590674f3648f4cdc9dc8ce32da2a282074cd0b020596ee033d12d385185';
 
   const MAX_CHAT_DOM = 15;
 
   const chatBox = document.getElementById('chat-box');
   const seenMessages = new Set();
-  const seenZaps = new Set();
+  const seenZaps = new Set(JSON.parse(localStorage.getItem('ng-seen-zaps') || '[]'));
   const seenRaids = new Set();
   const historicalZapsForChat = [];
   const historicalChatMsgs = [];
@@ -1298,6 +1290,118 @@ eleventyExcludeFromCollections: true
   let historicalRendered = false;
 
   initNostr(NADDR, RELAYS, MY_PUBKEY);
+
+  // ----------------
+  // ZAP LEADERBOARD BAR
+  // ----------------
+  const zlBar   = document.getElementById('zl-wrap');
+  const zlTrack = document.getElementById('zl-track');
+  const zlLabel = document.getElementById('zl-top');
+
+  function decodeBolt11Amount(bolt11) {
+    const match = bolt11.match(/^lnbc(\d+)([munp]?)/i);
+    if (!match) return 0;
+    const num = parseInt(match[1], 10);
+    switch (match[2]) {
+      case 'm': return num * 100000;
+      case 'u': return num * 100;
+      case 'n': return Math.floor(num / 10);
+      case 'p': return Math.floor(num / 10000);
+      default:  return num * 100000000;
+    }
+  }
+
+  function fmtSats(n) {
+    if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
+    if (n >= 1000) return Math.round(n / 1000) + 'K';
+    return n.toString();
+  }
+
+  function setZapLeaderEntries(entries) {
+    zlTrack.style.animation = 'none';
+    zlTrack.innerHTML = '';
+    const buildCopy = () => {
+      entries.forEach(({ rank, name, amount }) => {
+        const nameSpan = document.createElement('span');
+        nameSpan.className = 'zl-name';
+        nameSpan.textContent = `${rank}. ${name}`;
+        const amtSpan = document.createElement('span');
+        amtSpan.className = 'zl-amount';
+        amtSpan.textContent = amount;
+        const sep = document.createElement('span');
+        sep.className = 'zl-sep';
+        sep.textContent = '//';
+        zlTrack.appendChild(nameSpan);
+        zlTrack.appendChild(amtSpan);
+        zlTrack.appendChild(sep);
+      });
+    };
+    for (let i = 0; i < 6; i++) buildCopy();
+    requestAnimationFrame(() => {
+      const singleWidth = zlTrack.scrollWidth / 6;
+      const duration = singleWidth / 12;
+      zlTrack.style.setProperty('--zl-scroll-width', `-${singleWidth}px`);
+      zlTrack.style.animation = `scrollZapLeader ${duration}s linear infinite`;
+      zlBar.style.opacity = '1';
+    });
+  }
+
+  async function buildZapLeaderboard() {
+    const pool       = getPool();
+    const streamATag = getStreamATag();
+    const events     = await pool.querySync(RELAYS, { kinds: [9735], '#a': [streamATag], limit: 500 }, { maxWait: 3000 });
+
+    const totals = new Map();
+    events.forEach(e => {
+      const descTag = e.tags.find(t => t[0] === 'description');
+      if (!descTag) return;
+      let req; try { req = JSON.parse(descTag[1]); } catch { return; }
+      const bolt11 = e.tags.find(t => t[0] === 'bolt11');
+      if (!bolt11 || !req.pubkey || req.pubkey === MY_PUBKEY) return;
+      totals.set(req.pubkey, (totals.get(req.pubkey) || 0) + decodeBolt11Amount(bolt11[1]));
+    });
+
+    const top5 = [...totals.entries()].sort((a, b) => b[1] - a[1]).slice(0, 5);
+    if (!top5.length) return;
+
+    const profiles = await Promise.all(top5.map(([pk]) => fetchProfile(pk).catch(() => null)));
+
+    const entries = top5.map(([pk, total], i) => {
+      const p = profiles[i];
+      const raw = p?.name || pk.slice(0, 8);
+      const name = (raw.length > 20 ? raw.slice(0, 20) + '…' : raw).toUpperCase();
+      return { rank: i + 1, name, amount: fmtSats(total) };
+    });
+
+    const top = entries[0];
+    const mkBounce = (text, cls, ml, startI) => {
+      const w = document.createElement('span');
+      w.className = cls;
+      if (ml) w.style.marginLeft = ml;
+      [...text].forEach((ch, i) => {
+        const s = document.createElement('span');
+        s.textContent = ch;
+        s.style.animationDelay = `${(startI + i) * 0.06}s`;
+        w.appendChild(s);
+      });
+      return w;
+    };
+    zlLabel.innerHTML = '';
+    const zlPrefix = document.createElement('span');
+    zlPrefix.style.cssText = 'display:inline-block;transform:translateY(1px)';
+    zlPrefix.textContent = 'TOP ZAP:';
+    zlLabel.appendChild(zlPrefix);
+    const nameEl = mkBounce(top.name, 'zl-name', '6px', 0);
+    nameEl.style.transform = 'translateY(1px)';
+    const amtEl = mkBounce(top.amount, 'zl-amount', '8px', top.name.length);
+    amtEl.style.transform = 'translateY(1px)';
+    zlLabel.appendChild(nameEl);
+    zlLabel.appendChild(amtEl);
+
+    setZapLeaderEntries(entries);
+  }
+
+  setTimeout(buildZapLeaderboard, 2000);
 
   // Reload every hour to keep relay connections fresh on the 24/7 stream
   setTimeout(() => window.location.reload(), 60 * 60 * 1000);
@@ -1513,6 +1617,7 @@ eleventyExcludeFromCollections: true
   subscribeZaps(async (zap, isHistorical) => {
     if (seenZaps.has(zap.id)) return;
     seenZaps.add(zap.id);
+    try { const arr = [...seenZaps].slice(-200); localStorage.setItem('ng-seen-zaps', JSON.stringify(arr)); } catch {}
     if (isHistorical) {
       if (zap.isStreamZap) historicalZapsForChat.push(zap);
     } else {
@@ -1542,6 +1647,9 @@ eleventyExcludeFromCollections: true
     seenRaids.add(raid.timestamp + raid.pubkey);
     if (isHistorical) { historicalRaids.push(raid); return; }
     appendRaidToChat(raid);
+    fetchProfile(raid.pubkey).then(p => {
+      window.__addOverlayNotification?.('RAID FROM ' + (p?.name || raid.pubkey.slice(0, 8)), 'raid');
+    });
   }, () => {
     if (historicalRendered) {
       historicalRaids.forEach(r => appendRaidToChat(r));
@@ -1554,33 +1662,78 @@ eleventyExcludeFromCollections: true
   // NOTIFICATION CENTER
   // ----------------
   const followFeed = document.getElementById('follow-feed');
-  const MAX_NOTIFS = 3;
-  const seenNotifs = new Set();
-  const notifQueue = [];
+  const MAX_NOTIFS = 5;
+  const NOTIF_STORAGE_KEY = 'ng-notif-feed';
+
+  function saveNotifications() {
+    const items = [...followFeed.children].map(el => ({
+      time: el.querySelector('.follow-notif-time').textContent,
+      text: el.querySelector('.follow-notif-time + span').textContent,
+    }));
+    try { localStorage.setItem(NOTIF_STORAGE_KEY, JSON.stringify(items)); } catch {}
+  }
+
+  function restoreNotifications() {
+    let saved;
+    try { saved = JSON.parse(localStorage.getItem(NOTIF_STORAGE_KEY) || '[]'); } catch { return; }
+    saved.slice(0, MAX_NOTIFS).forEach(({ time, text }) => {
+      const item = document.createElement('div');
+      item.className = 'follow-notif is-in';
+      const timeSpan = document.createElement('span');
+      timeSpan.className = 'follow-notif-time';
+      timeSpan.textContent = time;
+      const textSpan = document.createElement('span');
+      textSpan.textContent = text;
+      item.appendChild(timeSpan);
+      item.appendChild(textSpan);
+      followFeed.appendChild(item);
+    });
+  }
+
+  restoreNotifications();
+  const seenNotifs = new Set(JSON.parse(localStorage.getItem('ng-seen-notifs') || '[]'));
 
   const NOTIF_LABELS = {
-    post:     'posted a new note',
-    zap:      'zapped NoGood',
-    comment:  'commented on NoGood',
-    reaction: 'liked NoGood\'s post',
-    reply:    'replied to NoGood',
+    post:         'posted a new note',
+    zap:          'zapped NoGood',
+    comment:      'replied to NoGood',
+    reaction:     'liked NoGood\'s post',
+    reply:        'replied to NoGood',
+    sale:         'ordered The NoGood Book',
+    node_online:  'back online',
+    node_offline: 'went offline',
+    relay_online:  'back online',
+    relay_offline: 'went offline',
+    raid:          '',
   };
 
   function addNotification(name, type, pubkey) {
-    const label = NOTIF_LABELS[type] || type;
+    const label = type in NOTIF_LABELS ? NOTIF_LABELS[type] : type;
+
+    // Evict oldest (top item = DOM lastChild due to column-reverse) when full
+    if (followFeed.children.length >= MAX_NOTIFS) {
+      followFeed.lastElementChild?.remove();
+    }
 
     // Snapshot positions of items that are staying
     const snapshots = [...followFeed.children]
       .map(el => ({ el, top: el.getBoundingClientRect().top }));
 
-    // Add new item invisibly
+    // Add new item invisibly at bottom
     const item = document.createElement('div');
     item.className = 'follow-notif';
-    item.textContent = `${name} ${label}`;
+    const now = new Date();
+    const time = document.createElement('span');
+    time.className = 'follow-notif-time';
+    time.textContent = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+    const text = document.createElement('span');
+    text.textContent = `${name} ${label}`;
+    item.appendChild(time);
+    item.appendChild(text);
     followFeed.insertBefore(item, followFeed.firstChild);
     followFeed.getBoundingClientRect();
 
-    // FLIP invert: push staying items back down
+    // FLIP invert: push staying items back to original position
     snapshots.forEach(({ el, top }) => {
       const dy = top - el.getBoundingClientRect().top;
       if (Math.abs(dy) < 0.5) return;
@@ -1589,7 +1742,7 @@ eleventyExcludeFromCollections: true
     });
     followFeed.getBoundingClientRect();
 
-    // Phase 1: animate staying items up
+    // Phase 1: animate staying items to new position
     requestAnimationFrame(() => {
       snapshots.forEach(({ el }) => {
         el.style.transition = 'transform 0.35s ease';
@@ -1597,48 +1750,46 @@ eleventyExcludeFromCollections: true
       });
     });
 
-    // Phase 2: after move, fade in new item + resolve profile
+    // Phase 2: fade in new item + resolve profile
     setTimeout(() => {
       snapshots.forEach(({ el }) => { el.style.transition = ''; });
       item.style.transition = 'opacity 0.35s ease';
       item.classList.add('is-in');
+      saveNotifications();
       if (pubkey) fetchProfile(pubkey).then(p => {
         const resolvedName = p.name.length > 10 ? p.name.slice(0, 10) + '…' : p.name;
-        item.textContent = `${resolvedName} ${label}`;
+        text.textContent = `${resolvedName} ${label}`;
+        saveNotifications();
       });
     }, 350);
-
-    // Auto fade-out after 15s
-    setTimeout(() => {
-      if (!item.isConnected) return;
-      item.style.transition = 'opacity 0.6s ease';
-      item.classList.remove('is-in');
-      item.classList.add('is-out');
-      setTimeout(() => { item.remove(); drainQueue(); }, 600);
-    }, 30000);
 
     return item;
   }
 
-  function drainQueue() {
-    if (notifQueue.length === 0 || followFeed.children.length >= MAX_NOTIFS) return;
-    const next = notifQueue.shift();
-    addNotification(next.name, next.type, next.pubkey);
-  }
-
   function queueNotification(name, type, pubkey) {
-    if (followFeed.children.length < MAX_NOTIFS) {
-      addNotification(name, type, pubkey);
-    } else {
-      notifQueue.push({ name, type, pubkey });
-    }
+    addNotification(name, type, pubkey);
   }
 
+  window.__addOverlayNotification = (name, type) => addNotification(name, type, null);
+  window.__testZap = () => {
+    const msgs = ['great work!', 'keep it up', 'love the stream', 'fuck easy', 'stay humble stack sats'];
+    addZap({ sats: Math.floor(Math.random() * 50000) + 100, name: 'testuser', message: msgs[Math.floor(Math.random() * msgs.length)] });
+  };
+
+  const __testTypes = ['zap', 'post', 'reaction', 'reply', 'comment', 'sale', 'node_online', 'node_offline', 'relay_online', 'relay_offline'];
+  let __testIndex = 0;
+  const __testNames = { sale: 'someone', node_online: 'NOGOODNODE', node_offline: 'NOGOODNODE', relay_online: 'NOGOODRELAY', relay_offline: 'NOGOODRELAY' };
+  window.__testNotification = () => {
+    const type = __testTypes[__testIndex % __testTypes.length];
+    __testIndex++;
+    addNotification(__testNames[type] || 'testuser', type, null);
+  };
 
   // Delay until after main mux EOSE (4s timeout + buffer)
   setTimeout(() => subscribeNotifications(({ type, pubkey, id, own }) => {
     if (seenNotifs.has(id)) return;
     seenNotifs.add(id);
+    try { const arr = [...seenNotifs].slice(-200); localStorage.setItem('ng-seen-notifs', JSON.stringify(arr)); } catch {}
     if (type === 'follow') return;
     queueNotification(pubkey.slice(0, 8), type, pubkey);
   }), 6000);
