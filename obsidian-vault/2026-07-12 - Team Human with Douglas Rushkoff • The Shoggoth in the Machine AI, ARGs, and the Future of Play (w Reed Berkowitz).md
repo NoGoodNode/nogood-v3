@@ -3,7 +3,7 @@ title: "Team Human with Douglas Rushkoff • The Shoggoth in the Machine: AI, AR
 url: https://fountain.fm/episode/MFyB0TLJ7vwKNLkfkxQw
 date: 2026-07-11
 tags:
-  - category/podcast
+  - podcast
 cover: "https://media.redcircle.com/images/2026/3/27/21/234bc932-3954-43f4-90a9-7eca4d21c35e_thlogonew_copy.jpg"
 show: "Team Human with Douglas Rushkoff"
 ---

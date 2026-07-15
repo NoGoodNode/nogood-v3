@@ -15,8 +15,18 @@ module.exports.config = {
 const THUMB_DIR = path.join(__dirname, "source/assets/img/clippings");
 
 function youtubeId(url) {
-	const m = url.match(/youtube\.com\/embed\/([^?&/]+)/);
+	if (!url) return null;
+	const m = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([^?&/]+)/);
 	return m ? m[1] : null;
+}
+
+function categoryFromUrl(url) {
+	try {
+		const h = new URL(url).hostname.replace(/^www\./, '');
+		if (h === 'youtube.com' || h === 'youtu.be') return 'video';
+		if (h === 'fountain.fm') return 'podcast';
+	} catch {}
+	return null;
 }
 
 async function fetchCover(coverUrl, clippingUrl) {
@@ -62,12 +72,11 @@ async function readClippings() {
 					const raw = fs.readFileSync(path.join(vaultDir, filename), "utf8");
 					const { data, content } = matter(raw);
 					const tags = data.tags || [];
-					const categoryTag = tags.find(tag => tag.startsWith("category/"));
+					const categoryTag = tags[0] || null;
+					const videoId = youtubeId(data.url) || youtubeId(data.embed);
+					const embed = data.embed || (videoId ? `https://www.youtube.com/embed/${videoId}` : null);
 					let embedThumb = data.embed_thumb || null;
-					if (!embedThumb && data.embed) {
-						const id = youtubeId(data.embed);
-						if (id) embedThumb = await fetchThumb(id);
-					}
+					if (!embedThumb && videoId) embedThumb = await fetchThumb(videoId);
 					let cover = null;
 					if (data.cover) {
 						cover = await fetchCover(data.cover, data.url);
@@ -85,11 +94,11 @@ async function readClippings() {
 						domain,
 						url: data.url,
 						date: data.date,
-						tags: tags.filter(tag => tag !== categoryTag),
-						category: categoryTag ? categoryTag.split("/")[1] : "default",
+						renderAs: categoryFromUrl(data.url) || 'default',
+						category: categoryTag,
 						intro: content.trim(),
 						quote: data.quote || null,
-						embed: data.embed || null,
+						embed: embed,
 						embed_thumb: embedThumb,
 						cover,
 					};

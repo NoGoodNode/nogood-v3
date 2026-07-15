@@ -3,7 +3,7 @@ title: "The Who Cares Era"
 url: "https://dansinker.com/posts/2025-05-23-who-cares/"
 date: 2026-07-12
 tags:
-  - "category/blog"
+  - article
 cover:
 show:
 embed:

@@ -1,5 +1,5 @@
 <div class="outline padding-small">
-    {% if item.category == "podcast" %}
+    {% if item.renderAs == "podcast" %}
     <div class="clipping-podcast">
         {% if item.cover %}
         <img src="{{ item.cover }}" alt="{{ item.title }}" class="no-blend clipping-podcast-cover">
@@ -16,7 +16,7 @@
     <p>{{ item.intro }}</p>
     {% endif %}
     {% else %}
-    <a href="{{ item.url }}" target="_blank" rel="noopener" data-umami-event="clipping-click" data-umami-event-title="{{ item.title }}">{{ item.title }}</a>{% if item.domain and item.category != "video" and item.category != "music" %} <span class="clipping-domain">— {{ item.domain }}</span>{% endif %}
+    <a href="{{ item.url }}" target="_blank" rel="noopener" data-umami-event="clipping-click" data-umami-event-title="{{ item.title }}">{{ item.title }}</a>{% if item.domain and item.renderAs != "video" %} <span class="clipping-domain">— {{ item.domain }}</span>{% endif %}
     <div class="spacer"></div>
     {% if item.intro %}
     <p class="">{{ item.intro }}</p>
@@ -38,7 +38,7 @@
     <div class="spacer"></div>
     <div class="flex-space-between">
         <div class="tag-row">
-            <span class="tag tag-dark pixel-font uppercase">{{ item.category }}</span>
+            {% if item.category %}<span class="tag tag-dark pixel-font uppercase">{{ item.category }}</span>{% endif %}
             <span class="text-small text-tabular">{{ item.date | postDate }}</span>
         </div>
         <span class="text-small">source:&nbsp;<a href="{{ item.url }}" target="_blank" rel="noopener" data-umami-event="clipping-click" data-umami-event-title="{{ item.title }}">{% if item.domain %}{{ item.domain }}{% else %}link{% endif %}</a></span>
