@@ -1278,6 +1278,7 @@ eleventyExcludeFromCollections: true
   const MY_PUBKEY = '55f04590674f3648f4cdc9dc8ce32da2a282074cd0b020596ee033d12d385185';
 
   const MAX_CHAT_DOM = 15;
+  const PAGE_LOAD_SECS = Math.floor(Date.now() / 1000);
 
   const chatBox = document.getElementById('chat-box');
   const seenMessages = new Set();
@@ -1622,7 +1623,7 @@ eleventyExcludeFromCollections: true
       if (zap.isStreamZap) historicalZapsForChat.push(zap);
     } else {
       if (zap.isStreamZap) appendZapToChat(zap);
-      fetchProfile(zap.senderPubkey || '').then(p => addZap({ sats: zap.amount, name: p.name, avatar: p.picture, message: zap.content }));
+      if (zap.timestamp >= PAGE_LOAD_SECS - 60) fetchProfile(zap.senderPubkey || '').then(p => addZap({ sats: zap.amount, name: p.name, avatar: p.picture, message: zap.content }));
     }
   }, () => {
     if (historicalRendered) {
@@ -1663,34 +1664,7 @@ eleventyExcludeFromCollections: true
   // ----------------
   const followFeed = document.getElementById('follow-feed');
   const MAX_NOTIFS = 5;
-  const NOTIF_STORAGE_KEY = 'ng-notif-feed';
 
-  function saveNotifications() {
-    const items = [...followFeed.children].map(el => ({
-      time: el.querySelector('.follow-notif-time').textContent,
-      text: el.querySelector('.follow-notif-time + span').textContent,
-    }));
-    try { localStorage.setItem(NOTIF_STORAGE_KEY, JSON.stringify(items)); } catch {}
-  }
-
-  function restoreNotifications() {
-    let saved;
-    try { saved = JSON.parse(localStorage.getItem(NOTIF_STORAGE_KEY) || '[]'); } catch { return; }
-    saved.slice(0, MAX_NOTIFS).forEach(({ time, text }) => {
-      const item = document.createElement('div');
-      item.className = 'follow-notif is-in';
-      const timeSpan = document.createElement('span');
-      timeSpan.className = 'follow-notif-time';
-      timeSpan.textContent = time;
-      const textSpan = document.createElement('span');
-      textSpan.textContent = text;
-      item.appendChild(timeSpan);
-      item.appendChild(textSpan);
-      followFeed.appendChild(item);
-    });
-  }
-
-  restoreNotifications();
   const seenNotifs = new Set(JSON.parse(localStorage.getItem('ng-seen-notifs') || '[]'));
 
   const NOTIF_LABELS = {
@@ -1755,11 +1729,9 @@ eleventyExcludeFromCollections: true
       snapshots.forEach(({ el }) => { el.style.transition = ''; });
       item.style.transition = 'opacity 0.35s ease';
       item.classList.add('is-in');
-      saveNotifications();
       if (pubkey) fetchProfile(pubkey).then(p => {
         const resolvedName = p.name.length > 10 ? p.name.slice(0, 10) + '…' : p.name;
         text.textContent = `${resolvedName} ${label}`;
-        saveNotifications();
       });
     }, 350);
 
