@@ -178,10 +178,38 @@ bodyColor: bg-highlight
     {# VIDEO #}
     <div class="section-column no-blend">
         <div class="video-fill">
-            <video src="/assets/img/radio-bg.mp4" autoplay loop muted playsinline></video>
+            <video id="home-stream-video" muted playsinline></video>
         </div>
     </div>
 </div>
+<script type="module">
+    import Hls from '/assets/js/vendor/hls.js';
+    const video = document.getElementById('home-stream-video');
+    const HLS_URL = 'https://api-core.zap.stream/537a365c-f1ec-44ac-af10-22d14a7319fb/hls/live.m3u8';
+    const FALLBACK = '/assets/img/radio-bg.mp4';
+    function useFallback() {
+        video.src = FALLBACK;
+        video.loop = true;
+        video.play().catch(() => {});
+    }
+    if (Hls.isSupported()) {
+        const hls = new Hls({ enableWorker: true, startLevel: 0 });
+        hls.loadSource(HLS_URL);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+            video.play().catch(() => {});
+        });
+        hls.on(Hls.Events.ERROR, (_e, data) => {
+            if (data.fatal) { hls.destroy(); useFallback(); }
+        });
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = HLS_URL;
+        video.play().catch(() => {});
+        video.addEventListener('error', useFallback);
+    } else {
+        useFallback();
+    }
+</script>
 {# SHOP MARQUEE #}
 <div class="section shop-marquee">
     <div class="marquee pixel-font header-large uppercase">
@@ -236,7 +264,7 @@ bodyColor: bg-highlight
                 </video>
             </a>
         </div>
-        <div class="item-info">
+        <div class="item-info margin-top-small">
             <h4 class="pixel-font uppercase">
                 <a href="/the-nogood-book/">The NoGood Book — €70</a>
             </h4>

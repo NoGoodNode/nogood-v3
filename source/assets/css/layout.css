@@ -60,6 +60,11 @@ SPACERS
     padding: 1.5rem 0;
 }
 
+.margin-top-small { margin-top: 1rem; }
+.margin-top { margin-top: 2rem; }
+.margin-top-large { margin-top: 3rem; }
+.margin-top-extralarge { margin-top: 4rem; }
+
 .line:before {
   content: '';
   position: absolute;
