@@ -200,7 +200,8 @@ export function subscribeNotifications(onNotification) {
         const type = isOwn && !isReply ? 'post' : isReply ? 'reply' : 'comment';
         onNotification({ type, pubkey: event.pubkey, id: event.id, own: isOwn });
       } else if (event.kind === 7) {
-        onNotification({ type: 'reaction', pubkey: event.pubkey, id: event.id, own: isOwn });
+        const targetPubkey = isOwn ? (event.tags.filter(t => t[0] === 'p').pop()?.[1] || null) : null;
+        onNotification({ type: 'reaction', pubkey: event.pubkey, id: event.id, own: isOwn, targetPubkey });
       } else if (event.kind === 3) {
         onNotification({ type: 'follow', pubkey: event.pubkey, id: event.id, own: isOwn });
       }
