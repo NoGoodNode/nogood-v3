@@ -1209,7 +1209,7 @@ eleventyExcludeFromCollections: true
       bookSaleCounter.textContent = sold + ' / ' + PRINT_RUN + ' sold';
       if (lastBookOrderDate !== null && lastOrderDate !== lastBookOrderDate) {
         lastBookOrderDate = lastOrderDate;
-        window.__addOverlayNotification?.('someone', 'sale');
+        window.__addOverlayNotification?.('', 'sale');
         waitForUpdatedCount(sold);
       } else {
         lastBookOrderDate = lastOrderDate;
@@ -1409,10 +1409,26 @@ eleventyExcludeFromCollections: true
   setTimeout(() => window.location.reload(), 60 * 60 * 1000);
 
   const viewersBar = document.getElementById('viewers-bar');
+  const LISTENER_MILESTONES = [10, 25, 50, 100, 150, 200, 250, 300, 400, 500];
+  for (let n = 550; n <= 10000; n += 50) LISTENER_MILESTONES.push(n);
+  let peakViewers = parseInt(localStorage.getItem('ng-peak-viewers') || '0', 10);
+  const triggeredMilestones = new Set(JSON.parse(localStorage.getItem('ng-triggered-milestones') || '[]'));
+
   subscribeStreamInfo(info => {
     if (info.viewers !== null && info.viewers > 0) {
       viewersBar.innerHTML = `<span>${info.viewers} listening</span>`;
       viewersBar.style.opacity = '1';
+      if (info.viewers > peakViewers) {
+        peakViewers = info.viewers;
+        try { localStorage.setItem('ng-peak-viewers', peakViewers); } catch {}
+        LISTENER_MILESTONES.forEach(m => {
+          if (peakViewers >= m && !triggeredMilestones.has(m)) {
+            triggeredMilestones.add(m);
+            try { localStorage.setItem('ng-triggered-milestones', JSON.stringify([...triggeredMilestones])); } catch {}
+            addNotification(`${m} listeners`, 'milestone', null, true);
+          }
+        });
+      }
     } else {
       viewersBar.style.opacity = '0';
     }
@@ -1652,7 +1668,7 @@ eleventyExcludeFromCollections: true
     if (isHistorical) { historicalRaids.push(raid); return; }
     appendRaidToChat(raid);
     fetchProfile(raid.pubkey).then(p => {
-      window.__addOverlayNotification?.('RAID FROM ' + (p?.name || raid.pubkey.slice(0, 8)), 'raid');
+      window.__addOverlayNotification?.('Raid from ' + (p?.name || raid.pubkey.slice(0, 8)), 'raid');
     });
   }, () => {
     if (historicalRendered) {
@@ -1704,12 +1720,14 @@ eleventyExcludeFromCollections: true
     comment:      'replied to NoGood',
     reaction:     'liked NoGood\'s post',
     reply:        'replied to NoGood',
-    sale:         'ordered The NoGood Book',
+    sale:         'new book order received',
     node_online:  'back online',
     node_offline: 'went offline',
     relay_online:  'back online',
     relay_offline: 'went offline',
     raid:          '',
+    own_zap:       '',
+    milestone:     '',
   };
 
   function addNotification(name, type, pubkey, persist = false) {
@@ -1732,7 +1750,7 @@ eleventyExcludeFromCollections: true
     time.className = 'follow-notif-time';
     time.textContent = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
     const text = document.createElement('span');
-    text.textContent = `${name} ${label}`;
+    text.textContent = name ? `${name} ${label}` : label;
     item.appendChild(time);
     item.appendChild(text);
     followFeed.insertBefore(item, followFeed.firstChild);
@@ -1782,7 +1800,7 @@ eleventyExcludeFromCollections: true
 
   const __testTypes = ['zap', 'post', 'reaction', 'reply', 'comment', 'sale', 'node_online', 'node_offline', 'relay_online', 'relay_offline'];
   let __testIndex = 0;
-  const __testNames = { sale: 'someone', node_online: 'NOGOODNODE', node_offline: 'NOGOODNODE', relay_online: 'NOGOODRELAY', relay_offline: 'NOGOODRELAY' };
+  const __testNames = { sale: '', node_online: 'NOGOODNODE', node_offline: 'NOGOODNODE', relay_online: 'NOGOODRELAY', relay_offline: 'NOGOODRELAY' };
   window.__testNotification = () => {
     const type = __testTypes[__testIndex % __testTypes.length];
     __testIndex++;
@@ -1790,11 +1808,18 @@ eleventyExcludeFromCollections: true
   };
 
   // Delay until after main mux EOSE (4s timeout + buffer)
-  setTimeout(() => subscribeNotifications(({ type, pubkey, id, own }) => {
+  setTimeout(() => subscribeNotifications(({ type, pubkey, id, own, amount }) => {
     if (seenNotifs.has(id)) return;
     seenNotifs.add(id);
     try { const arr = [...seenNotifs].slice(-200); localStorage.setItem('ng-seen-notifs', JSON.stringify(arr)); } catch {}
     if (type === 'follow') return;
+    if (own && type !== 'post' && type !== 'zap') return;
+    if (own && type === 'zap') {
+      const fmtSats = n => n >= 1000 ? Math.round(n / 1000) + 'K' : String(n);
+      const display = amount ? `NoGood zapped ${fmtSats(amount)} sats` : 'NoGood zapped';
+      addNotification(display, 'own_zap', null, true);
+      return;
+    }
     queueNotification(pubkey.slice(0, 8), type, pubkey);
   }), 6000);
 

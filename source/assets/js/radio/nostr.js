@@ -192,7 +192,9 @@ export function subscribeNotifications(onNotification) {
         if (descTag) { try { pubkey = JSON.parse(descTag[1]).pubkey || pubkey; } catch {} }
         onNotification({ type: 'zap', pubkey, id: event.id, own: false });
       } else if (event.kind === 9734 && isOwn) {
-        onNotification({ type: 'zap', pubkey: MY_PUBKEY, id: event.id, own: true });
+        const amountTag = event.tags.find(t => t[0] === 'amount');
+        const sats = amountTag ? Math.floor(parseInt(amountTag[1], 10) / 1000) : 0;
+        onNotification({ type: 'zap', pubkey: MY_PUBKEY, id: event.id, own: true, amount: sats });
       } else if (event.kind === 1) {
         const isReply = event.tags.some(t => t[0] === 'e');
         const type = isOwn && !isReply ? 'post' : isReply ? 'reply' : 'comment';
