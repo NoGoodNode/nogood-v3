@@ -372,6 +372,13 @@ eleventyExcludeFromCollections: true
     align-items: center;
     gap: 10px;
     justify-content: flex-end;
+    background: rgba(28, 28, 28, 0.75);
+    padding: 6px 10px;
+  }
+
+  .follow-notif span {
+    display: inline-block;
+    transform: translateY(1px);
   }
 
   .follow-notif-time {
@@ -647,7 +654,7 @@ eleventyExcludeFromCollections: true
 
   #book-promo-bar {
     position: absolute;
-    bottom: 190px;
+    bottom: 250px;
     right: 15px;
     width: 192px;
     display: flex;
@@ -1807,7 +1814,7 @@ eleventyExcludeFromCollections: true
   window.__testNotification = () => {
     const type = __testTypes[__testIndex % __testTypes.length];
     __testIndex++;
-    addNotification(__testNames[type] || 'testuser', type, null);
+    addNotification(type in __testNames ? __testNames[type] : 'testuser', type, null);
   };
 
   // Delay until after main mux EOSE (4s timeout + buffer)
