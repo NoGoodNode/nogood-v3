@@ -1283,6 +1283,7 @@ eleventyExcludeFromCollections: true
   const chatBox = document.getElementById('chat-box');
   const seenMessages = new Set();
   const seenZaps = new Set(JSON.parse(localStorage.getItem('ng-seen-zaps') || '[]'));
+  const seenZapsSession = new Set();
   const seenRaids = new Set();
   const historicalZapsForChat = [];
   const historicalChatMsgs = [];
@@ -1616,14 +1617,16 @@ eleventyExcludeFromCollections: true
   // NOSTR SUBSCRIPTIONS
   // ----------------
   subscribeZaps(async (zap, isHistorical) => {
-    if (seenZaps.has(zap.id)) return;
-    seenZaps.add(zap.id);
-    try { const arr = [...seenZaps].slice(-200); localStorage.setItem('ng-seen-zaps', JSON.stringify(arr)); } catch {}
     if (isHistorical) {
+      if (seenZapsSession.has(zap.id)) return;
+      seenZapsSession.add(zap.id);
       if (zap.isStreamZap) historicalZapsForChat.push(zap);
     } else {
+      if (seenZaps.has(zap.id)) return;
+      seenZaps.add(zap.id);
+      try { const arr = [...seenZaps].slice(-200); localStorage.setItem('ng-seen-zaps', JSON.stringify(arr)); } catch {}
       if (zap.isStreamZap) appendZapToChat(zap);
-      if (zap.timestamp >= PAGE_LOAD_SECS - 60) fetchProfile(zap.senderPubkey || '').then(p => addZap({ sats: zap.amount, name: p.name, avatar: p.picture, message: zap.content }));
+      if (zap.timestamp >= PAGE_LOAD_SECS) fetchProfile(zap.senderPubkey || '').then(p => addZap({ sats: zap.amount, name: p.name, avatar: p.picture, message: zap.content }));
     }
   }, () => {
     if (historicalRendered) {
@@ -1665,6 +1668,34 @@ eleventyExcludeFromCollections: true
   const followFeed = document.getElementById('follow-feed');
   const MAX_NOTIFS = 5;
 
+  function saveNotifSnapshot() {
+    const items = [...followFeed.children].map(el => ({
+      time: el.querySelector('.follow-notif-time')?.textContent || '',
+      text: el.querySelector('span:not(.follow-notif-time)')?.textContent || '',
+    }));
+    try { localStorage.setItem('ng-notif-snapshot', JSON.stringify(items)); } catch {}
+  }
+
+  function restoreNotifSnapshot() {
+    try {
+      const saved = JSON.parse(localStorage.getItem('ng-notif-snapshot') || '[]');
+      saved.forEach(({ time, text }) => {
+        const item = document.createElement('div');
+        item.className = 'follow-notif is-in';
+        const timeEl = document.createElement('span');
+        timeEl.className = 'follow-notif-time';
+        timeEl.textContent = time;
+        const textEl = document.createElement('span');
+        textEl.textContent = text;
+        item.appendChild(timeEl);
+        item.appendChild(textEl);
+        followFeed.appendChild(item);
+      });
+    } catch {}
+  }
+
+  restoreNotifSnapshot();
+
   const seenNotifs = new Set(JSON.parse(localStorage.getItem('ng-seen-notifs') || '[]'));
 
   const NOTIF_LABELS = {
@@ -1681,7 +1712,7 @@ eleventyExcludeFromCollections: true
     raid:          '',
   };
 
-  function addNotification(name, type, pubkey) {
+  function addNotification(name, type, pubkey, persist = false) {
     const label = type in NOTIF_LABELS ? NOTIF_LABELS[type] : type;
 
     // Evict oldest (top item = DOM lastChild due to column-reverse) when full
@@ -1735,11 +1766,12 @@ eleventyExcludeFromCollections: true
       });
     }, 350);
 
+    if (persist) saveNotifSnapshot();
     return item;
   }
 
   function queueNotification(name, type, pubkey) {
-    addNotification(name, type, pubkey);
+    addNotification(name, type, pubkey, true);
   }
 
   window.__addOverlayNotification = (name, type) => addNotification(name, type, null);
