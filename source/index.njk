@@ -137,6 +137,11 @@ bodyColor: bg-highlight
                 </h1>
             </div>
         </div>
+        <div class="spacer-small hide-medium hide-large"></div>
+        <div class="flex-row gap-large hide-medium hide-large">
+            <a href="/work/">See work</a>
+            <a href="/about/">Learn more</a>
+        </div>
         <div class="spacer hide-small"></div>
         <div class="place-bottom padding-right-small hide-small">
             <p class="text-large">
@@ -163,18 +168,10 @@ bodyColor: bg-highlight
             {% image "source/assets/img/NoGood_Selfpotrait_Dark.png", "NoGood self portrait" %}
         </div>
     </div>
-    {# MOBILE ONLY #}
-    <div class="section-column hide-medium hide-large">
-        <p class="text-large">
-            I established NoGood in 2021.
-            More than a pseudonym, I found that NoGood provided a space to experiment.
-            Since then, my commissioned projects and my personal work started to blend,
-            establishing a throughline that spans multiple years.
-        </p>
-    </div>
+
 </div>
 {# RADIO #}
-<div class="section relative">
+<div class="section relative hide-small">
     {# VIDEO #}
     <div class="section-column no-blend">
         <div class="video-fill">
@@ -264,15 +261,15 @@ bodyColor: bg-highlight
                 </video>
             </a>
         </div>
-        <div class="item-info margin-top-small">
+        <div class="item-info">
             <h4 class="pixel-font uppercase">
                 <a href="/the-nogood-book/">The NoGood Book — €70</a>
             </h4>
-            <div class="spacer-small hide-small"></div>
-            <p class="text-large hide-small">A monograph bringing together five years worth of NoGood illustration
+            <div class="spacer-small hide-medium hide-large"></div>
+            <p class="text-large">A monograph bringing together five years worth of NoGood illustration
                 projects, outlining the backdrop for and context within which my work was created.</p>
         </div>
-        <div class="inner-column"></div>
+        <div class="inner-column hide-small"></div>
         <div class="grid-span-full border-bottom"></div>
         {# REGULAR ITEMS #}
         {% include "source/snippets/product-grid.njk" %}

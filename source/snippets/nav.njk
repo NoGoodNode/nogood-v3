@@ -13,24 +13,12 @@
     <div id="header-menu">
         <div class="primary-menu hide-small">
             <ul>
-                <li>
-                    <a href="/work/">Work</a>
-                </li>
-                <li>
-                    <a href="/sketchbook/">Sketchbook</a>
-                </li>
-                <li>
-                    <a href="/shop/">Shop</a>
-                </li>
-                <li>
-                    <a href="/about/">About</a>
-                </li>
-                <li>
-                    <a href="/now/">Now</a>
-                </li>
-                <li>
-                    <a href="/archive/">Archive</a>
-                </li>
+                <li><a href="/work/">Work</a></li>
+                <li><a href="/sketchbook/">Sketchbook</a></li>
+                <li><a href="/shop/">Shop</a></li>
+                <li><a href="/about/">About</a></li>
+                <li><a href="/now/">Now</a></li>
+                <li><a href="/archive/">Archive</a></li>
             </ul>
         </div>
         <div
@@ -38,7 +26,11 @@
             {# RADIO #}
             <div class="hide-small flex-center">
                 <a href="/radio/" class="radio-pill pixel-font uppercase" aria-label="NoGood Radio">
-                    <span class="soundbars" aria-hidden="true"><span></span><span></span><span></span></span>
+                    <span class="soundbars" aria-hidden="true">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </span>
                     <span class="pill-label">NoGood Radio</span>
                 </a>
             </div>
@@ -80,40 +72,44 @@
             {# MOBILE MENU #}
             <div class="mobile-menu-wrapper hide-medium hide-large">
                 <div id="mobile-menu" class="mobile-menu-overlay bg-highlight">
-                    <div
-                        class="mobile-menu-wrapper padding-small">
+                    <div class="mobile-menu-wrapper padding-small">
                         <button class="closebtn" id="mobile-menu-close" aria-label="Close navigation menu">
                             <img class="mobile-menu-close-btn" src="/assets/icons/nogood_cross.svg" alt="" aria-hidden="true"/>
                         </button>
-                        <ul class="mobile-menu-content text-extra-large pixel-font uppercase">
-                            <li>
-                                <a href="/work/">Work</a>
-                            </li>
-                            <li>
-                                <a href="/sketchbook/">Sketchbook</a>
-                            </li>
-                            <li>
-                                <a href="/shop/">Shop</a>
-                            </li>
-                            <li>
-                                <a href="/now/">Now</a>
-                            </li>
-                            <li>
-                                <a href="/about/">About</a>
-                            </li>
-                            <li>
-                                <a href="/archive/">Archive</a>
-                            </li>
-                            <li>
-                                <a href="/radio/">Radio<span class="dot dot-radio dot-pulse nav-live-dot" hidden aria-label="Live" aria-hidden="true"></span>
-                                </a>
-                            </li>
-                        </ul>
+                        <div class="spacer-extralarge"></div>
+                        <div class="mobile-menu-content text-extra-large pixel-font uppercase">
+                            <a href="/work/">Work</a>
+                            <a href="/sketchbook/">Sketchbook</a>
+                            <a href="/shop/">Shop</a>
+                            <a href="/now/">Now</a>
+                            <a href="/about/">About</a>
+                            <a href="/archive/">Archive</a>
+                            <a href="/radio/">Radio<span class="dot dot-radio dot-pulse nav-live-dot" hidden aria-label="Live" aria-hidden="true"></span>
+                            </a>
+                        </div>
+                        <div class="spacer-large line"></div>
+                        <a href="/the-nogood-book/" class="mobile-menu-book-promo">
+                            <div class="no-blend">
+                                <video muted loop playsinline>
+                                    <source data-src="/assets/img/book/book-shoot.mp4" type="video/mp4">
+                                </video>
+                            </div>
+                            <div><span class="tag pixel-font">Out now</span> <span class="pixel-font uppercase mobile-menu-book-title">The NoGood Book — €70</span></div>
+                        </a>
+                        <div class="spacer-large line"></div>
+                        <span class="tag pixel-font {% if status.available %}tag-available{% else %}tag-unavailable{% endif %}">
+                            {% if status.available %}{{ status.availability_label }}{% else %}{{ status.unavailability_label }}{% endif %}
+                        </span>
+                        <div class="spacer-small"></div>
+                        <p>
+                            Get in touch: <a href="mailto:{{ settings.metadata.site_email }}">{{ settings.metadata.site_email }}</a><br>
+                            Based in Amsterdam, The Netherlands.
+                        </p>
                         <img class="mobile-menu-logo" src="/assets/img/NoGood_Logo.svg" alt="NoGood logo"/>
                     </div>
                 </div>
                 <button class="mobile-menu-open-btn hide-medium hide-large" id="mobile-menu-open" aria-label="Open navigation menu">
-                    <svg class="mobile-menu-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" aria-hidden="true"><path d="M0,5v1h7v-1H0Z"/><path d="M0,3v1h6v-1H0Z"/><path d="M0,1v1h5v-1H0Z"/><path d="M7,4v1h5v-1h-5Z"/><path d="M6,2v1h6v-1h-6Z"/><path d="M5,0v1h7V0h-7Z"/></svg>
+                    <svg class="mobile-menu-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" aria-hidden="true"><path d="M0,5v1h7v-1H0Z"/><path d="M0,3v1h6v-1H0Z"/><path d="M0,1v1h5v-1H0Z"/><path d="M7,4v1h5v-1h-5Z"/><path d="M6,2v1h6v-1h-6Z"/><path d="M5,0v1h7V0h-7Z"/> </svg>
                 </button>
                 <script defer src="/assets/js/nav.js"></script>
             </div>

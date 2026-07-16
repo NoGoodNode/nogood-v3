@@ -12,6 +12,7 @@
 
     #shop-header {
         aspect-ratio: 1 / 1;
+        margin-bottom: -4px;
     }
 
     #shop-header video {
@@ -410,7 +411,7 @@
     }
 
     .top-banner.marquee {
-        padding: 6px 0;
+        padding: 9px 0 6px;
     }
 
 }

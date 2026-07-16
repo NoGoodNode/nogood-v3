@@ -86,6 +86,11 @@ PADDING
     padding: 60px;
 }
 
+.padding-top-small { padding-top: 1rem; }
+.padding-top { padding-top: 2rem; }
+.padding-top-large { padding-top: 3rem; }
+.padding-top-extralarge { padding-top: 4rem; }
+
 .padding-right-small {
     padding-right: 20%;
 }
