@@ -10,7 +10,9 @@ document.addEventListener('click', e => {
     const iframe = document.createElement('iframe');
     iframe.src = src;
     iframe.className = 'embed-iframe';
+    iframe.title = 'Embedded content';
     iframe.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture');
     iframe.setAttribute('allowfullscreen', '');
+    iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-presentation allow-popups allow-popups-to-escape-sandbox');
     facade.replaceWith(iframe);
 });

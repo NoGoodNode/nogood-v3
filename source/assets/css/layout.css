@@ -8,10 +8,6 @@ BACKGROUND IMAGE
     clip-path: inset(10px);
 }
 
-.bg-image-large {
-    min-height: 95vh;
-}
-
 .bg-image img {
     position: absolute;
     left: 0;
@@ -377,11 +373,3 @@ SCROLL
 }
 
 
-/* ----------------
-VIDEO
----------------- */
-video {
-    width: 100%;
-    height: auto;
-    display: block;
-}

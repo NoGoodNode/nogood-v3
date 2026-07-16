@@ -28,10 +28,3 @@ footer .small-grid .section-column {
 	width: 95px;
 }
 
-
-.footer-updates {
-	display: flex;
-	flex-direction: row;
-	gap: 20px;
-	align-items: center;
-}

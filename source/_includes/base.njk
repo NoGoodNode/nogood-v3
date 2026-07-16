@@ -13,7 +13,7 @@
     {% endif %}
 
     {# OPEN GRAPH #}
-    <meta property="og:title" content="{{ title or settings.metadata.site_title }}" />
+    <meta property="og:title" content="{% if page.url == '/' %}{{ settings.metadata.site_title }}{% else %}{{ title or settings.metadata.site_title }}{% endif %}" />
     <meta property="og:author" content="{{ author or settings.metadata.site_title }}" />
     <meta property="og:url" content="{{ settings.metadata.site_url }}{{ page.url }}" />
     <meta property="og:description" content="{{ description or settings.metadata.site_description }}" />

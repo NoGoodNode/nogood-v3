@@ -9,10 +9,8 @@
     --muted-hover: rgb(201, 195, 177);
     
     --offwhite: rgba(233, 229, 219, 0.5);
-    --offwhite-hover: rgba(196, 191, 179, 0.5);
-    
+
     --medium: rgb(81, 90, 99);
-    --medium-hover: rgb(60, 68, 75);
     
     --highlight: #d0fa66;
     --highlight-hover: #add05b;
@@ -214,10 +212,3 @@ DARK SECTION OVERRIDES
     border-color: var(--highlight);
 }
 
-.bg-dark .play-circle {
-    background-color: var(--primary-light);
-}
-
-.bg-dark .play-circle::before {
-    border-color: transparent transparent transparent var(--primary-dark);
-}

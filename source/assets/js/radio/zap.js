@@ -1,6 +1,8 @@
 import QRCode from '/assets/js/vendor/qrcode.js';
 import { getStreamATag, getRelays, getPool } from './nostr.js';
 
+const RECIPIENT_PUBKEY = '55f04590674f3648f4cdc9dc8ce32da2a282074cd0b020596ee033d12d385185';
+
 let weblnEnabled = false;
 
 let zapLud16 = null;
@@ -23,12 +25,9 @@ export async function sendZap(amountSats) {
     }
 
     setStatus('Resolving lightning address...');
-    function withTimeout(promise, ms) {
-      return Promise.race([promise, new Promise(resolve => setTimeout(() => resolve(null), ms))]);
-    }
     async function fetchLnurl(lud16) {
       const [username, domain] = lud16.split('@');
-      const res = await fetch(`https://${domain}/.well-known/lnurlp/${username}`).catch(() => null);
+      const res = await fetch(`https://${domain}/.well-known/lnurlp/${username}`, { signal: AbortSignal.timeout(3000) }).catch(() => null);
       if (!res || !res.ok) return null;
       const data = await res.json();
       return data.callback ? data : null;
@@ -37,12 +36,12 @@ export async function sendZap(amountSats) {
       const callbackUrl = new URL(lnurlData.callback);
       callbackUrl.searchParams.set('amount', amountMsats.toString());
       if (zapRequestEvent) callbackUrl.searchParams.set('nostr', JSON.stringify(zapRequestEvent));
-      const res = await fetch(callbackUrl.toString()).catch(() => null);
+      const res = await fetch(callbackUrl.toString(), { signal: AbortSignal.timeout(8000) }).catch(() => null);
       if (!res || !res.ok) return null;
       const data = await res.json();
       return data.pr ? data : null;
     }
-    const lnurlData = await withTimeout(fetchLnurl(zapLud16), 3000);
+    const lnurlData = await fetchLnurl(zapLud16);
     if (!lnurlData) {
       setStatus('Could not reach lightning service', 'error');
       return;
@@ -71,7 +70,7 @@ export async function sendZap(amountSats) {
         tags: [
           ['relays', ...relays],
           ['amount', amountMsats.toString()],
-          ['p', lnurlData.nostrPubkey],
+          ['p', RECIPIENT_PUBKEY],
           ['a', streamATag],
         ],
       };
@@ -86,7 +85,7 @@ export async function sendZap(amountSats) {
     }
 
     setStatus('Getting invoice...');
-    const invoiceData = await withTimeout(fetchInvoice(lnurlData, amountMsats, zapRequestEvent), 8000);
+    const invoiceData = await fetchInvoice(lnurlData, amountMsats, zapRequestEvent);
     if (!invoiceData) {
       setStatus('Could not get invoice', 'error');
       return;
@@ -113,7 +112,7 @@ export async function sendZap(amountSats) {
     }
 
     setStatus('');
-    showInvoiceModal(invoiceData.pr, amountSats, lnurlData.nostrPubkey);
+    showInvoiceModal(invoiceData.pr, amountSats, RECIPIENT_PUBKEY);
 
   } catch (err) {
     if (err.message?.includes('User rejected') || err.message?.includes('cancelled')) {

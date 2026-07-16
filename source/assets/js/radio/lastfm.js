@@ -34,7 +34,7 @@ async function updateList() {
   if (!container) return;
 
   try {
-    const resp = await fetch(ENDPOINT, { cache: 'no-store' });
+    const resp = await fetch(ENDPOINT, { cache: 'no-store', signal: AbortSignal.timeout(5000) });
     if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
     const tracks = await resp.json();
 
@@ -48,29 +48,4 @@ async function updateList() {
 export function initLastFm() {
   updateList();
   setInterval(updateList, REFRESH_MS);
-}
-
-async function updateNowPlaying(el) {
-  try {
-    const resp = await fetch(ENDPOINT, { cache: 'no-store' });
-    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-    const tracks = await resp.json();
-    const track = tracks.find(t => !t.playedAt);
-    el.innerHTML = '';
-    if (!track) return;
-    const bars = document.createElement('span');
-    bars.className = 'soundbars';
-    bars.setAttribute('aria-label', 'Now playing');
-    bars.innerHTML = '<span></span><span></span><span></span>';
-    const text = document.createTextNode(`${track.artist} — ${track.name}`);
-    el.appendChild(bars);
-    el.appendChild(text);
-  } catch {}
-}
-
-export function initNowPlaying(id) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  updateNowPlaying(el);
-  setInterval(() => updateNowPlaying(el), REFRESH_MS);
 }

@@ -363,6 +363,5 @@ export function subscribeRaids(onRaid, onEose) {
 }
 
 export function getStreamATag() { return streamATag; }
-export function getStreamPubkey() { return streamPubkey; }
 export function getRelays() { return relays; }
 export function getPool() { return pool; }

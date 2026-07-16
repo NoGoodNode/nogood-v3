@@ -11,7 +11,7 @@ SNIPCART CART
 .snipcart__font--secondary,
 .snipcart__font--subtitle,
 .snipcart__font--subtitle-small {
-    font-family: 'UntitledSans Regular',Arial, Helvetica, sans-serif;
+    font-family: 'UntitledSans-Regular', Arial, Helvetica, sans-serif;
 }
 
 .snipcart-summary-fees__notice {

@@ -5,6 +5,7 @@ const PUBKEY = '55f04590674f3648f4cdc9dc8ce32da2a282074cd0b020596ee033d12d385185
 const RELAYS = [
   'wss://relay.primal.net',
   'wss://nos.lol',
+  'wss://relay.damus.io',
 ];
 
 const container = document.getElementById('latest-nostr-note');
@@ -198,7 +199,8 @@ async function init() {
 
   let profile = null;
   if (profileEvents.length) {
-    try { profile = JSON.parse(profileEvents[0].content); } catch { /* noop */ }
+    const latest = profileEvents.sort((a, b) => b.created_at - a.created_at)[0];
+    try { profile = JSON.parse(latest.content); } catch { /* noop */ }
   }
 
   if (!note) return;
@@ -213,6 +215,7 @@ async function init() {
   }
 
   renderNote(note, profile, mentionProfiles);
+  pool.close(RELAYS);
 }
 
 init();

@@ -63,13 +63,6 @@ PILLS
     width: max-content;
 }
 
-.pill-online {
-    border-color: var(--primary-dark);
-    color: var(--primary-dark);
-    background-color: transparent;
-    background-color: color-mix(in srgb, var(--primary-dark) 30%, transparent);
-}
-
 .pill-offline {
     border-color: var(--radio);
     color: var(--radio);
@@ -103,24 +96,3 @@ BADGE
     margin-bottom: 10px;
 }
 
-.play-circle {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: calc(1em - 2px);
-    height: calc(1em - 2px);
-    border-radius: 50%;
-    background-color: #000;
-    margin-right: 0.35em;
-    vertical-align: middle;
-    position: relative;
-    top: -1px;
-    flex-shrink: 0;
-}
-.play-circle::before {
-    content: '';
-    border-style: solid;
-    border-width: 0.2em 0 0.2em 0.35em;
-    border-color: transparent transparent transparent #fff;
-    margin-left: 0.08em;
-}
