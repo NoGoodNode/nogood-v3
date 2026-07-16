@@ -1789,7 +1789,10 @@ eleventyExcludeFromCollections: true
   }
 
   function queueNotification(name, type, pubkey) {
-    addNotification(name, type, pubkey, true);
+    fetchProfile(pubkey).then(p => {
+      const resolvedName = p.name.length > 10 ? p.name.slice(0, 10) + '…' : p.name;
+      addNotification(resolvedName, type, null, true);
+    });
   }
 
   window.__addOverlayNotification = (name, type) => addNotification(name, type, null);
