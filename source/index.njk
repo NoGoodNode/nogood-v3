@@ -189,23 +189,31 @@ bodyColor: bg-highlight
         video.loop = true;
         video.play().catch(() => {});
     }
-    if (Hls.isSupported()) {
-        const hls = new Hls({ enableWorker: true, startLevel: 0 });
-        hls.loadSource(HLS_URL);
-        hls.attachMedia(video);
-        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+    function initStream() {
+        if (Hls.isSupported()) {
+            const hls = new Hls({ enableWorker: true, startLevel: 0 });
+            hls.loadSource(HLS_URL);
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                video.play().catch(() => {});
+            });
+            hls.on(Hls.Events.ERROR, (_e, data) => {
+                if (data.fatal) { hls.destroy(); useFallback(); }
+            });
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = HLS_URL;
             video.play().catch(() => {});
-        });
-        hls.on(Hls.Events.ERROR, (_e, data) => {
-            if (data.fatal) { hls.destroy(); useFallback(); }
-        });
-    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-        video.src = HLS_URL;
-        video.play().catch(() => {});
-        video.addEventListener('error', useFallback);
-    } else {
-        useFallback();
+            video.addEventListener('error', useFallback);
+        } else {
+            useFallback();
+        }
     }
+    new IntersectionObserver((entries, obs) => {
+        if (entries[0].isIntersecting) {
+            obs.disconnect();
+            initStream();
+        }
+    }, { threshold: 0.1 }).observe(video);
 </script>
 {# SHOP MARQUEE #}
 <div class="section shop-marquee">

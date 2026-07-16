@@ -281,11 +281,8 @@ MOBILE MENU
 }
 
 .mobile-menu-logo {
-    position: absolute;
     height: auto;
     width: 95px;
-    left: 10px;
-    bottom: 10px;
 }
 
 .mobile-menu-book-promo {
