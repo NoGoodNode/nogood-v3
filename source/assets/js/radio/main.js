@@ -57,11 +57,9 @@ const nostrCtx = initNostr(CONFIG.naddr, CONFIG.relays);
 
 if (nostrCtx) {
   subscribeStreamInfo((info) => {
-    const titleEl = document.getElementById('stream-title');
     const descEl = document.getElementById('stream-description');
     const viewersEl = document.getElementById('stream-viewers');
     const uptimeEl = document.getElementById('stream-uptime');
-    if (titleEl) titleEl.textContent = info.title;
     if (descEl) descEl.textContent = info.summary;
     if (viewersEl) {
       if (info.viewers !== null && info.viewers > 0) {
@@ -138,27 +136,18 @@ function initTicker() {
       }
 
       const senderKey = zap.senderPubkey;
+      const insertItem = (name) => {
+        senderEl.textContent = name;
+        track.prepend(item);
+        while (track.children.length > 10) track.lastElementChild.remove();
+        updateTickerDuplicate();
+      };
+
       if (senderKey) {
-        senderEl.textContent = senderKey.slice(0, 8);
-        fetchProfile(senderKey).then((profile) => {
-          senderEl.textContent = profile.name;
-          const dupTrack = document.getElementById('ticker-track-dup');
-          if (dupTrack) {
-            const dupItem = dupTrack.querySelector(`[data-zap-id="${zap.id}"] .ticker__sender`);
-            if (dupItem) dupItem.textContent = profile.name;
-          }
-        });
+        fetchProfile(senderKey).then(p => insertItem(p.name)).catch(() => insertItem(senderKey.slice(0, 8)));
       } else {
-        senderEl.textContent = 'anon';
+        insertItem('anon');
       }
-
-      track.prepend(item);
-
-      while (track.children.length > 10) {
-        track.lastElementChild.remove();
-      }
-
-      updateTickerDuplicate();
     }
 
     if (isHistorical) {

@@ -226,7 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function fetchRadio() {
         let live = false;
         try {
-            const resp = await fetch('https://lastfm-api.hello-5b9.workers.dev/', { cache: 'no-store' });
+            const resp = await fetch('https://lastfm-api.hello-5b9.workers.dev/', { cache: 'no-store', signal: AbortSignal.timeout(5000) });
             if (resp.ok) {
                 const tracks = await resp.json();
                 live = tracks.some(t => !t.playedAt);

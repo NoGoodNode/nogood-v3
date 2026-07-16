@@ -14,7 +14,6 @@ export function initStream(hlsUrl, fallbackImage) {
   const video = document.getElementById('stream-video');
   const fallback = document.getElementById('stream-fallback');
   const playOverlay = document.getElementById('stream-play-overlay');
-  const unmuteOverlay = document.getElementById('unmute-overlay');
   const liveDots = document.querySelectorAll('.nav-live-dot');
   const offlineEl = document.getElementById('stream-offline');
   const playerEl = document.querySelector('.player');
@@ -109,27 +108,8 @@ export function initStream(hlsUrl, fallbackImage) {
 
   setupControls();
 
-  function setupUnmute() {
-    function unmute() {
-      video.muted = false;
-      video.play().catch(() => {});
-      unmuteOverlay.classList.add('is-hidden');
-    }
-
-    unmuteOverlay.addEventListener('click', unmute);
-    unmuteOverlay.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        unmute();
-      }
-    });
-  }
-
   if (Hls.isSupported()) {
-    hls = new Hls({
-      enableWorker: true,
-      lowLatencyMode: true,
-    });
+    hls = new Hls();
 
     hls.loadSource(hlsUrl);
     hls.attachMedia(video);
@@ -190,9 +170,11 @@ export function initStream(hlsUrl, fallbackImage) {
     clearTimeout(reconnectTimer);
   });
 
-  if (unmuteOverlay) setupUnmute();
+  let qualityBuilt = false;
 
   function buildQualitySelector(hlsInstance) {
+    if (qualityBuilt) return;
+    qualityBuilt = true;
     const container = document.getElementById('quality-selector');
     const toggle = document.getElementById('quality-toggle');
     const menu = document.getElementById('quality-menu');
