@@ -1145,6 +1145,7 @@ eleventyExcludeFromCollections: true
 
   function displayBookBar(sold) {
     bookBarActive = true;
+    window.__bookBarActive = true;
     const bookPicture = bookBar.querySelector('img');
     const bookLabel   = document.getElementById('book-sale-label');
     if (sold !== null) {
@@ -1175,6 +1176,7 @@ eleventyExcludeFromCollections: true
           el.style.display = '';
         });
         bookBarActive = false;
+        window.__bookBarActive = false;
         if (bookBarQueue.length > 0) {
           displayBookBar(bookBarQueue.shift());
         }
@@ -1247,6 +1249,7 @@ eleventyExcludeFromCollections: true
   }
 
   function showBookPromo() {
+    window.__bookPromoActive = true;
     bookPromoBar.querySelector('video')?.play();
     let textIndex = 0;
     setBookPromoText(BOOK_PROMO_TEXTS[textIndex]);
@@ -1265,6 +1268,7 @@ eleventyExcludeFromCollections: true
       setTimeout(() => {
         bookPromoBar.style.opacity = '0';
         bookPromoText.classList.remove('book-item-out');
+        window.__bookPromoActive = false;
       }, 600);
     }, BOOK_PROMO_SHOW_MS);
   }
@@ -1412,8 +1416,18 @@ eleventyExcludeFromCollections: true
 
   setTimeout(buildZapLeaderboard, 2000);
 
-  // Reload every hour to keep relay connections fresh on the 24/7 stream
-  setTimeout(() => window.location.reload(), 60 * 60 * 1000);
+  // Reload every hour to keep relay connections fresh on the 24/7 stream —
+  // but don't cut off an in-progress book sale/promo celebration, just check again shortly.
+  function scheduleReload(delay) {
+    setTimeout(() => {
+      if (window.__bookBarActive || window.__bookPromoActive) {
+        scheduleReload(60000);
+        return;
+      }
+      window.location.reload();
+    }, delay);
+  }
+  scheduleReload(60 * 60 * 1000);
 
   const viewersBar = document.getElementById('viewers-bar');
   const LISTENER_MILESTONES = [10, 25, 50, 100, 150, 200, 250, 300, 400, 500];
@@ -1803,7 +1817,7 @@ eleventyExcludeFromCollections: true
       .catch(() => addNotification('anon', type, null, true));
   }
 
-  window.__addOverlayNotification = (name, type) => addNotification(name, type, null);
+  window.__addOverlayNotification = (name, type) => addNotification(name, type, null, true);
   window.__testZap = () => {
     const msgs = ['great work!', 'keep it up', 'love the stream', 'fuck easy', 'stay humble stack sats'];
     addZap({ sats: Math.floor(Math.random() * 50000) + 100, name: 'testuser', message: msgs[Math.floor(Math.random() * msgs.length)] });
