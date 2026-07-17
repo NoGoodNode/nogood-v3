@@ -9,7 +9,7 @@ bodyColor: bg-highlight
 <div id="home-header" class="section medium-grid bg-highlight">
     <div class="section-column">
         <div class="header-featured-image bg-muted">
-            {% imageFast "source/assets/img/featured/novision-02.png", "Illustration of beaten down character" %}
+            {% image "source/assets/img/featured/novision-02.png", "Illustration of beaten down character", [720, 1400], "(min-width: 720px) 720px, 1400px", { eager: true } %}
             {# BADGE #}
             <div class="header-badge flex-center no-blend hide-small fade-in">
                 {% image "source/assets/img/nogood_sign.png", "NoGood sign" %}

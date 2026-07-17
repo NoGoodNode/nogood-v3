@@ -43,7 +43,7 @@ layout: base
         {% for item in gallery %}
         <div
             class="bg-{{ item.background_color }} {% if item.padding === true %}image-padding{% endif %} {% if item.override_blend_mode === true %}no-blend{% endif %}{% if not loop.first %} fade-in{% endif %}">
-            {% if loop.first %}{% imageFast item.url, item.alt %}{% else %}{% image item.url, item.alt %}{% endif %}
+            {% if loop.first %}{% image item.url, item.alt, [720, 1400], "(min-width: 720px) 720px, 1400px", { eager: true } %}{% else %}{% image item.url, item.alt %}{% endif %}
         </div>
         {% endfor %}
     </div>

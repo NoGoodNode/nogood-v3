@@ -25,6 +25,7 @@ function categoryFromUrl(url) {
 		const h = new URL(url).hostname.replace(/^www\./, '');
 		if (h === 'youtube.com' || h === 'youtu.be') return 'video';
 		if (h === 'fountain.fm') return 'podcast';
+		if (h === 'bookshop.org' || h.endsWith('.bookshop.org')) return 'book';
 	} catch {}
 	return null;
 }
@@ -86,7 +87,10 @@ async function readClippings() {
 						? data.title.split(' • ').slice(1).join(' • ')
 						: data.title;
 					let domain = null;
-					try { domain = new URL(data.url).hostname.replace(/^www\./, ''); } catch {}
+					try {
+						domain = new URL(data.url).hostname.replace(/^www\./, '');
+						if (domain.endsWith('bookshop.org')) domain = 'bookshop.org';
+					} catch {}
 					return {
 						title: data.title,
 						episode,
@@ -101,6 +105,9 @@ async function readClippings() {
 						embed: embed,
 						embed_thumb: embedThumb,
 						cover,
+						author: data.author || null,
+						pages: data.pages || null,
+						bookGenre: data.bookGenre || null,
 					};
 				})
 		);
@@ -233,41 +240,33 @@ eleventyConfig.ignores.add("source/snippets");
 		cacheOptions: { duration: "365d", directory: ".cache/img" },
 	};
 
-	// IMG shortcode
-	eleventyConfig.addShortcode("image", async function (src, alt, widths = [720, 1400], sizes = "(min-width: 720px) 720px, 1400px") {
+	// IMG shortcode — pass { eager: true } for above-the-fold images, { gif: true } for animated GIF → WebP
+	eleventyConfig.addShortcode("image", async function (src, alt, widths, sizes, opts = {}) {
+		if (opts.gif) {
+			return Image(src, {
+				...imageOptions,
+				widths: [750],
+				returnType: "html",
+				sharpOptions: { animated: true },
+				sharpWebpOptions: { quality: 75, background: { r: 255, g: 255, b: 255, alpha: 1 } },
+				htmlOptions: {
+					imgAttributes: { alt, loading: "lazy", decoding: "async" }
+				}
+			});
+		}
 		return Image(src, {
 			...imageOptions,
-			widths,
+			widths: widths || [720, 1400],
 			returnType: "html",
 			sharpWebpOptions: { quality: 90 },
 			htmlOptions: {
-				imgAttributes: { alt, sizes, loading: "lazy", decoding: "async" }
-			}
-		});
-	});
-
-	eleventyConfig.addShortcode("imageFast", async function (src, alt, widths = [720, 1400], sizes = "(min-width: 720px) 720px, 1400px") {
-		return Image(src, {
-			...imageOptions,
-			widths,
-			returnType: "html",
-			sharpWebpOptions: { quality: 90 },
-			htmlOptions: {
-				imgAttributes: { alt, sizes, loading: "eager", fetchpriority: "high", decoding: "async" }
-			}
-		});
-	});
-
-	// Animated GIF → WebP shortcode
-	eleventyConfig.addShortcode("imageGif", async function (src, alt) {
-		return Image(src, {
-			...imageOptions,
-			widths: [750],
-			returnType: "html",
-			sharpOptions: { animated: true },
-			sharpWebpOptions: { quality: 75, background: { r: 255, g: 255, b: 255, alpha: 1 } },
-			htmlOptions: {
-				imgAttributes: { alt, loading: "lazy", decoding: "async" }
+				imgAttributes: {
+					alt,
+					sizes: sizes || "(min-width: 720px) 720px, 1400px",
+					loading: opts.eager ? "eager" : "lazy",
+					decoding: "async",
+					...(opts.eager ? { fetchpriority: "high" } : {})
+				}
 			}
 		});
 	});

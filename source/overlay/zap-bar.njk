@@ -705,7 +705,7 @@ eleventyExcludeFromCollections: true
   <div id="name-scroll"><div id="name-track"></div></div>
 </div>
 <div id="book-sale-bar">
-  {% imageFast "source/assets/img/shop/NoGoodBook_Collectors.png", "The NoGood Book", [320], "160px" %}
+  {% image "source/assets/img/shop/NoGoodBook_Collectors.png", "The NoGood Book", [320], "160px", { eager: true } %}
   <div id="book-sale-info">
     <span id="book-sale-label">New Order</span>
     <span id="book-sale-counter">— / {{ booksales.total_print_run }}</span>

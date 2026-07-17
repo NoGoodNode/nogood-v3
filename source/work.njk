@@ -70,7 +70,7 @@ description: "Illustration projects by NoGood — branding, editorial, and visua
 
             {# GIF #}
             {% elif item.type === "gif" %}
-                {% imageGif item.src, item.alt %}
+                {% image item.src, item.alt, null, null, { gif: true } %}
 
             {% endif %}
 

@@ -203,3 +203,22 @@ a:hover + .clipping-domain {
     display: flex;
     flex-direction: column;
 }
+
+.clipping-book {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr;
+    gap: 0.75rem;
+    align-items: start;
+}
+
+.clipping-book-cover {
+    width: 2.5rem;
+    height: auto;
+    object-fit: cover;
+    border-radius: 2px;
+}
+
+.clipping-book-info {
+    display: flex;
+    flex-direction: column;
+}

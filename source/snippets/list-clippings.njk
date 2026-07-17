@@ -15,6 +15,24 @@
     <div class="spacer-small"></div>
     <p>{{ item.intro }}</p>
     {% endif %}
+    {% elif item.renderAs == "book" %}
+    <div class="clipping-book">
+        {% if item.cover %}
+        <img src="{{ item.cover }}" alt="{{ item.title }}" class="no-blend clipping-book-cover">
+        {% else %}
+        <div></div>
+        {% endif %}
+        <div class="clipping-book-info">
+            <a href="{{ item.url }}" target="_blank" rel="noopener" data-umami-event="clipping-click" data-umami-event-title="{{ item.title }}">{{ item.title }}</a>
+            {% if item.author or item.bookGenre %}
+            <p class="text-small">{% if item.author %}{{ item.author }}{% endif %}{% if item.author and item.bookGenre %} • {% endif %}{% if item.bookGenre %}{{ item.bookGenre }}{% endif %}</p>
+            {% endif %}
+        </div>
+    </div>
+    {% if item.intro %}
+    <div class="spacer-small"></div>
+    <p>{{ item.intro }}</p>
+    {% endif %}
     {% else %}
     <a href="{{ item.url }}" target="_blank" rel="noopener" data-umami-event="clipping-click" data-umami-event-title="{{ item.title }}">{{ item.title }}</a>{% if item.domain and item.renderAs != "video" %} <span class="clipping-domain">— {{ item.domain }}</span>{% endif %}
     <div class="spacer"></div>
