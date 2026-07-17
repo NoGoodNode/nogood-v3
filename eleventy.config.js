@@ -30,6 +30,17 @@ function categoryFromUrl(url) {
 	return null;
 }
 
+// Bookshop.org's own image CDN sits behind a Cloudflare bot challenge and can't be
+// fetched server-side, so for book covers we use the ISBN in the URL (?ean=...) to
+// pull the cover from Open Library instead, which is unblocked.
+function isbnCoverFromUrl(url) {
+	try {
+		const ean = new URL(url).searchParams.get('ean');
+		return /^\d{10,13}$/.test(ean) ? `https://covers.openlibrary.org/b/isbn/${ean}-L.jpg` : null;
+	} catch {}
+	return null;
+}
+
 async function fetchCover(coverUrl, clippingUrl) {
 	const hash = crypto.createHash('md5').update(clippingUrl).digest('hex');
 	const ext = coverUrl.match(/\.(png|webp|jpg|jpeg)(\?|$)/i)?.[1] || 'jpg';
@@ -79,7 +90,11 @@ async function readClippings() {
 					let embedThumb = data.embed_thumb || null;
 					if (!embedThumb && videoId) embedThumb = await fetchThumb(videoId);
 					let cover = null;
-					if (data.cover) {
+					const isbnCover = categoryFromUrl(data.url) === 'book' ? isbnCoverFromUrl(data.url) : null;
+					if (isbnCover) {
+						cover = await fetchCover(isbnCover, data.url);
+					}
+					if (!cover && data.cover) {
 						cover = await fetchCover(data.cover, data.url);
 					}
 					const show = data.show || null;
