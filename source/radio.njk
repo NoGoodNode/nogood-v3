@@ -115,22 +115,28 @@ ogImage: /assets/img/og/Radio_OG.jpg
       <div class="inner-column place-bottom">
         <div class="zap-status" id="zap-status" role="status" aria-live="polite"></div>
         <div class="button-group">
-          <button class="zap-btn button pixel-font uppercase" data-amount="21">⚡ 21</button>
           <button class="zap-btn button pixel-font uppercase" data-amount="100">⚡ 100</button>
           <button class="zap-btn button pixel-font uppercase" data-amount="1000">⚡ 1000</button>
           <button class="zap-btn button pixel-font uppercase" data-amount="5000">⚡ 5000</button>
-        </div>
-        <div class="spacer-small"></div>
-        <div class="input-group">
           <input
             type="number"
             class="zap-custom__input"
             id="zap-custom-input"
-            placeholder="Custom amount"
+            placeholder="Custom"
             min="1"
             inputmode="numeric"
             pattern="[0-9]*"
             aria-label="Custom zap amount"/>
+        </div>
+        <div class="spacer-small"></div>
+        <div class="input-group">
+          <input
+            type="text"
+            class="zap-custom__input"
+            id="zap-message-input"
+            placeholder="Add a message (optional)"
+            maxlength="200"
+            aria-label="Zap message"/>
           <button class="zap-btn button pixel-font uppercase" id="zap-custom-btn">⚡ Zap</button>
         </div>
       </div>

@@ -51,7 +51,7 @@ bodyColor: bg-muted
             <div class="spacer"></div>
             <div class="list two-col-list">
                 {% for episode in podcasts.episodes | reverse %}
-                    <div><a href="{{ episode.url }}" target="_blank" rel="noopener">{{ episode.show }} — {{ episode.title }}</a></div>
+                    <div><a href="{{ episode.url }}" target="_blank" rel="noopener">{{ episode.show }}</a></div>
                     <div class="align-right text-tabular">{{ episode.date | postDate }}</div>
                     <div class="row-border"></div>
                 {% endfor %}

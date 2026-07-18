@@ -11,7 +11,7 @@ export function configureZap(lud16) {
   zapLud16 = lud16;
 }
 
-export async function sendZap(amountSats) {
+export async function sendZap(amountSats, message = '') {
   const statusEl = document.getElementById('zap-status');
   const setStatus = (msg, type = '') => {
     statusEl.textContent = msg;
@@ -66,7 +66,7 @@ export async function sendZap(amountSats) {
       const zapRequest = {
         kind: 9734,
         created_at: Math.floor(Date.now() / 1000),
-        content: '',
+        content: message,
         tags: [
           ['relays', ...relays],
           ['amount', amountMsats.toString()],
@@ -216,18 +216,21 @@ function showInvoiceModal(invoice, amountSats, recipientPubkey) {
 
 
 export function initZapButtons() {
-  const buttons = document.querySelectorAll('.zap-btn[data-amount]');
+  const messageInput = document.getElementById('zap-message-input');
+  const getMessage = () => messageInput?.value.trim() || '';
 
+  const buttons = document.querySelectorAll('.zap-btn[data-amount]');
   buttons.forEach((btn) => {
     btn.addEventListener('click', async () => {
       const amount = parseInt(btn.dataset.amount, 10);
       btn.classList.add('zap-btn--loading');
       btn.disabled = true;
 
-      await sendZap(amount);
+      await sendZap(amount, getMessage());
 
       btn.classList.remove('zap-btn--loading');
       btn.disabled = false;
+      if (messageInput) messageInput.value = '';
     });
   });
 
@@ -237,8 +240,8 @@ export function initZapButtons() {
       customInput.value = customInput.value.replace(/[^0-9]/g, '');
     });
   }
-  const customBtn = document.getElementById('zap-custom-btn');
 
+  const customBtn = document.getElementById('zap-custom-btn');
   if (customBtn && customInput) {
     customBtn.addEventListener('click', async () => {
       const amount = parseInt(customInput.value, 10);
@@ -246,11 +249,12 @@ export function initZapButtons() {
       customBtn.classList.add('zap-btn--loading');
       customBtn.disabled = true;
 
-      await sendZap(amount);
+      await sendZap(amount, getMessage());
 
       customBtn.classList.remove('zap-btn--loading');
       customBtn.disabled = false;
       customInput.value = '';
+      if (messageInput) messageInput.value = '';
     });
   }
 }

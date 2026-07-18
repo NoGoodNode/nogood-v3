@@ -1,11 +1,9 @@
 # PODCAST APPEARANCES
 episodes:
-  - title: "Up ✌️ NoGood"
-    show: "Open Markets Podcast"
+  - show: "Open Markets Podcast"
     url: "https://fountain.fm/episode/WKPmEft6esngfKvtCJSi"
     date: 2026-07-08
 
-  - title: "BTC art & making something heavy"
-    show: "Citadel Dispatch"
+  - show: "Citadel Dispatch"
     url: "https://fountain.fm/episode/ADC8esvhU6sK2R70VI4B"
     date: 2026-07-14
