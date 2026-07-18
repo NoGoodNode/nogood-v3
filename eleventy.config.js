@@ -1,7 +1,6 @@
 // Import Modules
 const fs = require("fs");
 const path = require("path");
-const crypto = require("crypto");
 const { DateTime } = require("luxon");
 const Image = require("@11ty/eleventy-img");
 const YAML = require("yaml");
@@ -12,7 +11,32 @@ module.exports.config = {
 	templateFormats: ["html", "njk", "md"],
 };
 
-const THUMB_DIR = path.join(__dirname, "source/assets/img/clippings");
+const CLIPPINGS_IMG_OPTIONS = {
+	outputDir: path.join(__dirname, "_build/assets/img/clippings"),
+	urlPath: "/assets/img/clippings",
+	formats: ["webp"],
+	widths: [800],
+	cacheOptions: { duration: "365d", directory: ".cache/img" },
+	sharpWebpOptions: { quality: 85 },
+};
+
+async function processClippingImage(url) {
+	if (!url) return null;
+	try {
+		const stats = await Image(url, CLIPPINGS_IMG_OPTIONS);
+		return (stats.webp || stats.jpeg || stats.png)?.[0]?.url ?? null;
+	} catch {
+		return null;
+	}
+}
+
+async function fetchThumb(videoId) {
+	for (const quality of ["maxresdefault", "hqdefault"]) {
+		const result = await processClippingImage(`https://i.ytimg.com/vi/${videoId}/${quality}.jpg`);
+		if (result) return result;
+	}
+	return null;
+}
 
 function youtubeId(url) {
 	if (!url) return null;
@@ -41,35 +65,6 @@ function isbnCoverFromUrl(url) {
 	return null;
 }
 
-async function fetchCover(coverUrl, clippingUrl) {
-	const hash = crypto.createHash('md5').update(clippingUrl).digest('hex');
-	const ext = coverUrl.match(/\.(png|webp|jpg|jpeg)(\?|$)/i)?.[1] || 'jpg';
-	const dest = path.join(THUMB_DIR, `${hash}.${ext}`);
-	if (fs.existsSync(dest)) return `/assets/img/clippings/${hash}.${ext}`;
-	fs.mkdirSync(THUMB_DIR, { recursive: true });
-	try {
-		const res = await fetch(coverUrl);
-		if (res.ok) {
-			fs.writeFileSync(dest, Buffer.from(await res.arrayBuffer()));
-			return `/assets/img/clippings/${hash}.${ext}`;
-		}
-	} catch {}
-	return null;
-}
-
-async function fetchThumb(videoId) {
-	const dest = path.join(THUMB_DIR, `${videoId}.jpg`);
-	if (fs.existsSync(dest)) return `/assets/img/clippings/${videoId}.jpg`;
-	fs.mkdirSync(THUMB_DIR, { recursive: true });
-	for (const quality of ["maxresdefault", "hqdefault"]) {
-		const res = await fetch(`https://i.ytimg.com/vi/${videoId}/${quality}.jpg`);
-		if (res.ok) {
-			fs.writeFileSync(dest, Buffer.from(await res.arrayBuffer()));
-			return `/assets/img/clippings/${videoId}.jpg`;
-		}
-	}
-	return null;
-}
 
 let clippingsPromise = null;
 
@@ -92,10 +87,10 @@ async function readClippings() {
 					let cover = null;
 					const isbnCover = categoryFromUrl(data.url) === 'book' ? isbnCoverFromUrl(data.url) : null;
 					if (isbnCover) {
-						cover = await fetchCover(isbnCover, data.url);
+						cover = await processClippingImage(isbnCover);
 					}
 					if (!cover && data.cover) {
-						cover = await fetchCover(data.cover, data.url);
+						cover = await processClippingImage(data.cover);
 					}
 					const show = data.show || null;
 					const episode = (show && data.title.includes(' • '))
@@ -202,8 +197,6 @@ eleventyConfig.ignores.add("source/snippets");
 	eleventyConfig.addPassthroughCopy({ "source/assets/img/og": "assets/img/og" });
 	// Torrent files
 	eleventyConfig.addPassthroughCopy({ "source/assets/downloads": "assets/downloads" });
-	// Auto-downloaded clipping thumbnails
-	eleventyConfig.addPassthroughCopy({ "source/assets/img/clippings": "assets/img/clippings" });
 	// GIFs (excluded from image plugin)
 	eleventyConfig.addPassthroughCopy({ "source/assets/img/NG_Zap_Animation.gif": "assets/img/NG_Zap_Animation.gif" });
 	eleventyConfig.addPassthroughCopy({ "source/assets/img/NG_Block_Animation.gif": "assets/img/NG_Block_Animation.gif" });
