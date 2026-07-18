@@ -32,7 +32,7 @@ permalink: 404.html
                 <div class="spacer-large"></div>
                 {# UPDATES LIST #}
                 <div class="list tag-list">
-                    {% for post in collections.post | reverse | withoutTag('product') %}
+                    {% for post in collections.feedPosts %}
                         {% if loop.index0 < 12 %}
                             {% include "source/snippets/list-tag.njk" %}
                         {% endif %}
