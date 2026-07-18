@@ -216,36 +216,39 @@ function showInvoiceModal(invoice, amountSats, recipientPubkey) {
 
 
 export function initZapButtons() {
+  let selectedAmount = null;
+
   const messageInput = document.getElementById('zap-message-input');
+  const customInput = document.getElementById('zap-custom-input');
   const getMessage = () => messageInput?.value.trim() || '';
 
-  const buttons = document.querySelectorAll('.zap-btn[data-amount]');
-  buttons.forEach((btn) => {
-    btn.addEventListener('click', async () => {
-      const amount = parseInt(btn.dataset.amount, 10);
-      btn.classList.add('zap-btn--loading');
-      btn.disabled = true;
+  const presetBtns = document.querySelectorAll('.zap-btn[data-amount]');
 
-      await sendZap(amount, getMessage());
-
-      btn.classList.remove('zap-btn--loading');
-      btn.disabled = false;
-      if (messageInput) messageInput.value = '';
+  presetBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      presetBtns.forEach((b) => b.classList.remove('zap-preset--active'));
+      btn.classList.add('zap-preset--active');
+      selectedAmount = parseInt(btn.dataset.amount, 10);
+      if (customInput) customInput.value = '';
     });
   });
 
-  const customInput = document.getElementById('zap-custom-input');
   if (customInput) {
     customInput.addEventListener('input', () => {
       customInput.value = customInput.value.replace(/[^0-9]/g, '');
+      if (customInput.value) {
+        presetBtns.forEach((b) => b.classList.remove('zap-preset--active'));
+        selectedAmount = null;
+      }
     });
   }
 
   const customBtn = document.getElementById('zap-custom-btn');
-  if (customBtn && customInput) {
+  if (customBtn) {
     customBtn.addEventListener('click', async () => {
-      const amount = parseInt(customInput.value, 10);
+      const amount = customInput?.value ? parseInt(customInput.value, 10) : selectedAmount;
       if (!amount || amount < 1) return;
+
       customBtn.classList.add('zap-btn--loading');
       customBtn.disabled = true;
 
@@ -253,8 +256,10 @@ export function initZapButtons() {
 
       customBtn.classList.remove('zap-btn--loading');
       customBtn.disabled = false;
-      customInput.value = '';
+      if (customInput) customInput.value = '';
       if (messageInput) messageInput.value = '';
+      presetBtns.forEach((b) => b.classList.remove('zap-preset--active'));
+      selectedAmount = null;
     });
   }
 }

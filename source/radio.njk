@@ -95,18 +95,10 @@ ogImage: /assets/img/og/Radio_OG.jpg
         available.</p>
     </div>
   </div>
-  {# TRACKLIST #}
-  <div class="section-column" aria-label="Recent tracks">
-    <div class="bg-offwhite padding-small">
-      <h2 class="pixel-font uppercase">Tracklist</h2>
-      <div class="spacer"></div>
-      <div class="list tracklist" id="lastfm-list"></div>
-    </div>
-  </div>
   {# ZAP STREAM #}
   <div class="section-column" aria-label="Send a zap">
-    <div class="inner-column">
-      <h2 class="pixel-font uppercase">Zap NoGood Radio</h2>
+    <div class="bg-offwhite padding-small inner-column">
+      <h3 class="pixel-font uppercase">Zap NoGood Radio</h3>
       <div class="spacer"></div>
       <p class="text-large">
         If you have a Lightning Wallet you can zap the stream. Your zap should show up on screen, but there will be bugs.
@@ -115,19 +107,21 @@ ogImage: /assets/img/og/Radio_OG.jpg
       <div class="inner-column place-bottom">
         <div class="zap-status" id="zap-status" role="status" aria-live="polite"></div>
         <div class="button-group">
+          <button class="zap-btn button pixel-font uppercase" data-amount="21">⚡ 21</button>
           <button class="zap-btn button pixel-font uppercase" data-amount="100">⚡ 100</button>
           <button class="zap-btn button pixel-font uppercase" data-amount="1000">⚡ 1000</button>
           <button class="zap-btn button pixel-font uppercase" data-amount="5000">⚡ 5000</button>
-          <input
-            type="number"
-            class="zap-custom__input"
-            id="zap-custom-input"
-            placeholder="Custom"
-            min="1"
-            inputmode="numeric"
-            pattern="[0-9]*"
-            aria-label="Custom zap amount"/>
         </div>
+        <div class="spacer-small"></div>
+        <input
+          type="number"
+          class="zap-custom__input"
+          id="zap-custom-input"
+          placeholder="Custom amount"
+          min="1"
+          inputmode="numeric"
+          pattern="[0-9]*"
+          aria-label="Custom zap amount"/>
         <div class="spacer-small"></div>
         <div class="input-group">
           <input
@@ -142,22 +136,68 @@ ogImage: /assets/img/og/Radio_OG.jpg
       </div>
     </div>
   </div>
+  {# TRACKLIST #}
+  <div class="section-column" aria-label="Recent tracks">
+    <div class="bg-offwhite padding-small">
+      <h3 class="pixel-font uppercase">Tracklist</h3>
+      <div class="spacer"></div>
+      <div class="list tracklist" id="lastfm-list"></div>
+    </div>
+  </div>
 </div>
 <div class="section medium-grid">
   {# RECENT ZAPPERS #}
   <div class="section-column">
-    <h5 class="uppercase pixel-font">Radio supporters</h5>
-    <div class="spacer-small"></div>
-    <div id="radio-zap-feed" class="zap-feed animate-in"></div>
+    <div class="inner-column">
+      <div class="sticky">
+        <h5 class="uppercase pixel-font">Radio supporters</h5>
+        <div class="spacer-small"></div>
+        <div id="radio-zap-feed" class="zap-feed animate-in"></div>
+      </div>
+    </div>
   </div>
   {# ZAP LEADERBOARD #}
   <div class="section-column">
-    <h5 class="uppercase pixel-font">Radio leaderboard</h5>
-    <div class="spacer-small"></div>
-    <div id="radio-zap-leaderboard" class="zap-feed animate-in"></div>
+    <div class="inner-column">
+      <div class="sticky">
+        <h5 class="uppercase pixel-font">Radio leaderboard</h5>
+        <div class="spacer-small"></div>
+        <div id="radio-zap-leaderboard" class="zap-feed animate-in"></div>
+      </div>
+    </div>
   </div>
-  <div class="section-column"></div>
+  {# BOOK PROMO #}
+  <div class="section-column">
+    <div class="inner-column">
+      <div class="video fade-in">
+        <video autoplay muted loop playsinline>
+          <source src="/assets/img/book/book-shoot.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="spacer-small"></div>
+      <a href="/the-nogood-book/" class="pixel-font uppercase">The NoGood Book</a>
+      <div class="spacer-small"></div>
+      <p>Self-published. Crowdfunded. A monograph bringing together five years of illustration projects, outlining the backdrop for and context within which my work was created.</p>
+      <div class="spacer-small"></div>
+      <div class="button-wrapper">
+        <a href="/the-nogood-book/" class="button pixel-font uppercase">Buy now</a>
+      </div>
+      <p class="text-small">Limited run of 400 / <span id="book-sales-total-radio"></span> in stock</p>
+    </div>
+  </div>
 </div>
+<script>
+  (function () {
+    const geyserSales = {{ booksales.geyser_sales }};
+    const wordpressSales = {{ booksales.wordpress_sales }};
+    const printRun = {{ booksales.total_print_run }};
+    const el = document.getElementById('book-sales-total-radio');
+    fetch('https://book-stats.hello-5b9.workers.dev/book-sales')
+      .then(r => r.json())
+      .then(data => { if (el) el.textContent = printRun - ((data.total ?? 0) + geyserSales + wordpressSales); })
+      .catch(() => { if (el) el.textContent = printRun - (geyserSales + wordpressSales); });
+  })();
+</script>
 <script type="module" src="/assets/js/zap-feed.js"></script>
 <div class="zap-modal" id="zap-modal" hidden>
   <div class="zap-modal__backdrop"></div>

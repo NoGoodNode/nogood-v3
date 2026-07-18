@@ -26,6 +26,10 @@ CHAT MESSAGES
     border-radius: 2px;
 }
 
+.chat__message--zap .chat__message-text {
+    display: block;
+}
+
 .chat__message-zap-amount {
     margin-right: 0.4em;
     text-transform: uppercase;
@@ -34,10 +38,21 @@ CHAT MESSAGES
 /* ----------------
 ZAP BUTTONS
 ---------------- */
-.button-group .zap-btn,
-.button-group input {
+.button-group .zap-btn {
     flex: 1 1 0;
     min-width: 0;
+}
+
+.zap-preset--active {
+    background-color: var(--highlight);
+    color: var(--primary-dark);
+    border-color: var(--highlight);
+}
+
+.zap-custom__input {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 /* ----------------
