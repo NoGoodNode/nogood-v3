@@ -6,6 +6,7 @@ const RELAYS = [
   'wss://relay.primal.net',
   'wss://nos.lol',
   'wss://relay.damus.io',
+  'wss://relay.nogood.tech',
 ];
 
 const container = document.getElementById('latest-nostr-note');
@@ -184,6 +185,7 @@ function renderNote(event, profile, mentionProfiles = {}) {
     likesEl.textContent = `${s.likes} likes`;
     repliesEl.textContent = `${s.replies} comments`;
     zapEl.textContent = `${formatSats(s.zapTotal)} sats`;
+    pool.close(RELAYS);
   });
 }
 
@@ -215,7 +217,6 @@ async function init() {
   }
 
   renderNote(note, profile, mentionProfiles);
-  pool.close(RELAYS);
 }
 
 init();

@@ -8,6 +8,7 @@ const RELAYS = [
   'wss://nos.lol',
   'wss://relay.damus.io',
   'wss://relay.getalby.com/v1',
+  'wss://relay.nogood.tech',
 ];
 const MAX_ZAPS = 5;
 const MAX_LEADERBOARD = 5;
