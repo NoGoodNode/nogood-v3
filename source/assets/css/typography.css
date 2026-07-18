@@ -167,6 +167,16 @@ OTHER
 /* ----------------
 CLIPPING QUOTE
 ---------------- */
+.clippings-list .outline {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.clippings-list .outline p {
+    margin-bottom: 0;
+}
+
 .clipping-domain {
     color: var(--primary-dark-hover);
     opacity: 0;

@@ -1,10 +1,10 @@
 ---
-title: "How Japan's railways stayed one while splitting apart"
-url: "https://arun.is/blog/jr-logo/?ref=daniel.pizza"
+title: How Japan's railways stayed one while splitting apart
+url: https://arun.is/blog/jr-logo/?ref=daniel.pizza
 date: 2026-07-18
 tags:
-  - "article"
-cover:
+  - article
+cover: https://arun.is/.netlify/images?url=_astro%2Fcover.6I0lmrPY.jpg&w=1440&h=960&q=100&dpl=6a5b1d70e35e9e0008efa0ce
 show:
 quote:
 ---

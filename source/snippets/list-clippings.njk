@@ -12,7 +12,6 @@
         </div>
     </div>
     {% if item.intro %}
-    <div class="spacer-small"></div>
     <p>{{ item.intro }}</p>
     {% endif %}
     {% elif item.renderAs == "book" %}
@@ -30,30 +29,24 @@
         </div>
     </div>
     {% if item.intro %}
-    <div class="spacer-small"></div>
     <p>{{ item.intro }}</p>
     {% endif %}
     {% else %}
-    <a href="{{ item.url }}" target="_blank" rel="noopener" data-umami-event="clipping-click" data-umami-event-title="{{ item.title }}">{{ item.title }}</a>{% if item.domain and item.renderAs != "video" %} <span class="clipping-domain">— {{ item.domain }}</span>{% endif %}
-    <div class="spacer"></div>
-    {% if item.intro %}
-    <p class="">{{ item.intro }}</p>
-    {% endif %}
-    {% if item.quote %}
-    <div class="spacer-small"></div>
-    <blockquote class="clipping-quote">{{ item.quote }}</blockquote>
-    {% endif %}
+    <div><a href="{{ item.url }}" target="_blank" rel="noopener" data-umami-event="clipping-click" data-umami-event-title="{{ item.title }}">{{ item.title }}</a>{% if item.domain and item.renderAs != "video" %} <span class="clipping-domain">— {{ item.domain }}</span>{% endif %}</div>
     {% if item.embed %}
-    <div class="spacer-small"></div>
     <div class="embed-facade" data-src="{{ item.embed }}"{% if item.embed_thumb %} style="background-image: url('{{ item.embed_thumb }}')"{% endif %}>
         <button class="embed-play" aria-label="Load embed"></button>
     </div>
     {% elif item.cover %}
-    <div class="spacer-small"></div>
     <img src="{{ item.cover }}" alt="{{ item.title }}" class="no-blend">
     {% endif %}
+    {% if item.intro %}
+    <p>{{ item.intro }}</p>
     {% endif %}
-    <div class="spacer"></div>
+    {% if item.quote %}
+    <blockquote class="clipping-quote">{{ item.quote }}</blockquote>
+    {% endif %}
+    {% endif %}
     <div class="flex-space-between">
         <div class="tag-row">
             {% if item.category %}<span class="tag tag-dark pixel-font uppercase">{{ item.category }}</span>{% endif %}
