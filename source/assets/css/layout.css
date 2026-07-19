@@ -119,6 +119,13 @@ BORDERS + LINES
     border-radius: 2px;
 }
 
+.media-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+
 .border-bottom {
     border-bottom: 1px solid var(--border);
 }
@@ -232,6 +239,23 @@ MASONRY
     position: relative;
     border-right: 1px solid var(--border);
     border-bottom: 1px solid var(--border);
+}
+
+.masonry--borderless .masonry-item,
+.masonry--borderless .masonry-ghost {
+    border: none;
+}
+
+.masonry--borderless .masonry-item {
+    padding: 4px;
+}
+
+.masonry-item.is-muted {
+    opacity: 0.2;
+}
+
+.masonry-item.is-active .outline {
+    background-color: var(--offwhite);
 }
 
 .masonry-item--wide {

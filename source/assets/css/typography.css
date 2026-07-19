@@ -167,13 +167,17 @@ OTHER
 /* ----------------
 CLIPPING QUOTE
 ---------------- */
-.clippings-list .outline {
+.clippings-list .outline,
+.masonry-item .outline,
+.media-list .outline {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
 }
 
-.clippings-list .outline p {
+.clippings-list .outline p,
+.masonry-item .outline p,
+.media-list .outline p {
     margin-bottom: 0;
 }
 

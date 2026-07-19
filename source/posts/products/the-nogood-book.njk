@@ -68,42 +68,42 @@ specs:
 # SIZE GUIDE
 shirt_model:
 ---
+
 {# TITLE MARQUEE #}
 <div class="section">
   <div class="marquee pixel-font header-large uppercase">
     {% if subtitle === true %}
-    <ul class="marquee-content">
-      <li>{{ short_title }}</li>
-      <li>{{ subtitle_content }}</li>
-      <li>{{ short_title }}</li>
-      <li>{{ subtitle_content }}</li>
-    </ul>
-    <ul aria-hidden="true" class="marquee-content">
-      <li>{{ short_title }}</li>
-      <li>{{ subtitle_content }}</li>
-      <li>{{ short_title }}</li>
-      <li>{{ subtitle_content }}</li>
-    </ul>
+      <ul class="marquee-content">
+        <li>{{ short_title }}</li>
+        <li>{{ subtitle_content }}</li>
+        <li>{{ short_title }}</li>
+        <li>{{ subtitle_content }}</li>
+      </ul>
+      <ul aria-hidden="true" class="marquee-content">
+        <li>{{ short_title }}</li>
+        <li>{{ subtitle_content }}</li>
+        <li>{{ short_title }}</li>
+        <li>{{ subtitle_content }}</li>
+      </ul>
     {% else %}
-    <ul class="marquee-content">
-      <li>{{ short_title }}</li>
-      <li>{{ short_title }}</li>
-      <li>{{ short_title }}</li>
-      <li>{{ short_title }}</li>
-    </ul>
-    <ul aria-hidden="true" class="marquee-content">
-      <li>{{ short_title }}</li>
-      <li>{{ short_title }}</li>
-      <li>{{ short_title }}</li>
-      <li>{{ short_title }}</li>
-    </ul>
+      <ul class="marquee-content">
+        <li>{{ short_title }}</li>
+        <li>{{ short_title }}</li>
+        <li>{{ short_title }}</li>
+        <li>{{ short_title }}</li>
+      </ul>
+      <ul aria-hidden="true" class="marquee-content">
+        <li>{{ short_title }}</li>
+        <li>{{ short_title }}</li>
+        <li>{{ short_title }}</li>
+        <li>{{ short_title }}</li>
+      </ul>
     {% endif %}
   </div>
 </div>
-
 {# PRODUCT SECTION #}
-<div id="product" class="section large-grid">
-
+<div
+  id="product" class="section large-grid">
   {# GALLERY #}
   <div class="section-column product-gallery">
     <div class="">
@@ -114,260 +114,260 @@ shirt_model:
     </div>
     <div class="video fade-in">
       <video autoplay loop muted playsinline>
-        <source src="/assets/img/book/book-shoot.mp4" type="video/mp4">
-      </video>
-    </div>
-    <div class="slideshow slideshow-8 fade-in">
-      {% image "source/assets/img/book/NG_Shoot_Spread_001.jpg", "Spread from the NoGood Book" %}
-      {% image "source/assets/img/book/NG_Shoot_Spread_002.jpg", "Spread from the NoGood Book" %}
-      {% image "source/assets/img/book/NG_Shoot_Spread_003.jpg", "Spread from the NoGood Book" %}
-      {% image "source/assets/img/book/NG_Shoot_Spread_004.jpg", "Spread from the NoGood Book" %}
-      {% image "source/assets/img/book/NG_Shoot_Spread_005.jpg", "Spread from the NoGood Book" %}
-      {% image "source/assets/img/book/NG_Shoot_Spread_006.jpg", "Spread from the NoGood Book" %}
-      {% image "source/assets/img/book/NG_Shoot_Spread_007.jpg", "Spread from the NoGood Book" %}
-      {% image "source/assets/img/book/NG_Shoot_Spread_008.jpg", "Spread from the NoGood Book" %}
-    </div>
-    <div class="fade-in">
-      {% image "source/assets/img/book/NG_Shoot_Spread_009.jpg", "Spread from the NoGood Book" %}
-    </div>
-    <div class="fade-in">
-      {% image "source/assets/img/book/NG_Shoot_Close_001.jpg", "Detail shot of the NoGood Book" %}
-    </div>
-    {# PRODUCTION UPDATES #}
-    <div class="posts padding-large bg-muted">
-      <h4 class="pixel-font uppercase">
-        Background
-      </h4>
-      <div class="spacer"></div>
-      <p>
-        I started working on The NoGood Book in 2024 and decided early to self-publish it, giving me total control over the end product—I came up with the book’s concept, designed each and every page, selected the work, hired <a href="https://daniel.pizza" target="_blank" rel="noopener">Daniël</a> to be my editor and visited various printers to discuss options and budgets. When your order comes in, I’ll ship it with care from my studio in Amsterdam.
-      </p>
-      <p>
-        NoGood’s origins lie in the bitcoin space, but this is not a book about bitcoin. It does dedicate ample space to provide more background and context about the environment in which my work exists. 
-        To achieve this, it’s divided into four distinct sections, adding up to 272 pages in total.
-      </p>
-      <div class="spacer"></div>
-
-      {# SECTION LIST #}
-      <div class="list three-col-list">
-        <div>
-            01. Background
-        </div>
-        <div class="hide-small">
-            NoGood’s origins
-        </div>
-        <div class="align-right text-tabular">
-            32 pages
-        </div>
-        <div class="row-border"></div>
-        <div>
-            02. Work
-        </div>
-        <div class="hide-small">
-            Showcasing 5 years of illustration projects
-        </div>
-        <div class="align-right text-tabular">
-            128 pages
-        </div>
-        <div class="row-border"></div>
-        <div>
-            03. Process
-        </div>
-        <div class="hide-small">
-            Shots from every stage of my process
-        </div>
-        <div class="align-right text-tabular">
-            64 pages
-        </div>
-        <div class="row-border"></div>
-        <div>
-            01. Context
-        </div>
-        <div class="hide-small">
-            Articles by people whose work I admire
-        </div>
-        <div class="align-right text-tabular">
-            48 pages
-        </div>
-        <div class="row-border"></div>
+        <source src="/assets/img/book/book-shoot.mp4" type="video/mp4"></video>
       </div>
-
-      <div class="spacer-extralarge"></div>
-      
-      {# VIDEO #}
-      <div class="video fade-in">
-        <video autoplay="autoplay" muted="muted" loop="loop" width="100%" height="auto" poster="/assets/img/book/Book_Promo_Poster.jpg">
-          <source src="/assets/img/book-promo.mp4">
-        </video>
+      <div class="slideshow slideshow-8 fade-in">
+        {% image "source/assets/img/book/NG_Shoot_Spread_001.jpg", "Spread from the NoGood Book" %}
+        {% image "source/assets/img/book/NG_Shoot_Spread_002.jpg", "Spread from the NoGood Book" %}
+        {% image "source/assets/img/book/NG_Shoot_Spread_003.jpg", "Spread from the NoGood Book" %}
+        {% image "source/assets/img/book/NG_Shoot_Spread_004.jpg", "Spread from the NoGood Book" %}
+        {% image "source/assets/img/book/NG_Shoot_Spread_005.jpg", "Spread from the NoGood Book" %}
+        {% image "source/assets/img/book/NG_Shoot_Spread_006.jpg", "Spread from the NoGood Book" %}
+        {% image "source/assets/img/book/NG_Shoot_Spread_007.jpg", "Spread from the NoGood Book" %}
+        {% image "source/assets/img/book/NG_Shoot_Spread_008.jpg", "Spread from the NoGood Book" %}
       </div>
-
-      <div class="spacer-large"></div>
-      
-      <p>
-        A large chunk of the funds needed to produce the book came from a bitcoin-only crowdfund campaign.
-        I wrote irregular updates during the production process, providing a peek behind the scenes while 
-        the book’s design kept shapeshifting along the way.
-      </p>
-
-      <div class="spacer"></div>
-
-
-      <h4 class="pixel-font uppercase">Production Updates</h4>
-      <div class="spacer"></div>
-      <div class="list tag-list">
-        {% for post in collections.post | reverse %}
-          {% for tag in post.data.tags %}
-            {% if tag === "book" %}
-              {% include "source/snippets/list-tag.njk" %}
-            {% endif %}
-          {% endfor %}
-        {% endfor %}
+      <div class="fade-in">
+        {% image "source/assets/img/book/NG_Shoot_Spread_009.jpg", "Spread from the NoGood Book" %}
       </div>
-    </div>
-
-    {# SPECS #}
-    <div class="bg-dark padding-large fade-in">
-        <div class="">
-          <h4 class="uppercase pixel-font">Specs</h4>
+      <div class="fade-in">
+        {% image "source/assets/img/book/NG_Shoot_Close_001.jpg", "Detail shot of the NoGood Book" %}
+      </div>
+      {# BACKGROUND #}
+      <div class="posts padding-large bg-muted">
+        <div class="padding-right-small">
+          <h4 class="pixel-font uppercase">
+            Background
+          </h4>
           <div class="spacer"></div>
+          <p>
+            I started working on The NoGood Book in 2024 and decided early to self-publish it, giving me total control over the end
+            product—I came up with the book’s concept, designed each and every page, selected the work, hired
+            <a href="https://daniel.pizza" target="_blank" rel="noopener">Daniël</a>
+            to be my editor and visited various printers to discuss options and budgets. When your order comes in, I’ll ship it with
+            care from my studio in Amsterdam.
+          </p>
+          <p>
+            NoGood’s origins lie in the bitcoin space, but this is not a book about bitcoin. It does dedicate ample space to provide
+            more background and context about the environment in which my work exists. To achieve this, it’s divided into four
+            distinct sections, adding up to 272 pages in total.
+          </p>
+          <div class="spacer"></div>
+          {# SECTION LIST #}
+          <div class="list three-col-list">
+            <div>
+              01. Background
+            </div>
+            <div class="hide-small">
+              NoGood’s origins
+            </div>
+            <div class="align-right text-tabular">
+              32 pages
+            </div>
+            <div class="row-border"></div>
+            <div>
+              02. Work
+            </div>
+            <div class="hide-small">
+              Showcasing 5 years of illustration projects
+            </div>
+            <div class="align-right text-tabular">
+              128 pages
+            </div>
+            <div class="row-border"></div>
+            <div>
+              03. Process
+            </div>
+            <div class="hide-small">
+              Shots from every stage of my process
+            </div>
+            <div class="align-right text-tabular">
+              64 pages
+            </div>
+            <div class="row-border"></div>
+            <div>
+              01. Context
+            </div>
+            <div class="hide-small">
+              Articles by people whose work I admire
+            </div>
+            <div class="align-right text-tabular">
+              48 pages
+            </div>
+            <div class="row-border"></div>
+          </div>
         </div>
-        <div class="list two-col-list specs-list">
-          {% for item in bookspecs.specs %}
+        <div class="spacer-extralarge"></div>
+        {# VIDEO #}
+        <div class="video fade-in">
+          <video
+            autoplay="autoplay"
+            muted="muted"
+            loop="loop"
+            width="100%"
+            height="auto"
+            poster="/assets/img/book/Book_Promo_Poster.jpg">
+            <source src="/assets/img/book-promo.mp4"></video>
+          </div>
+          <div class="spacer-large"></div>
+          <div class="padding-right-small">
+          <p>
+            A large chunk of the funds needed to produce the book came from a bitcoin-only crowdfund campaign. I wrote irregular
+            updates during the production process, providing a peek behind the scenes while the book’s design kept shapeshifting
+            along the way.
+          </p>
+          <div class="spacer"></div>
+          <h4 class="pixel-font uppercase">Production Updates</h4>
+          <div class="spacer"></div>
+          <div class="list tag-list">
+            {% for post in collections.post | reverse %}
+              {% for tag in post.data.tags %}
+                {% if tag === "book" %}
+                  {% include "source/snippets/list-tag.njk" %}
+                {% endif %}
+              {% endfor %}
+            {% endfor %}
+          </div>
+          <div class="spacer-extralarge"></div>
+          {# MEDIA #}
+          {% set mediaItems = collections.clippingsAll | selectattr("book_media", "equalto", true) | list %}
+          <h4 class="uppercase pixel-font">Interviews &amp; Coverage ({{ mediaItems | length }})</h4>
+          <div class="spacer"></div>
+          <div class="media-list">
+            {% set hideCover = true %}
+            {% for item in mediaItems %}
+              {% include "source/snippets/list-clippings.njk" %}
+            {% endfor %}
+          </div>
+          </div>
+        </div>
+        {# SPECS #}
+        <div class="bg-dark padding-large fade-in">
           <div class="">
-            <p>{{ item.title }}</p>
+            <h4 class="uppercase pixel-font">Specs</h4>
+            <div class="spacer"></div>
           </div>
-          <div class="align-right">
-            <p>{{ item.description | safe }}</p>
+          <div class="list two-col-list specs-list">
+            {% for item in bookspecs.specs %}
+              <div class="">
+                <p>{{ item.title }}</p>
+              </div>
+              <div class="align-right">
+                <p>{{ item.description | safe }}</p>
+              </div>
+              <div class="row-border"></div>
+            {% endfor %}
           </div>
-          <div class="row-border"></div>
-          {% endfor %}
         </div>
       </div>
-
-    </div>
-
-
-  {# PRODUCT INFO #}
-  <div class="section-column product-info sticky-two-rows">
-    <div class="sticky-wrapper">
-      <div class="sticky">
-        {# BREADCRUMBS #}
-        {% include "source/snippets/breadcrumbs.njk" %}
-        {# PRICE #}
-        <h3 class="pixel-font uppercase">{% if site.pre_order === true %}pre-order - shipping Q2 2026{% endif %}
-        </h3>
-        <div class="spacer"></div>
-        {# DESCRIPTION #}
-        <p class="text-extra-large">
-          A self-published monograph bringing together five years of illustration projects,
-          outlining the backdrop for and context within which my work was created.
-        </p>
-        <div class="spacer-large"></div>
-
-        {# ORDER VARIATIONS #}
-        {# COLLECTORS EDITION #}
-
-        <div class="order-option inner-column padding-small outline bg-offwhite">
-            <div class="grid large-grid">
-                <h3 class="text-large"><s>Collectors edition</s></h3>
+      {# PRODUCT INFO #}
+      <div class="section-column product-info sticky-two-rows">
+        <div class="sticky-wrapper">
+          <div
+            class="sticky">
+            {# BREADCRUMBS #}
+            {% include "source/snippets/breadcrumbs.njk" %}
+            {# PRICE #}
+            <h3 class="pixel-font uppercase">
+              {% if site.pre_order === true %}pre-order - shipping Q2 2026{% endif %}
+            </h3>
+            <div class="spacer"></div>
+            {# DESCRIPTION #}
+            <p class="text-extra-large">
+              A self-published monograph bringing together five years of illustration projects, outlining the backdrop for and context
+              within which my work was created.
+            </p>
+            <div class="spacer-large"></div>
+            {# ORDER VARIATIONS #}
+            {# COLLECTORS EDITION #}
+            <div class="order-option inner-column padding-small outline bg-offwhite">
+              <div class="grid large-grid">
+                <h3 class="text-large">
+                  <s>Collectors edition</s>
+                </h3>
                 <h3 class="text-large align-right">Sold out</h3>
-            </div>
-        </div>
-
-        <div class="spacer-small"></div>
-
-        {# REGULAR EDITION #}
-        <div class="order-option inner-column outline padding-small">
-            <div class="flex-space-between flex-align-start">
-                <div class="flex-align-center gap-small">
-                    <div class="circle-thumb-group">
-                        <div class="circle-thumb">
-                            {% image "source/assets/img/shop/NoGoodBook_Cover_Square.jpg", "The NoGood Book cover" %}
-                        </div>
-                    </div>
-                    <h3 class="text-large nowrap">The NoGood Book</h3>
-                </div>
-                <div class="align-right">
-                    <h3 class="text-large pixel-font uppercase">€{{ snipcart.price }}</h3>
-                    <p class="text-small">+ shipping</p>
-                </div>
-            </div>
-            <div class="spacer"></div>
-            {# ORDER BUTTON #}
-            {% include "source/snippets/order-button.njk" %}
-            <div class="item-description text-small">
-                <span id="book-sales-total"></span> / 280 available
-            </div>
-        </div>
-
-        <div class="spacer-small"></div>
-
-        {# REGULAR EDITION + PRINT #}
-        <div class="order-option inner-column outline padding-small">
-            <div class="flex-space-between flex-align-start">
-                <div class="flex-align-center gap-small">
-                    <div class="circle-thumb-group">
-                        <div class="circle-thumb">
-                            {% image "source/assets/img/shop/NoGoodBook_Cover_Square.jpg", "The NoGood Book cover" %}
-                        </div>
-                        <div class="circle-thumb">
-                            {% image "source/assets/img/shop/NoGoodBook_Print_Icon.jpg", "Included print" %}
-                        </div>
-                    </div>
-                    <h3 class="text-large nowrap">The NoGood Book + print</h3>
-                </div>
-                <div class="align-right">
-                    <h3 class="text-large pixel-font uppercase">€{{ snipcart_print.price }}</h3>
-                    <p class="text-small">+ shipping</p>
-                </div>
-            </div>
-            <div class="spacer"></div>
-            <div class="button-wrapper">
-                <a class="snipcart-add-item button pixel-font uppercase"
-                    data-item-id="{{ snipcart_print.id }}"
-                    data-item-price="{{ snipcart_print.price }}"
-                    data-item-url="{{ page.url }}"
-                    data-item-description="{{ snipcart_print.short_description }}"
-                    data-item-image="{{ snipcart_print.snipcartimage }}"
-                    data-item-name="{{ title }} + print"
-                    data-item-weight="{{ snipcart_print.weight }}"
-                    data-umami-event="add-to-cart" data-umami-event-product="{{ title }} + print">
-                    Purchase
-                </a>
+              </div>
             </div>
             <div class="spacer-small"></div>
-            <div class="item-description text-small">
-                <span id="print-sales-total"></span> / 120 available
+            {# REGULAR EDITION #}
+            <div class="order-option inner-column outline padding-small">
+              <div class="flex-space-between flex-align-start">
+                <div class="flex-align-center gap-small">
+                  <div class="circle-thumb-group">
+                    <div class="circle-thumb">
+                      {% image "source/assets/img/shop/NoGoodBook_Cover_Square.jpg", "The NoGood Book cover" %}
+                    </div>
+                  </div>
+                  <h3 class="text-large nowrap">The NoGood Book</h3>
+                </div>
+                <div class="align-right">
+                  <h3 class="text-large pixel-font uppercase">€{{ snipcart.price }}</h3>
+                  <p class="text-small">+ shipping</p>
+                </div>
+              </div>
+              <div class="spacer"></div>
+              {# ORDER BUTTON #}
+              {% include "source/snippets/order-button.njk" %}
+              <div class="item-description text-small">
+                <span id="book-sales-total"></span>
+                / 280 available
+              </div>
             </div>
+            <div class="spacer-small"></div>
+            {# REGULAR EDITION + PRINT #}
+            <div class="order-option inner-column outline padding-small">
+              <div class="flex-space-between flex-align-start">
+                <div class="flex-align-center gap-small">
+                  <div class="circle-thumb-group">
+                    <div class="circle-thumb">
+                      {% image "source/assets/img/shop/NoGoodBook_Cover_Square.jpg", "The NoGood Book cover" %}
+                    </div>
+                    <div class="circle-thumb">
+                      {% image "source/assets/img/shop/NoGoodBook_Print_Icon.jpg", "Included print" %}
+                    </div>
+                  </div>
+                  <h3 class="text-large nowrap">The NoGood Book + print</h3>
+                </div>
+                <div class="align-right">
+                  <h3 class="text-large pixel-font uppercase">€{{ snipcart_print.price }}</h3>
+                  <p class="text-small">+ shipping</p>
+                </div>
+              </div>
+              <div class="spacer"></div>
+              <div class="button-wrapper">
+                <a class="snipcart-add-item button pixel-font uppercase" data-item-id="{{ snipcart_print.id }}" data-item-price="{{ snipcart_print.price }}" data-item-url="{{ page.url }}" data-item-description="{{ snipcart_print.short_description }}" data-item-image="{{ snipcart_print.snipcartimage }}" data-item-name="{{ title }} + print" data-item-weight="{{ snipcart_print.weight }}" data-umami-event="add-to-cart" data-umami-event-product="{{ title }} + print">
+                  Purchase
+                </a>
+              </div>
+              <div class="spacer-small"></div>
+              <div class="item-description text-small">
+                <span id="print-sales-total"></span>
+                / 120 available
+              </div>
+            </div>
+          </div>
         </div>
-
       </div>
     </div>
-  </div>
-</div>
-
-<script>
-    const geyserSales = {{ booksales.geyser_sales }};
-    const wordpressSales = {{ booksales.wordpress_sales }};
-    const printRun = {{ booksales.total_print_run }};
-    const printEditionRun = {{ booksales.bundle_run }};
-
-    fetch('https://book-stats.hello-5b9.workers.dev/book-sales')
+    <script>
+      const geyserSales = {{ booksales.geyser_sales }};
+      const wordpressSales = {{ booksales.wordpress_sales }};
+      const printRun = {{ booksales.total_print_run }};
+      const printEditionRun = {{ booksales.bundle_run }};
+      fetch('https://book-stats.hello-5b9.workers.dev/book-sales')
         .then(r => r.json())
         .then(data => {
-            const sold = (data.total ?? 0) + geyserSales + wordpressSales;
-            document.getElementById('book-sales-total').textContent = (printRun - sold);
+          const sold = (data.total ?? 0) + geyserSales + wordpressSales;
+          document.getElementById('book-sales-total').textContent = (printRun - sold);
         })
         .catch(() => {
-            document.getElementById('book-sales-total').textContent = printRun - (geyserSales + wordpressSales);
+          document.getElementById('book-sales-total').textContent = printRun - (geyserSales + wordpressSales);
         });
-
-    fetch('https://book-stats.hello-5b9.workers.dev/print-sales')
+      fetch('https://book-stats.hello-5b9.workers.dev/print-sales')
         .then(r => r.json())
         .then(data => {
-            document.getElementById('print-sales-total').textContent = printEditionRun - (data.total ?? 0);
+          document.getElementById('print-sales-total').textContent = printEditionRun - (data.total ?? 0);
         })
         .catch(() => {
-            document.getElementById('print-sales-total').textContent = printEditionRun;
+          document.getElementById('print-sales-total').textContent = printEditionRun;
         });
-</script>
+    </script>

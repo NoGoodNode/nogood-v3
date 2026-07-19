@@ -118,6 +118,7 @@ async function readClippings() {
 						author: data.author || null,
 						pages: data.pages || null,
 						bookGenre: data.bookGenre || null,
+						book_media: data.book_media || false,
 					};
 				})
 		);

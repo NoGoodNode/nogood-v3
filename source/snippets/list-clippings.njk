@@ -33,11 +33,11 @@
     {% endif %}
     {% else %}
     <div><a href="{{ item.url }}" target="_blank" rel="noopener" data-umami-event="clipping-click" data-umami-event-title="{{ item.title }}">{{ item.title }}</a>{% if item.domain and item.renderAs != "video" %} <span class="clipping-domain">— {{ item.domain }}</span>{% endif %}</div>
-    {% if item.embed %}
+    {% if item.embed and not hideCover %}
     <div class="embed-facade" data-src="{{ item.embed }}"{% if item.embed_thumb %} style="background-image: url('{{ item.embed_thumb }}')"{% endif %}>
         <button class="embed-play" aria-label="Load embed"></button>
     </div>
-    {% elif item.cover %}
+    {% elif item.cover and not hideCover %}
     <img src="{{ item.cover }}" alt="{{ item.title }}" class="no-blend">
     {% endif %}
     {% if item.intro %}

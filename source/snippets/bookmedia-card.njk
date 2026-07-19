@@ -1,0 +1,12 @@
+<div class="outline padding-small">
+    <div><a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.title }}</a></div>
+    {% if item.description %}
+    <p>{{ item.description }}</p>
+    {% endif %}
+    <div class="flex-space-between">
+        <div class="tag-row">
+            {% if item.category %}<span class="tag tag-dark pixel-font uppercase">{{ item.category }}</span>{% endif %}
+        </div>
+        <span class="text-small">source:&nbsp;<a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.url | replace("https://", "") | replace("http://", "") | truncate(30, true, "") }}</a></span>
+    </div>
+</div>

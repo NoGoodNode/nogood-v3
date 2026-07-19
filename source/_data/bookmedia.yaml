@@ -1,0 +1,15 @@
+items:
+  - title: "Writing the NoGood Book"
+    description: "Daniël, my friend, studio mate, and writer of The NoGood Book, wrote a blog about writing for someone who doesn't want to speak about his work all too much (me)."
+    category: article
+    url: "https://www.daniel.pizza/journal/nogood-book/"
+
+  - title: "Bitcoin art and making something heavy"
+    description: "I was a guest on Citadel Dispatch. We discussed The NoGood Book, building NoGood Radio, integrating open protocols, and why physical art matters in an increasingly digital world."
+    category: podcast
+    url: "https://fountain.fm/episode/ADC8esvhU6sK2R70VI4B"
+
+  - title: "#11 Up ✌️ NoGood"
+    description: "A conversation with Eric and Sync about Bitcoin art, Nostr, old hardware, open-source culture, and building a creative life outside the algorithm."
+    category: podcast
+    url: "https://fountain.fm/episode/WKPmEft6esngfKvtCJSi"
