@@ -241,22 +241,6 @@ MASONRY
     border-bottom: 1px solid var(--border);
 }
 
-.masonry--borderless .masonry-item,
-.masonry--borderless .masonry-ghost {
-    border: none;
-}
-
-.masonry--borderless .masonry-item {
-    padding: 4px;
-}
-
-.masonry-item.is-muted {
-    opacity: 0.2;
-}
-
-.masonry-item.is-active .outline {
-    background-color: var(--offwhite);
-}
 
 .masonry-item--wide {
     grid-column: span 2;

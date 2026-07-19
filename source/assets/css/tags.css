@@ -35,11 +35,6 @@ TAGS
     flex-wrap: wrap;
 }
 
-.tag.tag--active {
-    background-color: var(--highlight);
-    border-color: var(--highlight);
-    color: var(--primary-dark);
-}
 
 .clippings-list .flex-space-between {
     align-items: center;
