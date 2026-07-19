@@ -234,6 +234,7 @@ shirt_model:
           <div class="spacer"></div>
           <div class="media-list">
             {% set hideCover = true %}
+            {% set hideIntro = true %}
             {% for item in mediaItems %}
               {% include "source/snippets/list-clippings.njk" %}
             {% endfor %}

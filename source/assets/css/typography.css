@@ -168,11 +168,16 @@ OTHER
 CLIPPING QUOTE
 ---------------- */
 .clippings-list .outline,
-.masonry-item .outline,
-.media-list .outline {
+.masonry-item .outline {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
+}
+
+.media-list .outline {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
 }
 
 .clippings-list .outline p,

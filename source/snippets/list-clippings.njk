@@ -2,45 +2,45 @@
     {% if item.renderAs == "podcast" %}
     <div class="clipping-podcast">
         {% if item.cover %}
-        <img src="{{ item.cover }}" alt="{{ item.title }}" class="no-blend clipping-podcast-cover">
+        <img src="{{ item.cover }}" alt="{{ item.title }}" class="no-blend clipping-podcast-cover" loading="lazy" decoding="async">
         {% else %}
         <div></div>
         {% endif %}
         <div class="clipping-podcast-info">
-            <a href="{{ item.url }}" target="_blank" rel="noopener" data-umami-event="clipping-click" data-umami-event-title="{{ item.title }}">{{ item.episode }}</a>
+            <a href="{{ item.url }}" target="_blank" rel="noopener"data-umami-event="clipping-click" data-umami-event-title="{{ item.title }}">{{ item.episode }}</a>
             {% if item.show %}<p class="text-small">{{ item.show }}</p>{% endif %}
         </div>
     </div>
-    {% if item.intro %}
+    {% if item.intro and not hideIntro %}
     <p>{{ item.intro }}</p>
     {% endif %}
     {% elif item.renderAs == "book" %}
     <div class="clipping-book">
         {% if item.cover %}
-        <img src="{{ item.cover }}" alt="{{ item.title }}" class="no-blend clipping-book-cover">
+        <img src="{{ item.cover }}" alt="{{ item.title }}" class="no-blend clipping-book-cover" loading="lazy" decoding="async">
         {% else %}
         <div></div>
         {% endif %}
         <div class="clipping-book-info">
-            <a href="{{ item.url }}" target="_blank" rel="noopener" data-umami-event="clipping-click" data-umami-event-title="{{ item.title }}">{{ item.title }}</a>
+            <a href="{{ item.url }}" target="_blank" rel="noopener"data-umami-event="clipping-click" data-umami-event-title="{{ item.title }}">{{ item.title }}</a>
             {% if item.author or item.bookGenre %}
             <p class="text-small">{% if item.author %}{{ item.author }}{% endif %}{% if item.author and item.bookGenre %} • {% endif %}{% if item.bookGenre %}{{ item.bookGenre }}{% endif %}</p>
             {% endif %}
         </div>
     </div>
-    {% if item.intro %}
+    {% if item.intro and not hideIntro %}
     <p>{{ item.intro }}</p>
     {% endif %}
     {% else %}
-    <div><a href="{{ item.url }}" target="_blank" rel="noopener" data-umami-event="clipping-click" data-umami-event-title="{{ item.title }}">{{ item.title }}</a>{% if item.domain and item.renderAs != "video" %} <span class="clipping-domain">— {{ item.domain }}</span>{% endif %}</div>
+    <div><a href="{{ item.url }}" target="_blank" rel="noopener"data-umami-event="clipping-click" data-umami-event-title="{{ item.title }}">{{ item.title }}</a>{% if item.domain and item.renderAs != "video" %} <span class="clipping-domain">— {{ item.domain }}</span>{% endif %}</div>
     {% if item.embed and not hideCover %}
     <div class="embed-facade" data-src="{{ item.embed }}"{% if item.embed_thumb %} style="background-image: url('{{ item.embed_thumb }}')"{% endif %}>
         <button class="embed-play" aria-label="Load embed"></button>
     </div>
     {% elif item.cover and not hideCover %}
-    <img src="{{ item.cover }}" alt="{{ item.title }}" class="no-blend">
+    <img src="{{ item.cover }}" alt="{{ item.title }}" class="no-blend" loading="lazy" decoding="async">
     {% endif %}
-    {% if item.intro %}
+    {% if item.intro and not hideIntro %}
     <p>{{ item.intro }}</p>
     {% endif %}
     {% if item.quote %}
