@@ -1134,9 +1134,8 @@ eleventyExcludeFromCollections: true
   // ----------------
   // BOOK SALES
   // ----------------
-  const GEYSER_SALES  = {{ booksales.geyser_sales }};
-  const WP_SALES      = {{ booksales.wordpress_sales }};
-  const PRINT_RUN     = 400; // overlay-only total, intentionally decoupled from booksales.yaml
+  const PRESALES  = {{ booksales.presales }};
+  const PRINT_RUN = {{ booksales.book_run + booksales.print_run }};
   const bookBar         = document.getElementById('book-sale-bar');
   const bookSaleCounter = document.getElementById('book-sale-counter');
   let lastBookOrderDate = null;
@@ -1193,7 +1192,7 @@ eleventyExcludeFromCollections: true
       fetch('https://book-stats.hello-5b9.workers.dev/book-sales').then(r => r.json()),
       fetch('https://book-stats.hello-5b9.workers.dev/print-sales').then(r => r.json()),
     ]);
-    const sold = (bookData.total ?? 0) + (printData.total ?? 0) + GEYSER_SALES + WP_SALES;
+    const sold = (bookData.total ?? 0) + (printData.total ?? 0) + PRESALES;
     return { sold, lastOrderDate: bookData.lastOrderDate };
   }
 
@@ -1446,7 +1445,7 @@ eleventyExcludeFromCollections: true
           if (peakViewers >= m && !triggeredMilestones.has(m)) {
             triggeredMilestones.add(m);
             try { localStorage.setItem('ng-triggered-milestones', JSON.stringify([...triggeredMilestones])); } catch {}
-            addNotification(`${m} listeners`, 'milestone', null, true);
+            addNotification(`ATH: ${m} listeners`, 'milestone', null, true);
           }
         });
       }
