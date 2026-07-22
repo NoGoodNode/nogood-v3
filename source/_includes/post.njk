@@ -97,23 +97,23 @@ layout: base
 
 {% if cat === "book" %}
 <script>
-    const geyserSales = {{ booksales.geyser_sales }};
-    const wordpressSales = {{ booksales.wordpress_sales }};
-    const printRun = {{ booksales.total_print_run }};
+    const bookRun = {{ booksales.book_run }};
+    const printRun = {{ booksales.print_run }};
+    const presales = {{ booksales.presales }};
     function setStock(val) {
         ['book-sales-total-post', 'book-sales-total-post-mobile'].forEach(id => {
             const el = document.getElementById(id);
             if (el) el.textContent = val;
         });
     }
-    fetch('https://book-stats.hello-5b9.workers.dev/book-sales')
-        .then(r => r.json())
-        .then(data => {
-            const sold = (data.total ?? 0) + geyserSales + wordpressSales;
-            setStock(printRun - sold);
-        })
-        .catch(() => {
-            setStock(printRun - (geyserSales + wordpressSales));
-        });
+    Promise.all([
+        fetch('https://book-stats.hello-5b9.workers.dev/book-sales').then(r => r.json()),
+        fetch('https://book-stats.hello-5b9.workers.dev/print-sales').then(r => r.json()),
+    ]).then(([book, print]) => {
+        const available = (bookRun - (book.total ?? 0)) + (printRun - ((print.total ?? 0) + presales));
+        setStock(available);
+    }).catch(() => {
+        setStock(bookRun + (printRun - presales));
+    });
 </script>
 {% endif %}

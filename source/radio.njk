@@ -188,14 +188,19 @@ ogImage: /assets/img/og/Radio_OG.jpg
 </div>
 <script>
   (function () {
-    const geyserSales = {{ booksales.geyser_sales }};
-    const wordpressSales = {{ booksales.wordpress_sales }};
-    const printRun = {{ booksales.total_print_run }};
+    const bookRun = {{ booksales.book_run }};
+    const printRun = {{ booksales.print_run }};
+    const presales = {{ booksales.presales }};
     const el = document.getElementById('book-sales-total-radio');
-    fetch('https://book-stats.hello-5b9.workers.dev/book-sales')
-      .then(r => r.json())
-      .then(data => { if (el) el.textContent = printRun - ((data.total ?? 0) + geyserSales + wordpressSales); })
-      .catch(() => { if (el) el.textContent = printRun - (geyserSales + wordpressSales); });
+    Promise.all([
+      fetch('https://book-stats.hello-5b9.workers.dev/book-sales').then(r => r.json()),
+      fetch('https://book-stats.hello-5b9.workers.dev/print-sales').then(r => r.json()),
+    ]).then(([book, print]) => {
+      const available = (bookRun - (book.total ?? 0)) + (printRun - ((print.total ?? 0) + presales));
+      if (el) el.textContent = available;
+    }).catch(() => {
+      if (el) el.textContent = bookRun + (printRun - presales);
+    });
   })();
 </script>
 <script type="module" src="/assets/js/zap-feed.js"></script>

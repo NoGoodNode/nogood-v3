@@ -907,6 +907,15 @@ eleventyExcludeFromCollections: true
     text-overflow: ellipsis;
     opacity: 0;
     transition: opacity 0.35s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .follow-notif-time {
+    font-size: 0.7rem;
+    opacity: 0.45;
+    flex-shrink: 0;
   }
 
   .follow-notif.is-in  { opacity: 1; }
@@ -952,7 +961,7 @@ eleventyExcludeFromCollections: true
     <img id="capture-book-img" src="/assets/img/XMeR7KyWVM-320.webp" alt="The NoGood Book">
     <div id="capture-book">
       <span id="capture-book-label">The NoGood Book</span>
-      <span id="capture-book-count">— / {{ booksales.total_print_run }} available at</span>
+      <span id="capture-book-count">— / {{ booksales.book_run + booksales.print_run }} available at</span>
       <span id="capture-book-url"></span>
     </div>
   </div>
@@ -987,6 +996,21 @@ eleventyExcludeFromCollections: true
     <div class="sidebar-section-label">Activity</div>
     <div id="follow-feed"></div>
   </div>
+</div>
+<div id="test-controls" style="position:absolute;top:70px;left:460px;right:240px;display:none;flex-wrap:wrap;gap:6px;z-index:999;padding:10px">
+  <button onclick="window.__testZap()" style="font-family:monospace;padding:5px 10px;background:rgb(248,194,40);border:none;cursor:pointer">⚡ Incoming Zap</button>
+  <button onclick="window.__testChat()" style="font-family:monospace;padding:5px 10px;background:rgb(251,250,243);border:none;cursor:pointer">💬 Chat Msg</button>
+  <button onclick="window.__testRaid()" style="font-family:monospace;padding:5px 10px;background:rgb(160,80,240);color:#fff;border:none;cursor:pointer">🚨 Raid</button>
+  <button onclick="window.testNotif('zap')" style="font-family:monospace;padding:5px 10px;background:rgb(44,44,44);color:#fff;border:none;cursor:pointer">Notif: Zap</button>
+  <button onclick="window.testNotif('reply')" style="font-family:monospace;padding:5px 10px;background:rgb(44,44,44);color:#fff;border:none;cursor:pointer">Notif: Reply</button>
+  <button onclick="window.testNotif('reaction')" style="font-family:monospace;padding:5px 10px;background:rgb(44,44,44);color:#fff;border:none;cursor:pointer">Notif: Reaction</button>
+  <button onclick="window.__addOverlayNotification('','sale')" style="font-family:monospace;padding:5px 10px;background:rgb(216,255,124);border:none;cursor:pointer">Notif: Sale</button>
+  <button onclick="window.__addOverlayNotification('NOGOODNODE','node_online')" style="font-family:monospace;padding:5px 10px;background:rgb(216,255,124);border:none;cursor:pointer">Node Online</button>
+  <button onclick="window.__addOverlayNotification('NOGOODNODE','node_offline')" style="font-family:monospace;padding:5px 10px;background:#e57373;color:#fff;border:none;cursor:pointer">Node Offline</button>
+  <button onclick="window.__addOverlayNotification('NoGoodRelay','relay_online')" style="font-family:monospace;padding:5px 10px;background:rgb(216,255,124);border:none;cursor:pointer">Relay Online</button>
+  <button onclick="window.__addOverlayNotification('NoGoodRelay','relay_offline')" style="font-family:monospace;padding:5px 10px;background:#e57373;color:#fff;border:none;cursor:pointer">Relay Offline</button>
+  <button onclick="window.__addOverlayNotification('testuser','raid')" style="font-family:monospace;padding:5px 10px;background:rgba(160,80,240,0.35);color:#fff;border:none;cursor:pointer">Notif: Raid</button>
+  <button onclick="window.__addOverlayNotification('50 listeners','milestone')" style="font-family:monospace;padding:5px 10px;background:rgb(44,44,44);color:rgb(248,194,40);border:none;cursor:pointer">Notif: Milestone</button>
 </div>
 <div id="capture-frame"></div>
 <div id="chat-column">
@@ -1382,9 +1406,10 @@ eleventyExcludeFromCollections: true
 
 <script>
   // ── BOOK COUNTER ─────────────────────────────────────────────────────────────
-  const BOOK_GEYSER_SALES = {{ booksales.geyser_sales }};
-  const BOOK_WP_SALES     = {{ booksales.wordpress_sales }};
-  const BOOK_PRINT_RUN    = {{ booksales.total_print_run }};
+  const BOOK_RUN  = {{ booksales.book_run }};
+  const PRINT_RUN = {{ booksales.print_run }};
+  const PRESALES  = {{ booksales.presales }};
+  const TOTAL_RUN = BOOK_RUN + PRINT_RUN;
   const bookCountEl       = document.getElementById('capture-book-count');
   const bookUrlEl         = document.getElementById('capture-book-url');
 
@@ -1397,10 +1422,12 @@ eleventyExcludeFromCollections: true
 
   async function pollBookSales() {
     try {
-      const data = await fetch('https://book-stats.hello-5b9.workers.dev/book-sales').then(r => r.json());
-      const sold      = (data.total ?? 0) + BOOK_GEYSER_SALES + BOOK_WP_SALES;
-      const available = BOOK_PRINT_RUN - sold;
-      bookCountEl.textContent = available + ' / ' + BOOK_PRINT_RUN + ' available at';
+      const [bookData, printData] = await Promise.all([
+        fetch('https://book-stats.hello-5b9.workers.dev/book-sales').then(r => r.json()),
+        fetch('https://book-stats.hello-5b9.workers.dev/print-sales').then(r => r.json()),
+      ]);
+      const available = (BOOK_RUN - (bookData.total ?? 0)) + (PRINT_RUN - ((printData.total ?? 0) + PRESALES));
+      bookCountEl.textContent = available + ' / ' + TOTAL_RUN + ' available at';
     } catch {}
   }
 
@@ -1433,9 +1460,11 @@ eleventyExcludeFromCollections: true
   });
 
   const chatBox = document.getElementById('chat-box');
-  const seenMessages = new Set();
-  const seenZaps     = new Set();
-  const seenRaids    = new Set();
+  const seenMessages    = new Set();
+  const seenZaps        = new Set(JSON.parse(localStorage.getItem('ng-seen-zaps') || '[]'));
+  const seenZapsSession = new Set();
+  const seenRaids       = new Set(JSON.parse(localStorage.getItem('ng-seen-raids') || '[]'));
+  const PAGE_LOAD_SECS  = Math.floor(Date.now() / 1000);
   const historicalZapsForChat = [];
   const historicalAllZaps     = [];
   const historicalChatMsgs    = [];
@@ -1485,18 +1514,6 @@ eleventyExcludeFromCollections: true
     });
     header.appendChild(amount);
 
-    if (zap.senderPubkey) {
-      const sender = document.createElement('span');
-      sender.className = 'ov-msg-name';
-      sender.textContent = zap.senderPubkey.slice(0, 8);
-      fetchProfile(zap.senderPubkey).then(p => { sender.textContent = p.name; });
-      header.appendChild(sender);
-    } else if (zap.name) {
-      const sender = document.createElement('span');
-      sender.className = 'ov-msg-name';
-      sender.textContent = zap.name;
-      header.appendChild(sender);
-    }
     el.appendChild(header);
 
     if (zap.content) {
@@ -1505,8 +1522,23 @@ eleventyExcludeFromCollections: true
       text.textContent = zap.content;
       el.appendChild(text);
     }
-    randomOffset(el);
-    insertInOrder(el, zap.timestamp);
+
+    const insertZap = (name) => {
+      if (name) {
+        const sender = document.createElement('span');
+        sender.className = 'ov-msg-name';
+        sender.textContent = name;
+        header.appendChild(sender);
+      }
+      randomOffset(el);
+      insertInOrder(el, zap.timestamp);
+    };
+
+    if (zap.senderPubkey) {
+      fetchProfile(zap.senderPubkey).then(p => insertZap(p.name)).catch(() => insertZap(zap.senderPubkey.slice(0, 8)));
+    } else {
+      insertZap(zap.name || null);
+    }
   }
 
   function renderContentWithMentions(el, text, emojiMap = {}) {
@@ -1650,16 +1682,21 @@ eleventyExcludeFromCollections: true
   // ── SUBSCRIPTIONS ─────────────────────────────────────────────────────────────
 
   subscribeZaps(async (zap, isHistorical) => {
-    if (seenZaps.has(zap.id)) return;
-    seenZaps.add(zap.id);
     if (isHistorical) {
+      if (seenZapsSession.has(zap.id)) return;
+      seenZapsSession.add(zap.id);
       if (zap.isStreamZap) historicalZapsForChat.push(zap);
       historicalAllZaps.push(zap);
     } else {
+      if (seenZaps.has(zap.id)) return;
+      seenZaps.add(zap.id);
+      try { const arr = [...seenZaps].slice(-200); localStorage.setItem('ng-seen-zaps', JSON.stringify(arr)); } catch {}
       if (zap.isStreamZap) appendZapToChat(zap);
-      const zapMsg = zap.content;
-      const zapPubkey = zap.senderPubkey;
-      fetchProfile(zap.senderPubkey || '').then(p => addZap({ sats: zap.amount, name: p.name, avatar: p.picture, message: zapMsg, pubkey: zapPubkey }));
+      if (zap.timestamp >= PAGE_LOAD_SECS) {
+        const zapMsg = zap.content;
+        const zapPubkey = zap.senderPubkey;
+        fetchProfile(zap.senderPubkey || '').then(p => addZap({ sats: zap.amount, name: p.name, avatar: p.picture, message: zapMsg, pubkey: zapPubkey }));
+      }
     }
   }, () => {
     if (historicalRendered) {
@@ -1682,6 +1719,7 @@ eleventyExcludeFromCollections: true
   subscribeRaids((raid, isHistorical) => {
     if (seenRaids.has(raid.timestamp + raid.pubkey)) return;
     seenRaids.add(raid.timestamp + raid.pubkey);
+    try { const arr = [...seenRaids].slice(-50); localStorage.setItem('ng-seen-raids', JSON.stringify(arr)); } catch {}
     if (isHistorical) { historicalRaids.push(raid); return; }
     appendRaidToChat(raid);
   }, () => {
@@ -1693,29 +1731,42 @@ eleventyExcludeFromCollections: true
 
   const followFeed = document.getElementById('follow-feed');
   const MAX_NOTIFS = 5;
-  const seenNotifs = new Set();
+  const seenNotifs = new Set(JSON.parse(localStorage.getItem('ng-seen-notifs') || '[]'));
 
   const NOTIF_LABELS = {
-    zap:      'zapped NoGood',
-    comment:  'commented',
-    reaction: 'liked a post',
-    reply:    'replied',
+    zap:          'zapped NoGood',
+    comment:      'replied to NoGood',
+    reaction:     'liked a post',
+    reply:        'replied to NoGood',
+    sale:         'new book order received',
+    node_online:  'back online',
+    node_offline: 'went offline',
+    relay_online: 'back online',
+    relay_offline:'went offline',
+    raid:         '',
+    milestone:    '',
   };
 
-  const NOTIF_STORAGE_KEY = 'streamNotifs';
-
-  function saveNotifs() {
-    const items = [...followFeed.children].map(el => el.dataset.notif);
-    sessionStorage.setItem(NOTIF_STORAGE_KEY, JSON.stringify(items));
+  function saveNotifSnapshot() {
+    const items = [...followFeed.children].map(el => ({
+      time: el.querySelector('.follow-notif-time')?.textContent || '',
+      text: el.querySelector('span:not(.follow-notif-time)')?.textContent || '',
+    }));
+    try { localStorage.setItem('ng-notif-snapshot', JSON.stringify(items)); } catch {}
   }
 
-  function renderNotifItem(text, animate = false) {
+  function renderNotifItem(time, text, animate = false) {
     if (followFeed.children.length >= MAX_NOTIFS) followFeed.lastElementChild.remove();
     const snapshots = [...followFeed.children].map(el => ({ el, top: el.getBoundingClientRect().top }));
     const item = document.createElement('div');
     item.className = 'follow-notif';
-    item.dataset.notif = text;
-    item.textContent = text;
+    const timeEl = document.createElement('span');
+    timeEl.className = 'follow-notif-time';
+    timeEl.textContent = time;
+    const textEl = document.createElement('span');
+    textEl.textContent = text;
+    item.appendChild(timeEl);
+    item.appendChild(textEl);
     followFeed.insertBefore(item, followFeed.firstChild);
     if (animate) {
       followFeed.getBoundingClientRect();
@@ -1740,27 +1791,43 @@ eleventyExcludeFromCollections: true
     return item;
   }
 
-  function addNotification(name, type, pubkey) {
-    const label = NOTIF_LABELS[type] || type;
-    const text = `${name} ${label}`;
-    const item = renderNotifItem(text, true);
-    saveNotifs();
-    if (pubkey) fetchProfile(pubkey).then(p => {
-      const n = p.name.length > 10 ? p.name.slice(0, 10) + '…' : p.name;
-      const resolved = `${n} ${label}`;
-      item.textContent = resolved;
-      item.dataset.notif = resolved;
-      saveNotifs();
-    });
+  function addNotification(name, type, pubkey, persist = false) {
+    const label = type in NOTIF_LABELS ? NOTIF_LABELS[type] : type;
+    const text = name ? `${name} ${label}` : label;
+    const now = new Date();
+    const time = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+    renderNotifItem(time, text, true);
+    if (persist) saveNotifSnapshot();
   }
 
-  // Restore on load
-  const savedNotifs = JSON.parse(sessionStorage.getItem(NOTIF_STORAGE_KEY) || '[]');
-  savedNotifs.reverse().forEach(text => renderNotifItem(text, false));
+  try {
+    const saved = JSON.parse(localStorage.getItem('ng-notif-snapshot') || '[]');
+    saved.slice().reverse().forEach(({ time, text }) => renderNotifItem(time, text, false));
+  } catch {}
 
   function queueNotification(name, type, pubkey) {
-    addNotification(name, type, pubkey);
+    fetchProfile(pubkey)
+      .then(p => {
+        const resolvedName = p.name.length > 10 ? p.name.slice(0, 10) + '…' : p.name;
+        addNotification(resolvedName, type, null, true);
+      })
+      .catch(() => addNotification('anon', type, null, true));
   }
+
+  window.__addOverlayNotification = (name, type) => addNotification(name, type, null, true);
+
+  window.__testZap = () => {
+    const msgs = ['great work!', 'keep it up', 'love the stream', 'fuck easy', 'stay humble stack sats'];
+    addZap({ sats: Math.floor(Math.random() * 50000) + 100, name: 'testuser', message: msgs[Math.floor(Math.random() * msgs.length)] });
+  };
+
+  window.__testChat = () => {
+    appendChatMessage({ id: 'test-' + Date.now(), pubkey: '55f04590674f3648f4cdc9dc8ce32da2a282074cd0b020596ee033d12d385185', content: 'Test message — hello from the drawing stream! 🔥', tags: [], timestamp: Math.floor(Date.now() / 1000) });
+  };
+
+  window.__testRaid = () => {
+    appendRaidToChat({ pubkey: '55f04590674f3648f4cdc9dc8ce32da2a282074cd0b020596ee033d12d385185', timestamp: Math.floor(Date.now() / 1000) });
+  };
 
   window.testNotif = (type) => {
     const names = ['satoshi', 'plebfan', 'nogoodvibes', 'lightning_larry'];
@@ -1770,6 +1837,7 @@ eleventyExcludeFromCollections: true
   setTimeout(() => subscribeNotifications(({ type, pubkey, id }) => {
     if (seenNotifs.has(id)) return;
     seenNotifs.add(id);
+    try { const arr = [...seenNotifs].slice(-200); localStorage.setItem('ng-seen-notifs', JSON.stringify(arr)); } catch {}
     if (type === 'follow') return;
     queueNotification(pubkey.slice(0, 8), type, pubkey);
   }), 6000);

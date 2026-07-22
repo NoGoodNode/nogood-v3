@@ -310,7 +310,7 @@ shirt_model:
               {% include "source/snippets/order-button.njk" %}
               <div class="item-description text-small">
                 <span id="book-sales-total"></span>
-                / 280 available
+                / {{ booksales.book_run }} available
               </div>
             </div>
             <div class="spacer-small"></div>
@@ -342,7 +342,7 @@ shirt_model:
               <div class="spacer-small"></div>
               <div class="item-description text-small">
                 <span id="print-sales-total"></span>
-                / 120 available
+                / {{ booksales.print_run }} available
               </div>
             </div>
           </div>
@@ -350,25 +350,23 @@ shirt_model:
       </div>
     </div>
     <script>
-      const geyserSales = {{ booksales.geyser_sales }};
-      const wordpressSales = {{ booksales.wordpress_sales }};
-      const printRun = {{ booksales.total_print_run }};
-      const printEditionRun = {{ booksales.bundle_run }};
+      const bookRun = {{ booksales.book_run }};
+      const printRun = {{ booksales.print_run }};
+      const presales = {{ booksales.presales }};
       fetch('https://book-stats.hello-5b9.workers.dev/book-sales')
         .then(r => r.json())
         .then(data => {
-          const sold = (data.total ?? 0) + geyserSales + wordpressSales;
-          document.getElementById('book-sales-total').textContent = (printRun - sold);
+          document.getElementById('book-sales-total').textContent = bookRun - (data.total ?? 0);
         })
         .catch(() => {
-          document.getElementById('book-sales-total').textContent = printRun - (geyserSales + wordpressSales);
+          document.getElementById('book-sales-total').textContent = bookRun;
         });
       fetch('https://book-stats.hello-5b9.workers.dev/print-sales')
         .then(r => r.json())
         .then(data => {
-          document.getElementById('print-sales-total').textContent = printEditionRun - (data.total ?? 0);
+          document.getElementById('print-sales-total').textContent = printRun - ((data.total ?? 0) + presales);
         })
         .catch(() => {
-          document.getElementById('print-sales-total').textContent = printEditionRun;
+          document.getElementById('print-sales-total').textContent = printRun - presales;
         });
     </script>

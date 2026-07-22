@@ -1,8 +1,6 @@
-# Sales from the Geyser crowdfund campaign (manual)
-geyser_sales: 85
-# Sales from the old WordPress store (manual)
-wordpress_sales: 15
-# Total print run for the regular edition
-total_print_run: 370
-# Total available for the book + print bundle
-bundle_run: 27
+# Regular book copies available for purchase
+book_run: 280
+# Book + print bundle copies available for purchase
+print_run: 120
+# Pre-orders not sold through Snipcart (Geyser + WordPress combined)
+presales: 100

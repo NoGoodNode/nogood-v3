@@ -1,0 +1,31 @@
+name: Post Nostr note on book sale
+
+on:
+  schedule:
+    - cron: '0 * * * *'   # every hour
+  workflow_dispatch:        # manual trigger for testing
+
+permissions:
+  contents: read
+  actions: write            # needed to update the LAST_SALE_DATE variable
+
+jobs:
+  post-sale-note:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Check for new sale and post note
+        run: node external-scripts/book-sale-nostr.mjs
+        env:
+          ALBY_BUNKER_URI: ${{ secrets.ALBY_BUNKER_URI }}
+          LAST_SALE_DATE: ${{ vars.LAST_SALE_DATE }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
