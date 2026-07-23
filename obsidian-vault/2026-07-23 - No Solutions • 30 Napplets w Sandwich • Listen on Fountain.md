@@ -5,7 +5,7 @@ date: 2026-07-23
 tags:
   - podcast
 cover:
-show:
+show: No Solutions
 quote:
 ---
 You should be able to compose your nostr clients.
