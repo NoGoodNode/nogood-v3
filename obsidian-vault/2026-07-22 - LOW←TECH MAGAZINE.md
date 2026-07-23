@@ -8,4 +8,4 @@ cover:
 show:
 quote:
 ---
-This is a solar-powered website, which means it sometimes goes offline
+This is a solar-powered website, which means it sometimes goes offline.
