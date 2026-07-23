@@ -1,9 +1,9 @@
 ---
-title: "LOW←TECH MAGAZINE"
-url: "https://solar.lowtechmagazine.com/"
+title: LOW←TECH MAGAZINE
+url: https://solar.lowtechmagazine.com/
 date: 2026-07-22
 tags:
-  - "General"
+  - General
 cover:
 show:
 quote:
