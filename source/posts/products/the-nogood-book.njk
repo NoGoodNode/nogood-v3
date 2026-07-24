@@ -233,6 +233,8 @@ shirt_model:
           <h4 class="uppercase pixel-font">Interviews &amp; Coverage ({{ mediaItems | length }})</h4>
           <div class="spacer"></div>
           <div class="media-list">
+            {% set hideCover = true %}
+            {% set hideIntro = true %}
             {% for item in mediaItems %}
               {% include "source/snippets/list-clippings.njk" %}
             {% endfor %}
