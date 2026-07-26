@@ -4,6 +4,8 @@ import { initZapButtons, configureZap } from './zap.js';
 import { initLastFm } from './lastfm.js';
 import * as nip19 from '/assets/js/vendor/nostr-nip19.js';
 
+const BOT_PUBKEY = 'c0434367d3e598555e930db7d54eb5e2b4013c0b7673c8f668475fc76b6a6606';
+
 const CONFIG = {
   hlsUrl: 'https://api-core.zap.stream/537a365c-f1ec-44ac-af10-22d14a7319fb/hls/live.m3u8',
   naddr: 'naddr1qqjr2vehvyenvdtr94nrzetr956rgctr94skvvfs95eryep3x3snwve389nxyqgwwaehxw309ahx7uewd3hkctczyr85tf46zd366lkjzws83ecs6fq3ttnjrjd500g7haz936h0knp22qcyqqq8vecjrlda8',
@@ -265,7 +267,7 @@ function appendChatMessage(msg) {
   lastMessageTime.set(msg.pubkey, now);
 
   const el = document.createElement('div');
-  el.className = 'chat__message';
+  el.className = msg.pubkey === BOT_PUBKEY ? 'chat__message chat__message--bot' : 'chat__message';
 
   const sender = document.createElement('span');
   sender.className = 'chat__message-sender';

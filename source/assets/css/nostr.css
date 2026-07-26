@@ -19,6 +19,16 @@ CHAT MESSAGES
     margin: 0 0.1em;
 }
 
+.chat__message--bot {
+    background: var(--offwhite);
+    border-radius: 2px;
+    padding: 2px 6px;
+}
+
+.chat__message--bot .chat__message-sender {
+    color: var(--radio);
+}
+
 .chat__message--zap {
     padding: 5px 10px;
     background-color: var(--highlight);
