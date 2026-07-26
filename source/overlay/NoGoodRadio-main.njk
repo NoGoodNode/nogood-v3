@@ -190,6 +190,14 @@ eleventyExcludeFromCollections: true
     margin: 0 0.1em;
   }
 
+  .ov-msg--bot {
+    background: rgb(200, 70, 30);
+    border-radius: 4px;
+    padding: 4px 8px;
+    color: rgb(10, 10, 10);
+  }
+  .ov-msg--bot .ov-msg-name { color: rgb(10, 10, 10); opacity: 0.6; }
+
   .ov-msg--zap {
     outline: 1px solid rgb(160, 80, 240);
     border-radius: 4px;
@@ -1561,11 +1569,13 @@ eleventyExcludeFromCollections: true
     if (lastIndex < text.length) el.appendChild(document.createTextNode(text.slice(lastIndex)));
   }
 
+  const BOT_PUBKEY = 'c0434367d3e598555e930db7d54eb5e2b4013c0b7673c8f668475fc76b6a6606';
+
   function appendChatMessage(msg) {
     if (!chatBox) return;
 
     const el = document.createElement('div');
-    el.className = 'ov-msg';
+    el.className = msg.pubkey === BOT_PUBKEY ? 'ov-msg ov-msg--bot' : 'ov-msg';
 
     const img = document.createElement('img');
     img.className = 'ov-msg-avatar';
