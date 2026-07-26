@@ -191,12 +191,12 @@ eleventyExcludeFromCollections: true
   }
 
   .ov-msg--bot {
-    background: rgba(233, 71, 54, 0.15);
     outline: 1px solid #e94736;
     border-radius: 4px;
     padding: 4px 8px;
   }
   .ov-msg--bot .ov-msg-name { color: #e94736; }
+  .ov-msg-body--full { width: 100%; }
 
   .ov-msg--zap {
     outline: 1px solid rgb(160, 80, 240);
@@ -1574,17 +1574,21 @@ eleventyExcludeFromCollections: true
   function appendChatMessage(msg) {
     if (!chatBox) return;
 
-    const el = document.createElement('div');
-    el.className = msg.pubkey === BOT_PUBKEY ? 'ov-msg ov-msg--bot' : 'ov-msg';
+    const isBot = msg.pubkey === BOT_PUBKEY;
 
-    const img = document.createElement('img');
-    img.className = 'ov-msg-avatar';
-    img.style.display = 'none';
-    img.onerror = function() { this.remove(); };
-    el.appendChild(img);
+    const el = document.createElement('div');
+    el.className = isBot ? 'ov-msg ov-msg--bot' : 'ov-msg';
+
+    if (!isBot) {
+      const img = document.createElement('img');
+      img.className = 'ov-msg-avatar';
+      img.style.display = 'none';
+      img.onerror = function() { this.remove(); };
+      el.appendChild(img);
+    }
 
     const body = document.createElement('div');
-    body.className = 'ov-msg-body';
+    body.className = isBot ? 'ov-msg-body ov-msg-body--full' : 'ov-msg-body';
 
     const sender = document.createElement('span');
     sender.className = 'ov-msg-name';
@@ -1607,8 +1611,8 @@ eleventyExcludeFromCollections: true
     fetchProfile(msg.pubkey).then(p => {
       const name = p.name || msg.pubkey.slice(0, 8);
       sender.textContent = name.length > 12 ? name.slice(0, 12) + '…' : name;
-      if (p.picture) { img.src = p.picture; img.style.display = ''; }
-      else { img.remove(); }
+      if (!isBot && p.picture) { el.querySelector('.ov-msg-avatar').src = p.picture; el.querySelector('.ov-msg-avatar').style.display = ''; }
+      else if (!isBot) { el.querySelector('.ov-msg-avatar')?.remove(); }
     });
 
     insertInOrder(el, msg.timestamp);
