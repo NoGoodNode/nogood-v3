@@ -1625,12 +1625,14 @@ eleventyExcludeFromCollections: true
     el.className = 'ov-msg ov-msg--raid';
 
     const span = document.createElement('span');
+    span.textContent = 'RAID';
     el.appendChild(span);
 
+    insertInOrder(el, raid.timestamp);
+
     fetchProfile(raid.pubkey)
-      .then(p => { span.textContent = `RAID FROM ${p.name}`; })
-      .catch(() => { span.textContent = `RAID FROM ${raid.pubkey.slice(0, 8)}`; })
-      .finally(() => insertInOrder(el, raid.timestamp));
+      .then(p => { span.textContent = `RAID FROM ${p.name || raid.pubkey.slice(0, 8)}`; })
+      .catch(() => { span.textContent = `RAID FROM ${raid.pubkey.slice(0, 8)}`; });
   }
 
   // ----------------
