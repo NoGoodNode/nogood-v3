@@ -30,13 +30,14 @@ CHAT MESSAGES
 }
 
 .chat__message--raid {
-    background: rgba(160, 80, 240, 0.12);
+    background: var(--medium);
     border-radius: 2px;
     padding: 2px 6px;
+    color: var(--highlight);
 }
 
 .chat__message--raid .chat__message-sender {
-    color: rgba(160, 80, 240, 0.7);
+    color: var(--highlight);
 }
 
 .chat__message--zap {

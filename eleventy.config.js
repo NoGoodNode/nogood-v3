@@ -171,6 +171,7 @@ eleventyConfig.ignores.add("source/snippets");
 	});
 
 	// Add passthrough files
+	eleventyConfig.addPassthroughCopy({ "source/.well-known/nostr.json": ".well-known/nostr.json" });
 	eleventyConfig.addPassthroughCopy({ "source/CNAME": "CNAME" });
 	eleventyConfig.addPassthroughCopy({ "source/.htaccess": ".htaccess" });
 	// overlay data files
