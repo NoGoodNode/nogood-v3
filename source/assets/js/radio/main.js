@@ -1,5 +1,5 @@
 import { initStream } from './stream.js';
-import { initNostr, subscribeStreamInfo, subscribeZaps, subscribeChat, sendChatMessage, fetchProfile } from './nostr.js';
+import { initNostr, subscribeStreamInfo, subscribeZaps, subscribeChat, subscribeRaids, sendChatMessage, fetchProfile } from './nostr.js';
 import { initZapButtons, configureZap } from './zap.js';
 import { initLastFm } from './lastfm.js';
 import * as nip19 from '/assets/js/vendor/nostr-nip19.js';
@@ -208,6 +208,29 @@ function appendZapToChat(zap) {
   insertInOrder(el, zap.timestamp, messagesEl);
 }
 
+function appendRaidToChat(raid) {
+  const messagesEl = document.getElementById('chat-messages');
+  if (!messagesEl) return;
+
+  const el = document.createElement('div');
+  el.className = 'chat__message chat__message--raid';
+
+  const sender = document.createElement('span');
+  sender.className = 'chat__message-sender';
+  sender.textContent = 'RAID';
+  el.appendChild(sender);
+
+  const text = document.createElement('span');
+  text.className = 'chat__message-text';
+  el.appendChild(text);
+
+  insertInOrder(el, raid.timestamp, messagesEl);
+
+  fetchProfile(raid.pubkey)
+    .then(p => { sender.textContent = `RAID FROM ${p.name || raid.pubkey.slice(0, 8)}`; })
+    .catch(() => { sender.textContent = `RAID FROM ${raid.pubkey.slice(0, 8)}`; });
+}
+
 function renderContentWithMentions(el, text, emojiMap = {}) {
   const tokenPattern = /(https?:\/\/[^\s]+)|(?:nostr:|@)(npub1[a-z0-9]+|nprofile1[a-z0-9]+)|:([a-zA-Z0-9_]+):/g;
   let lastIndex = 0;
@@ -366,6 +389,10 @@ async function initChat() {
   messagesEl.addEventListener('scroll', () => {
     const { scrollTop, scrollHeight, clientHeight } = messagesEl;
     autoScroll = scrollHeight - scrollTop - clientHeight < 40;
+  });
+
+  subscribeRaids((raid) => {
+    appendRaidToChat(raid);
   });
 
   subscribeChat((msg, isHistorical) => {
