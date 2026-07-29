@@ -18,6 +18,10 @@ SNIPCART CART
     margin-bottom: 20px;
 }
 
+.snipcart-summary-fees > .snipcart-summary-fees__item:nth-child(2) {
+    display: none !important;
+}
+
 .snipcart-featured-payment-methods__list {
     display: none;
 }
