@@ -37,15 +37,13 @@ CART DRAWER
     padding: 1rem !important;
 }
 
-/* In side drawer mode the footer (shipping/total/checkout) overlays the item list.
-   Snipcart does not expose a clean flex hook for this layout, so padding-bottom
-   on the item list clears the footer height manually. */
-.snipcart-layout__content--side .snipcart-item-list {
-    padding-bottom: 200px !important;
-}
-
 .snipcart-layout--large .snipcart-cart__footer {
     background-color: rgb(242, 240, 231) !important;
+}
+
+.snipcart-cart__footer,
+.snipcart-cart__footer-buttons {
+    min-height: 0 !important;
 }
 
 .snipcart-cart-summary {
@@ -55,7 +53,6 @@ CART DRAWER
 .snipcart-layout:not(.snipcart-layout--large) {
     border-left: 1px solid var(--border) !important;
 }
-
 
 /* no drop shadow */
 .snipcart-item-line {
