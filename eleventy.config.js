@@ -129,7 +129,6 @@ async function readClippings() {
 
 module.exports = async function (eleventyConfig) {
 eleventyConfig.ignores.add("source/snippets");
-	eleventyConfig.ignores.add("source/overlay/**/*.md");
 
 	eleventyConfig.on("eleventy.before", async () => { await readClippings(); });
 
