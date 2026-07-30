@@ -201,8 +201,7 @@ CONTEXT ARTICLES
 #post .section-column > .bg-highlight,
 #post .section-column > .bg-offwhite,
 #post .section-column > .video {
-    margin-top: 1.75rem;
-    margin-bottom: 3rem;
+    margin-bottom: 1rem;
 }
 
 /* ----------------

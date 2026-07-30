@@ -1,4 +1,12 @@
 /* ----------------
+POST HEADINGS
+---------------- */
+#post h3,
+#post h4 {
+    margin-bottom: -8px;
+}
+
+/* ----------------
 BREADCRUMBS
 ---------------- */
 #breadcrumbs {
