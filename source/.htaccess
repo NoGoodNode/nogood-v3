@@ -1,1 +1,9 @@
 ErrorDocument 404 /404.html
+
+Redirect 301 /book/announcement/ /blog/announcement/
+Redirect 301 /book/beginnings/ /blog/beginnings/
+Redirect 301 /book/closing-in/ /blog/closing-in/
+Redirect 301 /book/loops/ /blog/loops/
+Redirect 301 /book/print-signed-shipped/ /blog/print-signed-shipped/
+Redirect 301 /book/progress/ /blog/progress/
+Redirect 301 /book/throwback/ /blog/throwback/

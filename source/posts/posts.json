@@ -1,1 +1,1 @@
-{ "tags": "post", "author": "NoGood" }
+{ "tags": "post", "author": "NoGood", "permalink": "/blog/{{ page.fileSlug }}/" }
