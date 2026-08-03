@@ -1295,7 +1295,7 @@ eleventyExcludeFromCollections: true
   const RELAYS    = ['wss://relay.nogood.tech', 'wss://relay.primal.net', 'wss://nos.lol', 'wss://relay.damus.io'];
   const MY_PUBKEY = '55f04590674f3648f4cdc9dc8ce32da2a282074cd0b020596ee033d12d385185';
 
-  const MAX_CHAT_DOM = 15;
+  const MAX_CHAT_DOM = 200;
   const PAGE_LOAD_SECS = Math.floor(Date.now() / 1000);
 
   const chatBox = document.getElementById('chat-box');
@@ -1307,7 +1307,9 @@ eleventyExcludeFromCollections: true
   const historicalZapsForChat = [];
   const historicalChatMsgs = [];
   const historicalRaids = [];
+  let zapHistoricalDone = false;
   let chatHistoricalDone = false;
+  let raidHistoricalDone = false;
   let historicalRendered = false;
 
   initNostr(NADDR, RELAYS, MY_PUBKEY);
@@ -1640,7 +1642,7 @@ eleventyExcludeFromCollections: true
   // HISTORICAL RENDER
   // ----------------
   function maybeRenderHistorical() {
-    if (!chatHistoricalDone || historicalRendered) return;
+    if (!zapHistoricalDone || !chatHistoricalDone || !raidHistoricalDone || historicalRendered) return;
     historicalRendered = true;
 
     const firstChatTs = historicalChatMsgs.length > 0
@@ -1648,13 +1650,12 @@ eleventyExcludeFromCollections: true
       : 0;
 
     const items = [
-      ...historicalChatMsgs.slice(-MAX_CHAT_DOM).map(m => ({ type: 'chat', timestamp: m.timestamp, data: m })),
+      ...historicalChatMsgs.map(m => ({ type: 'chat', timestamp: m.timestamp, data: m })),
       ...historicalZapsForChat
         .filter(z => z.timestamp >= firstChatTs)
-        .slice(-MAX_CHAT_DOM)
         .map(z => ({ type: 'zap', timestamp: z.timestamp, data: z })),
-      ...historicalRaids.slice(-5).map(r => ({ type: 'raid', timestamp: r.timestamp, data: r })),
-    ].sort((a, b) => a.timestamp - b.timestamp);
+      ...historicalRaids.map(r => ({ type: 'raid', timestamp: r.timestamp, data: r })),
+    ].sort((a, b) => a.timestamp - b.timestamp).slice(-MAX_CHAT_DOM);
 
     items.forEach(item => {
       if (item.type === 'chat') appendChatMessage(item.data);
@@ -1684,6 +1685,7 @@ eleventyExcludeFromCollections: true
       if (zap.timestamp >= PAGE_LOAD_SECS) fetchProfile(zap.senderPubkey || '').then(p => addZap({ sats: zap.amount, name: p.name, avatar: p.picture, message: zap.content }));
     }
   }, () => {
+    zapHistoricalDone = true;
     if (historicalRendered) {
       historicalZapsForChat.forEach(z => { if (z.isStreamZap) appendZapToChat(z); });
     } else {
@@ -1714,6 +1716,7 @@ eleventyExcludeFromCollections: true
       });
     }
   }, () => {
+    raidHistoricalDone = true;
     if (historicalRendered) {
       historicalRaids.forEach(r => appendRaidToChat(r));
     } else {
