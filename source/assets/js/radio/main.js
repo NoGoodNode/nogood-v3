@@ -284,10 +284,12 @@ function appendChatMessage(msg) {
   const messagesEl = document.getElementById('chat-messages');
   if (!messagesEl) return;
 
-  const now = msg.timestamp * 1000;
-  const last = lastMessageTime.get(msg.pubkey) || 0;
-  if (now - last < CHAT_RATE_LIMIT_MS) return;
-  lastMessageTime.set(msg.pubkey, now);
+  if (msg.pubkey !== BOT_PUBKEY) {
+    const now = msg.timestamp * 1000;
+    const last = lastMessageTime.get(msg.pubkey) || 0;
+    if (now - last < CHAT_RATE_LIMIT_MS) return;
+    lastMessageTime.set(msg.pubkey, now);
+  }
 
   const el = document.createElement('div');
   el.className = msg.pubkey === BOT_PUBKEY ? 'chat__message chat__message--bot' : 'chat__message';
