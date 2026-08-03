@@ -1302,7 +1302,8 @@ eleventyExcludeFromCollections: true
   const seenMessages = new Set();
   const seenZaps = new Set(JSON.parse(localStorage.getItem('ng-seen-zaps') || '[]'));
   const seenZapsSession = new Set();
-  const seenRaids = new Set(JSON.parse(localStorage.getItem('ng-seen-raids') || '[]'));
+  const renderedRaidIds = new Set();
+  const notifiedRaidIds = new Set(JSON.parse(localStorage.getItem('ng-seen-raids') || '[]'));
   const historicalZapsForChat = [];
   const historicalChatMsgs = [];
   const historicalRaids = [];
@@ -1701,14 +1702,17 @@ eleventyExcludeFromCollections: true
   });
 
   subscribeRaids((raid, isHistorical) => {
-    if (seenRaids.has(raid.timestamp + raid.pubkey)) return;
-    seenRaids.add(raid.timestamp + raid.pubkey);
-    try { const arr = [...seenRaids].slice(-50); localStorage.setItem('ng-seen-raids', JSON.stringify(arr)); } catch {}
+    if (renderedRaidIds.has(raid.id)) return;
+    renderedRaidIds.add(raid.id);
     if (isHistorical) { historicalRaids.push(raid); return; }
     appendRaidToChat(raid);
-    fetchProfile(raid.pubkey).then(p => {
-      window.__addOverlayNotification?.('Raid from ' + (p?.name || raid.pubkey.slice(0, 8)), 'raid');
-    });
+    if (!notifiedRaidIds.has(raid.id)) {
+      notifiedRaidIds.add(raid.id);
+      try { localStorage.setItem('ng-seen-raids', JSON.stringify([...notifiedRaidIds].slice(-50))); } catch {}
+      fetchProfile(raid.pubkey).then(p => {
+        window.__addOverlayNotification?.('Raid from ' + (p?.name || raid.pubkey.slice(0, 8)), 'raid');
+      });
+    }
   }, () => {
     if (historicalRendered) {
       historicalRaids.forEach(r => appendRaidToChat(r));

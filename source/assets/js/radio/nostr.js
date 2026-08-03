@@ -74,7 +74,7 @@ function startMux() {
           if (!muxEosed) {
             historicalRaids.push(event);
           } else {
-            if (raidCb) raidCb({ pubkey: event.pubkey, content: event.content, timestamp: event.created_at }, false);
+            if (raidCb) raidCb({ id: event.id, pubkey: event.pubkey, content: event.content, timestamp: event.created_at }, false);
           }
         }
       },
@@ -112,7 +112,7 @@ function deliverHistoricalRaids() {
   raidHistoryDelivered = true;
   historicalRaids
     .sort((a, b) => a.created_at - b.created_at)
-    .forEach(event => raidCb({ pubkey: event.pubkey, content: event.content, timestamp: event.created_at }, true));
+    .forEach(event => raidCb({ id: event.id, pubkey: event.pubkey, content: event.content, timestamp: event.created_at }, true));
   if (raidEoseCb) raidEoseCb();
 }
 
