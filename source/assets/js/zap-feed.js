@@ -1,4 +1,4 @@
-import { SimplePool } from '/assets/js/vendor/nostr-pool.js';
+import { getEventHub } from '/assets/js/nostr/event-hub.js';
 import * as nip19 from '/assets/js/vendor/nostr-nip19.js';
 
 const PUBKEY = '55f04590674f3648f4cdc9dc8ce32da2a282074cd0b020596ee033d12d385185';
@@ -22,7 +22,7 @@ const filter = isRadio
   ? { kinds: [9735], '#a': [STREAM_ADDRESS], limit: 100 }
   : { kinds: [9735], '#p': [PUBKEY], limit: 100 };
 
-const pool = new SimplePool();
+const hub = getEventHub();
 
 function truncateNpub(pubkey) {
   try {
@@ -83,7 +83,7 @@ function renderZap(zap, name) {
 
 async function init() {
   // Single query for all zap events — cap wait so slow relays don't stall render
-  const events = await pool.querySync(RELAYS, filter, { maxWait: 1500 });
+  const events = await hub.query(filter, { relays: RELAYS, maxWait: 1500 });
 
   const allParsed = events
     .filter(e => !isRadio || e.tags.some(t => t[0] === 'a' && t[1] === STREAM_ADDRESS))
@@ -113,7 +113,7 @@ async function init() {
 
   const profileMap = new Map();
   if (allPubkeys.length) {
-    const profileEvents = await pool.querySync(RELAYS, { kinds: [0], authors: allPubkeys }, { maxWait: 1500 });
+    const profileEvents = await hub.query({ kinds: [0], authors: allPubkeys }, { relays: RELAYS, maxWait: 1500 });
     profileEvents.forEach(e => {
       if (profileMap.has(e.pubkey)) return;
       try {
@@ -146,7 +146,6 @@ async function init() {
     });
   }
 
-  pool.close(RELAYS);
 }
 
 init();

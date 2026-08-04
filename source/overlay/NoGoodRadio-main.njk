@@ -1285,7 +1285,7 @@ eleventyExcludeFromCollections: true
 </script>
 
 <script type="module">
-  import { initNostr, subscribeStreamInfo, subscribeZaps, subscribeChat, subscribeRaids, subscribeNotifications, fetchProfile, getPool, getStreamATag } from '/assets/js/radio/nostr.js';
+  import { initNostr, subscribeStreamInfo, subscribeZaps, subscribeChat, subscribeRaids, subscribeNotifications, fetchProfile, queryNostr, getStreamATag } from '/assets/js/radio/nostr.js';
   import * as nip19 from '/assets/js/vendor/nostr-nip19.js';
 
   // ----------------
@@ -1370,9 +1370,8 @@ eleventyExcludeFromCollections: true
   }
 
   async function buildZapLeaderboard() {
-    const pool       = getPool();
     const streamATag = getStreamATag();
-    const events     = await pool.querySync(RELAYS, { kinds: [9735], '#a': [streamATag], limit: 500 }, { maxWait: 3000 });
+    const events     = await queryNostr({ kinds: [9735], '#a': [streamATag], limit: 500 }, { relays: RELAYS, maxWait: 3000 });
 
     const totals = new Map();
     events.forEach(e => {

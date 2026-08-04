@@ -6,7 +6,7 @@
     "clean": "find _build -maxdepth 1 -mindepth 1 -not -name 'assets' -exec rm -rf {} + 2>/dev/null; find _build/assets -maxdepth 1 -mindepth 1 -not -name 'img' -exec rm -rf {} + 2>/dev/null; mkdir -p _build/assets/img",
     "start": "npm run clean && npx @11ty/eleventy --serve",
     "build": "npm run clean && npx @11ty/eleventy",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --no-warnings --test test/*.test.mjs"
   },
   "keywords": [],
   "author": "",

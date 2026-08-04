@@ -1,4 +1,4 @@
-import { SimplePool } from '/assets/js/vendor/nostr-pool.js';
+import { getEventHub } from '/assets/js/nostr/event-hub.js';
 import * as nip19 from '/assets/js/vendor/nostr-nip19.js';
 
 const PUBKEY = '55f04590674f3648f4cdc9dc8ce32da2a282074cd0b020596ee033d12d385185';
@@ -12,7 +12,7 @@ const RELAYS = [
 const container = document.getElementById('latest-nostr-note');
 if (!container) throw new Error('No #latest-nostr-note element');
 
-const pool = new SimplePool();
+const hub = getEventHub();
 
 function formatDate(timestamp) {
   const date = new Date(timestamp * 1000);
@@ -48,7 +48,7 @@ function formatSats(n) {
 }
 
 async function fetchStats(noteId) {
-  const events = await pool.querySync(RELAYS, { kinds: [1, 7, 9735], '#e': [noteId] }, { maxWait: 1500 });
+  const events = await hub.query({ kinds: [1, 7, 9735], '#e': [noteId] }, { relays: RELAYS, maxWait: 1500 });
   const stats = { likes: 0, replies: 0, zapTotal: 0 };
   events.forEach(event => {
     if (event.kind === 7) stats.likes++;
@@ -185,14 +185,14 @@ function renderNote(event, profile, mentionProfiles = {}) {
     likesEl.textContent = `${s.likes} likes`;
     repliesEl.textContent = `${s.replies} comments`;
     zapEl.textContent = `${formatSats(s.zapTotal)} sats`;
-    pool.close(RELAYS);
+
   });
 }
 
 async function init() {
   const [noteEvents, profileEvents] = await Promise.all([
-    pool.querySync(RELAYS, { kinds: [1], authors: [PUBKEY], limit: 20 }, { maxWait: 1500 }),
-    pool.querySync(RELAYS, { kinds: [0], authors: [PUBKEY] }, { maxWait: 1500 }),
+    hub.query({ kinds: [1], authors: [PUBKEY], limit: 20 }, { relays: RELAYS, maxWait: 1500 }),
+    hub.query({ kinds: [0], authors: [PUBKEY] }, { relays: RELAYS, maxWait: 1500 }),
   ]);
 
   const note = noteEvents
@@ -210,7 +210,7 @@ async function init() {
   const mentionPubkeys = extractMentionPubkeys(note.content);
   let mentionProfiles = {};
   if (mentionPubkeys.length) {
-    const mentionEvents = await pool.querySync(RELAYS, { kinds: [0], authors: mentionPubkeys }, { maxWait: 1500 });
+    const mentionEvents = await hub.query({ kinds: [0], authors: mentionPubkeys }, { relays: RELAYS, maxWait: 1500 });
     mentionEvents.forEach(e => {
       try { mentionProfiles[e.pubkey] = JSON.parse(e.content); } catch { /* skip */ }
     });
