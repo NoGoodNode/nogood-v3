@@ -171,6 +171,14 @@ eleventyConfig.ignores.add("source/snippets");
 			.sort((a, b) => a.data.order - b.data.order);
 	});
 
+	eleventyConfig.addCollection("sitemapPages", function (collectionApi) {
+		return collectionApi.getAll()
+			.filter(item => typeof item.url === "string" && item.url.startsWith("/"))
+			.filter(item => item.url !== "/404.html")
+			.filter(item => !item.data.unlisted)
+			.filter(item => !item.inputPath.includes("/overlay/"));
+	});
+
 	// Add passthrough files
 	eleventyConfig.addPassthroughCopy({ "source/.well-known/nostr.json": ".well-known/nostr.json" });
 	eleventyConfig.addPassthroughCopy({ "source/CNAME": "CNAME" });
@@ -213,6 +221,7 @@ eleventyConfig.ignores.add("source/snippets");
 	eleventyConfig.addPassthroughCopy({ "source/assets/img/book/NG_Unboxing.mp4": "assets/img/book/NG_Unboxing.mp4" });
 	eleventyConfig.addPassthroughCopy({ "source/assets/img/book/NG_BooksEverywhere.mp4": "assets/img/book/NG_BooksEverywhere.mp4" });
 	eleventyConfig.addPassthroughCopy({ "source/assets/img/book/NG_Shoot_Book_Cover.jpg": "assets/img/book/NG_Shoot_Book_Cover.jpg" });
+	eleventyConfig.addPassthroughCopy({ "source/assets/img/book/NG_Book_Cover.jpg": "assets/img/book/NG_Book_Cover.jpg" });
 	// YAML
 	eleventyConfig.addDataExtension("yaml", (contents) => YAML.parse(contents));
 

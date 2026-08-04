@@ -45,7 +45,7 @@ description: "Illustration projects by NoGood — branding, editorial, and visua
 
 <div class="section section-fullwidth">
     <div class="masonry">
-        {% for item in work.items %}
+        {% for item in work.work %}
 
         <div class="masonry-item{% if item.span %} masonry-item--wide{% endif %}">
           <div class="fade-in{% if item.bg %} {{ item.bg }}{% endif %}">
@@ -75,6 +75,16 @@ description: "Illustration projects by NoGood — branding, editorial, and visua
             {% endif %}
 
           </div>
+
+          <div class="margin-top-small flex-row flex-align-baseline text-small uppercase">
+            <div class="flex-row flex-grow gap-small">
+              <span class="pixel-font">{{ item.title or item.alt }}</span>
+              <span class="pixel-font">/</span>
+              <span class="normal-case offset-up-1">{{ item.client or 'Personal work' }}</span>
+            </div>
+            <span class="tag tag-dark pixel-font uppercase">{{ item.category or 'Illustration' }}</span>
+          </div>
+
         </div>
 
         {% endfor %}

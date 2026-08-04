@@ -94,6 +94,7 @@ if (nostrCtx) {
   });
 
   initTicker();
+  initSupporters();
   initChat();
 }
 
@@ -161,6 +162,56 @@ function initTicker() {
     zapHistoricalDone = true;
     if (historicalRendered) historicalZapsForChat.forEach(z => appendZapToChat(z));
     else maybeRenderHistorical();
+  });
+}
+
+function initSupporters() {
+  const feed = document.getElementById('radio-zap-feed');
+  const leaderboard = document.getElementById('radio-zap-leaderboard');
+  const zaps = new Map();
+  let ready = false;
+
+  function row(label, amount) {
+    const el = document.createElement('div');
+    el.className = 'chat__message chat__message--zap';
+
+    const sender = document.createElement('span');
+    sender.className = 'chat__message-sender';
+    sender.textContent = label;
+
+    const value = document.createElement('span');
+    value.className = 'chat__message-zap-amount pixel-font';
+    value.textContent = `⚡ ${formatSats(amount)} sats`;
+
+    el.append(sender, value);
+    return el;
+  }
+
+  async function render() {
+    if (!ready) return;
+    const all = [...zaps.values()];
+    const recent = all.slice().sort((a, b) => b.timestamp - a.timestamp).slice(0, 5);
+    const totals = new Map();
+    all.forEach(zap => {
+      if (zap.senderPubkey) totals.set(zap.senderPubkey, (totals.get(zap.senderPubkey) || 0) + zap.amount);
+    });
+    const top = [...totals.entries()].sort((a, b) => b[1] - a[1]).slice(0, 5);
+    const pubkeys = [...new Set([...recent.map(zap => zap.senderPubkey), ...top.map(([pubkey]) => pubkey)].filter(Boolean))];
+    const profiles = new Map(await Promise.all(pubkeys.map(async pubkey => [pubkey, await fetchProfile(pubkey)])));
+    const name = pubkey => profiles.get(pubkey)?.name || pubkey?.slice(0, 8) || 'anon';
+
+    feed.replaceChildren(...recent.map(zap => row(name(zap.senderPubkey), zap.amount)));
+    leaderboard.replaceChildren(...top.map(([pubkey, amount], index) => row(`${index + 1}. ${name(pubkey)}`, amount)));
+  }
+
+  subscribeZaps((zap) => {
+    if (zap.isStreamZap && zap.senderPubkey !== '55f04590674f3648f4cdc9dc8ce32da2a282074cd0b020596ee033d12d385185') {
+      zaps.set(zap.id, zap);
+      render();
+    }
+  }, () => {
+    ready = true;
+    render();
   });
 }
 

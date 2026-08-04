@@ -161,6 +161,15 @@ OTHER
     text-transform: uppercase;
 }
 
+.normal-case {
+    text-transform: none;
+}
+
+.offset-up-1 {
+    position: relative;
+    top: -1px;
+}
+
 .text-tabular {
     font-variant-numeric: tabular-nums;
 }

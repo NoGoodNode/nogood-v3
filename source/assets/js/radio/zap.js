@@ -1,4 +1,3 @@
-import QRCode from '/assets/js/vendor/qrcode.js';
 import { getStreamATag, getRelays, getPool } from './nostr.js';
 
 const RECIPIENT_PUBKEY = '55f04590674f3648f4cdc9dc8ce32da2a282074cd0b020596ee033d12d385185';
@@ -125,7 +124,7 @@ export async function sendZap(amountSats, message = '') {
   }
 }
 
-function showInvoiceModal(invoice, amountSats, recipientPubkey) {
+async function showInvoiceModal(invoice, amountSats, recipientPubkey) {
   const modal = document.getElementById('zap-modal');
   const canvas = document.getElementById('zap-modal-qr');
   const amountEl = document.getElementById('zap-modal-amount');
@@ -137,6 +136,7 @@ function showInvoiceModal(invoice, amountSats, recipientPubkey) {
   amountEl.textContent = `${amountSats} sats`;
   openLink.href = `lightning:${invoice}`;
 
+  const { default: QRCode } = await import('/assets/js/vendor/qrcode.js');
   QRCode.toCanvas(canvas, invoice.toUpperCase(), {
     width: 200,
     margin: 0,

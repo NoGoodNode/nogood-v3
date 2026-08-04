@@ -46,6 +46,10 @@ async function updateList() {
 }
 
 export function initLastFm() {
-  updateList();
-  setInterval(updateList, REFRESH_MS);
+  const refresh = () => {
+    if (!document.hidden) updateList();
+  };
+  refresh();
+  setInterval(refresh, REFRESH_MS);
+  document.addEventListener('visibilitychange', refresh);
 }

@@ -180,7 +180,6 @@ bodyColor: bg-highlight
     </div>
 </div>
 <script type="module">
-    import Hls from '/assets/js/vendor/hls.js';
     const video = document.getElementById('home-stream-video');
     const HLS_URL = 'https://api-core.zap.stream/537a365c-f1ec-44ac-af10-22d14a7319fb/hls/live.m3u8';
     const FALLBACK = '/assets/img/radio-bg.mp4';
@@ -189,8 +188,17 @@ bodyColor: bg-highlight
         video.loop = true;
         video.play().catch(() => {});
     }
-    function initStream() {
-        if (Hls.isSupported()) {
+    async function initStream() {
+        if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = HLS_URL;
+            video.play().catch(() => {});
+            video.addEventListener('error', useFallback);
+        } else {
+            const { default: Hls } = await import('/assets/js/vendor/hls.js');
+            if (!Hls.isSupported()) {
+                useFallback();
+                return;
+            }
             const hls = new Hls({ enableWorker: true, startLevel: 0 });
             hls.loadSource(HLS_URL);
             hls.attachMedia(video);
@@ -200,12 +208,6 @@ bodyColor: bg-highlight
             hls.on(Hls.Events.ERROR, (_e, data) => {
                 if (data.fatal) { hls.destroy(); useFallback(); }
             });
-        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-            video.src = HLS_URL;
-            video.play().catch(() => {});
-            video.addEventListener('error', useFallback);
-        } else {
-            useFallback();
         }
     }
     new IntersectionObserver((entries, obs) => {
