@@ -293,7 +293,7 @@ work:
     alt: "Zapstream illustration"
     span: false
     title: "+++"
-    client: "zap.stream"
+    client: ""
     category: ""
     bg:
 
@@ -302,7 +302,7 @@ work:
     alt: "Zapstream illustration"
     span: false
     title: "Zap Zap Zap"
-    client: ""
+    client: "zap.stream"
     category: ""
     bg:
 
