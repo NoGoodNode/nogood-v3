@@ -208,7 +208,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let nodeOfflineCount = 0;
     const NODE_OFFLINE_THRESHOLD = 10;
-    const STATUS_CACHE_KEY = 'nogood-status';
 
     async function fetchNode() {
         let online = false;
@@ -282,23 +281,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function initialLoad() {
-        const cached = sessionStorage.getItem(STATUS_CACHE_KEY);
-        if (cached) {
-            try {
-                const { online, live } = JSON.parse(cached);
-                applyNode(online, true);
-                applyRadio(live);
-                revealItems();
-                return;
-            } catch {}
-        }
         refresh(true);
     }
 
     async function refresh(force = false) {
         if (!force && document.hidden) return;
         const [online, live] = await Promise.all([fetchNode(), fetchRadio()]);
-        sessionStorage.setItem(STATUS_CACHE_KEY, JSON.stringify({ online, live }));
         applyNode(online, force);
         applyRadio(live);
         revealItems();
