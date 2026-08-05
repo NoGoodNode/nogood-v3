@@ -46,6 +46,38 @@ test("sitemap only contains valid public site URLs", () => {
 	assert.equal(new Set(urls).size, urls.length);
 });
 
+test("generated JSON-LD is valid JSON", () => {
+	const invalid = [];
+	for (const file of walk(buildDir).filter(path => path.endsWith(".html"))) {
+		const html = readFileSync(file, "utf8");
+		for (const match of html.matchAll(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/g)) {
+			try {
+				JSON.parse(match[1]);
+			} catch (error) {
+				invalid.push(`${file.replace(`${buildDir}/`, "")}: ${error.message}`);
+			}
+		}
+	}
+	assert.deepEqual(invalid, []);
+});
+
+test("legacy book routes redirect to their blog replacements", () => {
+	const redirects = {
+		"/book/announcement": "/blog/announcement/",
+		"/book/beginnings": "/blog/beginnings/",
+		"/book/closing-in": "/blog/closing-in/",
+		"/book/loops": "/blog/loops/",
+		"/book/print-signed-shipped": "/blog/print-signed-shipped/",
+		"/book/progress": "/blog/progress/",
+		"/book/throwback": "/blog/throwback/",
+	};
+	for (const [from, to] of Object.entries(redirects)) {
+		const html = outputHtml(from);
+		assert.match(html, new RegExp(`http-equiv="refresh" content="0; url=${to}"`));
+		assert.match(html, new RegExp(`location\\.replace\\("${to}"`));
+	}
+});
+
 test("Snipcart uses the established global bootstrap", () => {
 	assert.match(outputHtml("/shop"), /window\.SnipcartSettings/);
 	assert.match(outputHtml("/work"), /window\.SnipcartSettings/);

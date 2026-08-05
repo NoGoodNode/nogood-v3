@@ -52,12 +52,12 @@
     {
         "@context": "https://schema.org",
         "@type": "WebSite",
-        "name": "{{ settings.metadata.site_title }}",
-        "url": "{{ settings.metadata.site_url }}",
-        "description": "{{ settings.metadata.site_description }}",
+        "name": {{ settings.metadata.site_title | json | safe }},
+        "url": {{ settings.metadata.site_url | json | safe }},
+        "description": {{ settings.metadata.site_description | json | safe }},
         "author": {
             "@type": "Brand",
-            "name": "{{ settings.metadata.site_title }}"
+            "name": {{ settings.metadata.site_title | json | safe }}
         }
     }
     </script>
@@ -69,9 +69,9 @@
     {
         "@context": "https://schema.org/",
         "@type": "Product",
-        "name": "{{ title }}",
-        "description": "{{ description | trim }}",
-        "image": "{{ settings.metadata.site_url }}{{ snipcart.snipcartimage }}",
+        "name": {{ title | json | safe }},
+        "description": {{ description | trim | json | safe }},
+        "image": {{ (settings.metadata.site_url + snipcart.snipcartimage) | json | safe }},
         "brand": {
             "@type": "Brand",
             "name": "NoGood"
@@ -79,9 +79,9 @@
         "offers": {
             "@type": "Offer",
             "priceCurrency": "EUR",
-            "price": "{{ snipcart.price }}",
+            "price": {{ snipcart.price | json | safe }},
             "availability": "{% if site.sold_out === true %}https://schema.org/OutOfStock{% else %}https://schema.org/InStock{% endif %}",
-            "url": "{{ settings.metadata.site_url }}{{ page.url }}"
+            "url": {{ (settings.metadata.site_url + page.url) | json | safe }}
         }
     }
     </script>
@@ -98,19 +98,19 @@
                 "@type": "ListItem",
                 "position": 1,
                 "name": "NoGood",
-                "item": "{{ settings.metadata.site_url }}"
+                "item": {{ settings.metadata.site_url | json | safe }}
             },
             {
                 "@type": "ListItem",
                 "position": 2,
-                "name": "{% if snipcart %}Shop{% elif client %}Work{% else %}{{ title }}{% endif %}",
-                "item": "{% if snipcart %}{{ settings.metadata.site_url }}/shop/{% elif client %}{{ settings.metadata.site_url }}/work/{% else %}{{ settings.metadata.site_url }}{{ page.url }}{% endif %}"
+                "name": {% if snipcart %}"Shop"{% elif client %}"Work"{% else %}{{ title | json | safe }}{% endif %},
+                "item": {% if snipcart %}{{ (settings.metadata.site_url + "/shop/") | json | safe }}{% elif client %}{{ (settings.metadata.site_url + "/work/") | json | safe }}{% else %}{{ (settings.metadata.site_url + page.url) | json | safe }}{% endif %}
             }{% if snipcart or client %},
             {
                 "@type": "ListItem",
                 "position": 3,
-                "name": "{{ title }}",
-                "item": "{{ settings.metadata.site_url }}{{ page.url }}"
+                "name": {{ title | json | safe }},
+                "item": {{ (settings.metadata.site_url + page.url) | json | safe }}
             }{% endif %}
         ]
     }
@@ -123,13 +123,13 @@
     {
         "@context": "https://schema.org",
         "@type": "CreativeWork",
-        "name": "{{ title }}",
-        "description": "{{ description | default('') | trim }}",
+        "name": {{ title | json | safe }},
+        "description": {{ description | default('') | trim | json | safe }},
         "creator": {
             "@type": "Brand",
             "name": "NoGood"
         },
-        "url": "{{ settings.metadata.site_url }}{{ page.url }}"
+        "url": {{ (settings.metadata.site_url + page.url) | json | safe }}
     }
     </script>
     {% endif %}
@@ -140,13 +140,13 @@
     {
         "@context": "https://schema.org",
         "@type": "Article",
-        "headline": "{{ title }}",
-        "description": "{{ description | default('') | trim }}",
+        "headline": {{ title | json | safe }},
+        "description": {{ description | default('') | trim | json | safe }},
         "author": {
             "@type": "Brand",
             "name": "NoGood"
         },
-        "url": "{{ settings.metadata.site_url }}{{ page.url }}"
+        "url": {{ (settings.metadata.site_url + page.url) | json | safe }}
     }
     </script>
     {% endif %}

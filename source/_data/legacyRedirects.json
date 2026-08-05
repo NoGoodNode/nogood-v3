@@ -1,0 +1,9 @@
+[
+  { "from": "/book/announcement", "to": "/blog/announcement/" },
+  { "from": "/book/beginnings", "to": "/blog/beginnings/" },
+  { "from": "/book/closing-in", "to": "/blog/closing-in/" },
+  { "from": "/book/loops", "to": "/blog/loops/" },
+  { "from": "/book/print-signed-shipped", "to": "/blog/print-signed-shipped/" },
+  { "from": "/book/progress", "to": "/blog/progress/" },
+  { "from": "/book/throwback", "to": "/blog/throwback/" }
+]

@@ -64,7 +64,7 @@ description: "Illustration projects by NoGood — branding, editorial, and visua
 
             {# VIDEO #}
             {% elif item.type === "video" %}
-                <video autoplay muted loop playsinline width="100%" height="auto"{% if item.poster %} poster="{{ item.poster }}"{% endif %}>
+                <video autoplay muted loop playsinline preload="metadata" width="100%" height="auto"{% if item.poster %} poster="{{ item.poster }}"{% endif %}>
                     <source src="{{ item.src }}">
                 </video>
 

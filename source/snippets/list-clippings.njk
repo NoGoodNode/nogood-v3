@@ -2,7 +2,7 @@
     {% if item.renderAs == "podcast" %}
     <div class="clipping-podcast">
         {% if item.cover %}
-        <img src="{{ item.cover }}" alt="{{ item.title }}" class="no-blend clipping-podcast-cover" loading="lazy" decoding="async">
+        <img src="{{ item.cover.url }}" alt="{{ item.title }}" width="{{ item.cover.width }}" height="{{ item.cover.height }}" class="no-blend clipping-podcast-cover" loading="lazy" decoding="async">
         {% else %}
         <div></div>
         {% endif %}
@@ -17,7 +17,7 @@
     {% elif item.renderAs == "book" %}
     <div class="clipping-book">
         {% if item.cover %}
-        <img src="{{ item.cover }}" alt="{{ item.title }}" class="no-blend clipping-book-cover" loading="lazy" decoding="async">
+        <img src="{{ item.cover.url }}" alt="{{ item.title }}" width="{{ item.cover.width }}" height="{{ item.cover.height }}" class="no-blend clipping-book-cover" loading="lazy" decoding="async">
         {% else %}
         <div></div>
         {% endif %}
@@ -38,7 +38,7 @@
         <button class="embed-play" aria-label="Load embed"></button>
     </div>
     {% elif item.cover and not hideCover %}
-    <img src="{{ item.cover }}" alt="{{ item.title }}" class="no-blend" loading="lazy" decoding="async">
+    <img src="{{ item.cover.url }}" alt="{{ item.title }}" width="{{ item.cover.width }}" height="{{ item.cover.height }}" class="no-blend" loading="lazy" decoding="async">
     {% endif %}
     {% if item.intro and not hideIntro %}
     <p>{{ item.intro }}</p>
