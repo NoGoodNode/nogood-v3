@@ -1,4 +1,6 @@
 import { getEventHub } from '/assets/js/nostr/event-hub.js';
+import { NOGOOD_PUBKEY } from '/assets/js/nostr/config.js';
+import { parseZapReceipt } from '/assets/js/nostr/zaps.js';
 import * as nip19 from '/assets/js/vendor/nostr-nip19.js';
 
 const PROFILE_CACHE = new Map();
@@ -48,7 +50,7 @@ export function createRadioNostr({ naddr, relays, profilePubkey = null, hub = ge
         const isStreamZap = event.tags.some(tag => tag[0] === 'a' && tag[1] === streamATag);
         const isProfileZap = profilePubkey && event.tags.some(tag => tag[0] === 'p' && tag[1] === profilePubkey);
         if (!isStreamZap && !isProfileZap) return;
-        const zap = parseZapReceipt(event);
+        const zap = parseZapReceipt(event, { expectedATag: isStreamZap ? streamATag : null });
         if (zap) notify('zaps', { ...zap, isStreamZap }, isHistorical);
       } else if (event.kind === 1311) {
         notify('chat', parseChatMessage(event), isHistorical);
@@ -121,7 +123,7 @@ export function subscribeRaids(onRaid, onEose) {
 
 export function subscribeNotifications(onNotification) {
   if (!activeRadioNostr) return;
-  const myPubkey = '55f04590674f3648f4cdc9dc8ce32da2a282074cd0b020596ee033d12d385185';
+  const myPubkey = NOGOOD_PUBKEY;
   const since = Math.floor(Date.now() / 1000);
   activeRadioNostr.hub.createFeed({
     filters: [
@@ -211,28 +213,6 @@ export function fetchProfile(pubkey) {
 function parseStreamEvent(event) {
   const tags = Object.fromEntries(event.tags.filter(tag => ['title', 'summary', 'image', 'status', 'streaming', 'current_participants', 'starts'].includes(tag[0])).map(tag => [tag[0], tag[1]]));
   return { title: tags.title || 'NoGood Radio', summary: tags.summary || '', image: tags.image || '', status: tags.status || 'unknown', streaming: tags.streaming || '', viewers: tags.current_participants ? parseInt(tags.current_participants, 10) : null, starts: tags.starts ? parseInt(tags.starts, 10) : null, pubkey: event.pubkey, event };
-}
-
-function parseZapReceipt(event) {
-  const description = event.tags.find(tag => tag[0] === 'description');
-  if (!description) return null;
-  let request;
-  try { request = JSON.parse(description[1]); } catch { return null; }
-  const bolt11 = event.tags.find(tag => tag[0] === 'bolt11');
-  return { id: event.id, amount: bolt11 ? decodeBolt11Amount(bolt11[1]) : 0, senderPubkey: request.pubkey || null, timestamp: event.created_at, content: request.content || '' };
-}
-
-function decodeBolt11Amount(bolt11) {
-  const match = bolt11.match(/^lnbc(\d+)([munp]?)/i);
-  if (!match) return 0;
-  const num = parseInt(match[1], 10);
-  switch (match[2]) {
-    case 'm': return num * 100000;
-    case 'u': return num * 100;
-    case 'n': return Math.floor(num / 10);
-    case 'p': return Math.floor(num / 10000);
-    default: return num * 100000000;
-  }
 }
 
 function parseChatMessage(event) {

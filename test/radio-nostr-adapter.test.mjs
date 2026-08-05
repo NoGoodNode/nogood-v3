@@ -20,6 +20,8 @@ test('Radio adapter replays stream chat received before subscribeChat', async ()
   const source = await readFile(new URL('../source/assets/js/radio/nostr.js', import.meta.url), 'utf8');
   const moduleSource = source
     .replace("import { getEventHub } from '/assets/js/nostr/event-hub.js';", `import { getEventHub } from '${asModuleUrl('export function getEventHub() { throw new Error(\'unexpected default hub\'); }')}';`)
+    .replace("import { NOGOOD_PUBKEY } from '/assets/js/nostr/config.js';", `import { NOGOOD_PUBKEY } from '${asModuleUrl("export const NOGOOD_PUBKEY = 'profile-pubkey';")}';`)
+    .replace("import { parseZapReceipt } from '/assets/js/nostr/zaps.js';", `import { parseZapReceipt } from '${asModuleUrl('export function parseZapReceipt() { return null; }')}';`)
     .replace("import * as nip19 from '/assets/js/vendor/nostr-nip19.js';", `import * as nip19 from '${asModuleUrl('export function decode() {} export function npubEncode(value) { return value; }')}';`);
   const { createRadioNostr } = await import(asModuleUrl(moduleSource));
   const radio = createRadioNostr({

@@ -1,13 +1,10 @@
 import { getEventHub } from '/assets/js/nostr/event-hub.js';
+import { NOGOOD_NOSTR_RELAYS, NOGOOD_PUBKEY } from '/assets/js/nostr/config.js';
+import { decodeBolt11Amount } from '/assets/js/nostr/zaps.js';
 import * as nip19 from '/assets/js/vendor/nostr-nip19.js';
 
-const PUBKEY = '55f04590674f3648f4cdc9dc8ce32da2a282074cd0b020596ee033d12d385185';
-const RELAYS = [
-  'wss://relay.primal.net',
-  'wss://nos.lol',
-  'wss://relay.damus.io',
-  'wss://relay.nogood.tech',
-];
+const PUBKEY = NOGOOD_PUBKEY;
+const RELAYS = NOGOOD_NOSTR_RELAYS;
 
 const container = document.getElementById('latest-nostr-note');
 if (!container) throw new Error('No #latest-nostr-note element');
@@ -25,19 +22,6 @@ function noteUrl(eventId) {
     return `https://njump.me/${nevent}`;
   } catch {
     return `https://njump.me/${eventId}`;
-  }
-}
-
-function decodeBolt11Amount(bolt11) {
-  const match = bolt11.match(/^lnbc(\d+)([munp]?)/i);
-  if (!match) return 0;
-  const num = parseInt(match[1], 10);
-  switch (match[2]) {
-    case 'm': return num * 100000;
-    case 'u': return num * 100;
-    case 'n': return Math.floor(num / 10);
-    case 'p': return Math.floor(num / 10000);
-    default:  return num * 100000000;
   }
 }
 

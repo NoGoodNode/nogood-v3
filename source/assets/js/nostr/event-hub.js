@@ -1,18 +1,16 @@
 import { SimplePool } from '../vendor/nostr-pool.js';
+import { NOGOOD_NOSTR_RELAYS } from './config.js';
 
-export const NOGOOD_NOSTR_RELAYS = [
-  'wss://relay.primal.net',
-  'wss://nos.lol',
-  'wss://relay.damus.io',
-  'wss://relay.nogood.tech',
-];
+export { NOGOOD_NOSTR_RELAYS };
 
 let sharedHub = null;
 
 export function createEventHub({ relays = NOGOOD_NOSTR_RELAYS, pool = new SimplePool({ enableReconnect: true }) } = {}) {
   const profileCache = new Map();
 
-  function createFeed({ filters, historyTimeout = 6000 }) {
+  // Keep live feeds bounded: consumers can still receive every event, while
+  // late subscribers replay only the most recent retained history.
+  function createFeed({ filters, historyTimeout = 6000, maxEvents = 500 }) {
     const events = new Map();
     const subscribers = new Set();
     const requests = relays.flatMap(url => filters.map(filter => ({ url, filter })));
@@ -30,6 +28,12 @@ export function createEventHub({ relays = NOGOOD_NOSTR_RELAYS, pool = new Simple
     function retain(event, isHistorical) {
       if (events.has(event.id)) return;
       events.set(event.id, event);
+      if (events.size > maxEvents) {
+        const oldest = [...events.values()].reduce((oldest, candidate) =>
+          candidate.created_at < oldest.created_at ? candidate : oldest
+        );
+        events.delete(oldest.id);
+      }
       subscribers.forEach(({ onEvent }) => onEvent?.(event, isHistorical));
     }
 

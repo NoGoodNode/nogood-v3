@@ -2,6 +2,7 @@ import { initStream } from './stream.js';
 import { initNostr, subscribeStreamInfo, subscribeZaps, subscribeChat, subscribeRaids, sendChatMessage, fetchProfile } from './nostr.js';
 import { initZapButtons, configureZap } from './zap.js';
 import { initLastFm } from './lastfm.js';
+import { NOGOOD_NOSTR_RELAYS } from '/assets/js/nostr/config.js';
 import * as nip19 from '/assets/js/vendor/nostr-nip19.js';
 
 const BOT_PUBKEY = 'c0434367d3e598555e930db7d54eb5e2b4013c0b7673c8f668475fc76b6a6606';
@@ -10,7 +11,7 @@ const CONFIG = {
   hlsUrl: 'https://api-core.zap.stream/537a365c-f1ec-44ac-af10-22d14a7319fb/hls/live.m3u8',
   naddr: 'naddr1qqjr2vehvyenvdtr94nrzetr956rgctr94skvvfs95eryep3x3snwve389nxyqgwwaehxw309ahx7uewd3hkctczyr85tf46zd366lkjzws83ecs6fq3ttnjrjd500g7haz936h0knp22qcyqqq8vecjrlda8',
   fallbackImage: 'https://blossom.nogood.studio/6d5bb489e87c2f2db2a0fa61fd2bfca9f6d4f50e05b7caf1784644886c0e4ff6.jpg',
-  relays: ['wss://relay.primal.net', 'wss://nos.lol', 'wss://relay.damus.io', 'wss://relay.nogood.tech'],
+  relays: NOGOOD_NOSTR_RELAYS,
 };
 
 function waitForGlobal(name, timeout = 3000) {

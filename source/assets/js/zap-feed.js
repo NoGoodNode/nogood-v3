@@ -1,15 +1,11 @@
 import { getEventHub } from '/assets/js/nostr/event-hub.js';
+import { NOGOOD_PUBKEY, NOGOOD_ZAP_RELAYS } from '/assets/js/nostr/config.js';
+import { parseZapReceipt } from '/assets/js/nostr/zaps.js';
 import * as nip19 from '/assets/js/vendor/nostr-nip19.js';
 
-const PUBKEY = '55f04590674f3648f4cdc9dc8ce32da2a282074cd0b020596ee033d12d385185';
+const PUBKEY = NOGOOD_PUBKEY;
 const STREAM_ADDRESS = '30311:cf45a6ba1363ad7ed213a078e710d24115ae721c9b47bd1ebf4458eaefb4c2a5:537a365c-f1ec-44ac-af10-22d14a7319fb';
-const RELAYS = [
-  'wss://relay.primal.net',
-  'wss://nos.lol',
-  'wss://relay.damus.io',
-  'wss://relay.getalby.com/v1',
-  'wss://relay.nogood.tech',
-];
+const RELAYS = NOGOOD_ZAP_RELAYS;
 const MAX_ZAPS = 5;
 const MAX_LEADERBOARD = 5;
 
@@ -32,30 +28,9 @@ function truncateNpub(pubkey) {
 }
 
 function parseZap(event) {
-  const descTag = event.tags.find(t => t[0] === 'description');
-  if (!descTag) return null;
-  let zapRequest;
-  try { zapRequest = JSON.parse(descTag[1]); } catch { return null; }
-  const bolt11 = event.tags.find(t => t[0] === 'bolt11');
-  return {
-    id: event.id,
-    amount: bolt11 ? decodeBolt11Amount(bolt11[1]) : 0,
-    senderPubkey: zapRequest.pubkey || null,
-    timestamp: event.created_at,
-  };
-}
-
-function decodeBolt11Amount(bolt11) {
-  const match = bolt11.match(/^lnbc(\d+)([munp]?)/i);
-  if (!match) return 0;
-  const num = parseInt(match[1], 10);
-  switch (match[2]) {
-    case 'm': return num * 100000;
-    case 'u': return num * 100;
-    case 'n': return Math.floor(num / 10);
-    case 'p': return Math.floor(num / 10000);
-    default:  return num * 100000000;
-  }
+  return parseZapReceipt(event, {
+    expectedATag: isRadio ? STREAM_ADDRESS : null,
+  });
 }
 
 function formatSats(n) {
