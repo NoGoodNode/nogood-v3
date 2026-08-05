@@ -6,6 +6,27 @@ eleventyExcludeFromCollections: true
 ---
 
 <style>
+  :root {
+    --primary-dark: #1c1c1c;
+    --primary-light: #fbfaf3;
+    --medium: #515a63;
+    --muted: #a19a89;
+    --radio: #e94736;
+    --error: #e57373;
+    --zap-yellow: #f8c228;
+    --zap-yellow-20: rgba(248, 194, 40, 0.2);
+    --zap-yellow-35: rgba(248, 194, 40, 0.35);
+    --zap-yellow-75: rgba(248, 194, 40, 0.75);
+    --zap-purple: #a050f0;
+    --zap-purple-15: rgba(160, 80, 240, 0.15);
+    --zap-purple-35: rgba(160, 80, 240, 0.35);
+    --zap-green: #d8ff7c;
+    --zap-aqua: #6faca0;
+    --dark-75: rgba(28, 28, 28, 0.75);
+    --dark-90: rgba(28, 28, 28, 0.9);
+    --light-30: rgba(251, 250, 243, 0.3);
+  }
+
   /* TEST ONLY */
   body { background: transparent; }
 
@@ -75,8 +96,8 @@ eleventyExcludeFromCollections: true
   }
 
   #mempool-bar {
-    background: rgba(28, 28, 28, 0.75);
-    border-left: 1px solid rgb(248, 194, 40);
+    background: var(--dark-75);
+    border-left: 1px solid var(--zap-yellow);
     width: fit-content;
     display: grid;
     grid-template-columns: auto auto;
@@ -97,7 +118,7 @@ eleventyExcludeFromCollections: true
     justify-content: space-between;
     overflow: hidden;
     padding: 8px 10px 6px 10px;
-    background: rgb(28, 28, 28);
+    background: var(--primary-dark);
     opacity: 0;
     transition: opacity 0.4s ease;
   }
@@ -116,7 +137,7 @@ eleventyExcludeFromCollections: true
   #block-text {
     font-family: 'PPSupplyMono', monospace;
     font-size: 0.9rem;
-    color: rgb(248, 194, 40);
+    color: var(--zap-yellow);
     letter-spacing: 0.06em;
     text-transform: uppercase;
     white-space: nowrap;
@@ -136,14 +157,14 @@ eleventyExcludeFromCollections: true
   }
 
   .mempool-label {
-    color: rgb(251, 250, 243);
+    color: var(--primary-light);
     text-transform: uppercase;
   }
 
   .mempool-value {
     text-align: right;
     justify-self: end;
-    color: rgb(251, 250, 243);
+    color: var(--primary-light);
   }
 
 
@@ -159,8 +180,8 @@ eleventyExcludeFromCollections: true
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    background: rgba(28, 28, 28, 0.75);
-    border-left: 1px solid rgb(248, 194, 40);
+    background: var(--dark-75);
+    border-left: 1px solid var(--zap-yellow);
     padding: 20px;
     opacity: 0;
     transition: opacity 0.4s ease;
@@ -175,7 +196,7 @@ eleventyExcludeFromCollections: true
     font-family: 'UntitledSans-Regular', sans-serif;
     font-weight: 400;
     font-size: 1rem;
-    color: rgb(251, 250, 243);
+    color: var(--primary-light);
     letter-spacing: 0.02em;
     line-height: 1.5;
   }
@@ -191,15 +212,15 @@ eleventyExcludeFromCollections: true
   }
 
   .ov-msg--bot {
-    outline: 1px solid #e94736;
+    outline: 1px solid var(--radio);
     border-radius: 4px;
     padding: 4px 8px;
   }
-  .ov-msg--bot .ov-msg-name { color: #e94736; }
+  .ov-msg--bot .ov-msg-name { color: var(--radio); }
   .ov-msg-body--full { width: 100%; }
 
   .ov-msg--zap {
-    outline: 1px solid rgb(160, 80, 240);
+    outline: 1px solid var(--zap-purple);
     border-radius: 4px;
     flex-direction: column;
     align-items: flex-start;
@@ -207,30 +228,30 @@ eleventyExcludeFromCollections: true
     padding: 10px 12px;
   }
 
-  .ov-msg--zap .ov-msg-name { color: rgb(160, 80, 240); }
+  .ov-msg--zap .ov-msg-name { color: var(--zap-purple); }
 
   .ov-msg--zap-small {
-    background: rgba(160, 80, 240, 0.15);
-    outline-color: rgb(160, 80, 240);
+    background: var(--zap-purple-15);
+    outline-color: var(--zap-purple);
   }
-  .ov-msg--zap-small .ov-msg-name { color: rgb(160, 80, 240); }
+  .ov-msg--zap-small .ov-msg-name { color: var(--zap-purple); }
 
-  .ov-msg--zap-big { outline-color: #6faca0; }
-  .ov-msg--zap-big .ov-msg-name { color: #6faca0; }
+  .ov-msg--zap-big { outline-color: var(--zap-aqua); }
+  .ov-msg--zap-big .ov-msg-name { color: var(--zap-aqua); }
 
   @keyframes megaZapGlow {
-    0%, 100% { box-shadow: 0 0 6px rgba(248, 194, 40, 0.35); }
-    50%       { box-shadow: 0 0 18px rgba(248, 194, 40, 0.75), 0 0 32px rgba(248, 194, 40, 0.2); }
+    0%, 100% { box-shadow: 0 0 6px var(--zap-yellow-35); }
+    50%       { box-shadow: 0 0 18px var(--zap-yellow-75), 0 0 32px var(--zap-yellow-20); }
   }
 
   .ov-msg--zap-mega {
-    background: rgba(248, 194, 40, 0.2);
-    outline-color: rgb(248, 194, 40);
+    background: var(--zap-yellow-20);
+    outline-color: var(--zap-yellow);
     animation: megaZapGlow 2.5s ease-in-out infinite;
   }
 
   .ov-msg--zap-mega .ov-msg-name {
-    color: rgb(248, 194, 40);
+    color: var(--zap-yellow);
   }
 
   .ov-msg-zap-header {
@@ -251,13 +272,13 @@ eleventyExcludeFromCollections: true
   }
 
   .ov-msg-link { opacity: 0.6; }
-  .ov-msg-mention { color: rgb(160, 80, 240); }
+  .ov-msg-mention { color: var(--zap-purple); }
 
   .ov-msg-content {
     font-family: 'UntitledSans-Regular', sans-serif;
     font-weight: 400;
     font-size: 1rem;
-    color: rgb(251, 250, 243);
+    color: var(--primary-light);
     letter-spacing: 0.02em;
     line-height: 1.5;
     word-break: break-word;
@@ -283,7 +304,7 @@ eleventyExcludeFromCollections: true
 
   .ov-msg-name {
     font-family: 'PPSupplyMono', monospace;
-    color: rgb(161, 154, 137);
+    color: var(--muted);
     margin-right: 4px;
   }
 
@@ -300,12 +321,12 @@ eleventyExcludeFromCollections: true
   }
 
   .ov-msg--raid {
-    background: rgba(160, 80, 240, 0.35);
+    background: var(--zap-purple-35);
     border-radius: 4px;
     padding: 10px 12px;
     font-family: 'PPSupplyMono', monospace;
     font-size: 1rem;
-    color: rgb(251, 250, 243);
+    color: var(--primary-light);
     letter-spacing: 0.04em;
   }
 
@@ -318,7 +339,7 @@ eleventyExcludeFromCollections: true
     width: 520px;
     height: 36px;
     overflow: hidden;
-    background: rgb(248, 194, 40);
+    background: var(--zap-yellow);
     display: flex;
     align-items: center;
     padding: 0 10px 0 80px;
@@ -331,8 +352,8 @@ eleventyExcludeFromCollections: true
     top: 20px;
     left: calc(42% + 540px);
     height: 36px;
-    background: rgba(28, 28, 28, 0.75);
-    border-left: 1px solid rgb(248, 194, 40);
+    background: var(--dark-75);
+    border-left: 1px solid var(--zap-yellow);
     display: flex;
     align-items: center;
     padding: 0 10px;
@@ -342,7 +363,7 @@ eleventyExcludeFromCollections: true
     font-family: 'PPSupplyMono', monospace;
     font-size: 0.9rem;
     font-weight: 400;
-    color: rgb(251, 250, 243);
+    color: var(--primary-light);
     letter-spacing: 0.06em;
     line-height: 1;
     text-transform: uppercase;
@@ -360,7 +381,7 @@ eleventyExcludeFromCollections: true
     align-items: flex-end;
     gap: 5px;
     pointer-events: none;
-    border-right: 3px solid rgb(248, 194, 40);
+    border-right: 3px solid var(--zap-yellow);
     padding-right: 15px;
   }
 
@@ -368,7 +389,7 @@ eleventyExcludeFromCollections: true
     font-family: 'PPSupplyMono', monospace;
     font-weight: 400;
     font-size: 0.9rem;
-    color: rgb(251, 250, 243);
+    color: var(--primary-light);
     letter-spacing: 0.06em;
     text-transform: uppercase;
     white-space: nowrap;
@@ -380,7 +401,7 @@ eleventyExcludeFromCollections: true
     align-items: center;
     gap: 10px;
     justify-content: flex-end;
-    background: rgba(28, 28, 28, 0.75);
+    background: var(--dark-75);
     padding: 6px 10px;
   }
 
@@ -426,8 +447,8 @@ eleventyExcludeFromCollections: true
   }
 
   .status-pill span:not(.node-dot) { transform: translateY(0px); display: inline-block; }
-  .status-pill.node-online  { color: rgb(28, 28, 28);  border-color: rgb(216, 255, 124); background: rgb(216, 255, 124); }
-  .status-pill.node-offline { color: rgb(28, 28, 28);  border-color: #e57373;           background: #e57373; }
+  .status-pill.node-online  { color: var(--primary-dark);  border-color: var(--zap-green); background: var(--zap-green); }
+  .status-pill.node-offline { color: var(--primary-dark);  border-color: var(--error);           background: var(--error); }
 
   @keyframes nodeBlink {
     0%, 100% { opacity: 1; }
@@ -445,8 +466,8 @@ eleventyExcludeFromCollections: true
     vertical-align: middle;
   }
 
-  .node-online  .node-dot { background: rgb(28, 28, 28); }
-  .node-offline .node-dot { background: rgb(28, 28, 28); }
+  .node-online  .node-dot { background: var(--primary-dark); }
+  .node-offline .node-dot { background: var(--primary-dark); }
 
   #np-scroll {
     flex: 1;
@@ -470,7 +491,7 @@ eleventyExcludeFromCollections: true
     font-family: 'PPSupplyMono', monospace;
     font-size: 1em;
     font-weight: 400;
-    color: rgb(28, 28, 28);
+    color: var(--primary-dark);
     letter-spacing: 0.04em;
     line-height: 1.3;
     flex-shrink: 0;
@@ -480,7 +501,7 @@ eleventyExcludeFromCollections: true
     font-family: 'PPSupplyMono', monospace;
     font-size: 1em;
     font-weight: 400;
-    color: rgb(28, 28, 28);
+    color: var(--primary-dark);
     letter-spacing: 0;
     line-height: 1;
     transform: translateY(1px);
@@ -501,22 +522,22 @@ eleventyExcludeFromCollections: true
 
   #zl-top {
     height: 36px;
-    background: rgb(248, 194, 40);
+    background: var(--zap-yellow);
     display: flex;
     align-items: center;
     padding: 0 14px;
     white-space: nowrap;
     font-family: 'PPSupplyMono', monospace;
     font-size: 0.9rem;
-    color: rgb(28, 28, 28);
+    color: var(--primary-dark);
     letter-spacing: 0.06em;
     text-transform: uppercase;
     flex-shrink: 0;
     gap: 0;
   }
 
-  #zl-top .zl-name   { color: rgb(28, 28, 28); margin-left: 6px; }
-  #zl-top .zl-amount { color: rgb(28, 28, 28); }
+  #zl-top .zl-name   { color: var(--primary-dark); margin-left: 6px; }
+  #zl-top .zl-amount { color: var(--primary-dark); }
   #zl-top .zl-name span,
   #zl-top .zl-amount span { display: inline-block; animation: letterBounce 2.5s ease infinite; }
 
@@ -524,7 +545,7 @@ eleventyExcludeFromCollections: true
     width: 520px;
     height: 36px;
     overflow: hidden;
-    background: rgba(28, 28, 28, 0.9);
+    background: var(--dark-90);
     display: flex;
     align-items: center;
     padding: 0 14px;
@@ -553,15 +574,15 @@ eleventyExcludeFromCollections: true
     align-items: center;
   }
 
-  .zl-name   { font-family: 'PPSupplyMono', monospace; font-size: 0.9rem; color: rgb(251, 250, 243); letter-spacing: 0.06em; flex-shrink: 0; text-transform: uppercase; }
-  .zl-amount { font-family: 'PPSupplyMono', monospace; font-size: 0.9rem; color: rgb(248, 194, 40);  letter-spacing: 0.06em; flex-shrink: 0; margin-left: 8px; }
-  .zl-sep    { font-family: 'PPSupplyMono', monospace; font-size: 0.9rem; color: rgba(251, 250, 243, 0.3); flex-shrink: 0; padding: 0 14px; }
+  .zl-name   { font-family: 'PPSupplyMono', monospace; font-size: 0.9rem; color: var(--primary-light); letter-spacing: 0.06em; flex-shrink: 0; text-transform: uppercase; }
+  .zl-amount { font-family: 'PPSupplyMono', monospace; font-size: 0.9rem; color: var(--zap-yellow);  letter-spacing: 0.06em; flex-shrink: 0; margin-left: 8px; }
+  .zl-sep    { font-family: 'PPSupplyMono', monospace; font-size: 0.9rem; color: var(--light-30); flex-shrink: 0; padding: 0 14px; }
   .zl-message { font-family: 'PPSupplyMono', monospace; font-size: 0.9rem; letter-spacing: 0.06em; flex-shrink: 0; text-transform: uppercase; }
 
   #zap-incoming .zl-name,
   #zap-incoming .zl-amount,
-  #zap-incoming .zl-sep   { color: rgb(28, 28, 28); margin-left: 0; padding: 0; }
-  #zap-incoming .zl-message { color: rgb(251, 250, 243); }
+  #zap-incoming .zl-sep   { color: var(--primary-dark); margin-left: 0; padding: 0; }
+  #zap-incoming .zl-message { color: var(--medium); }
 
 
   #overlay-badge {
@@ -571,7 +592,7 @@ eleventyExcludeFromCollections: true
     width: 120px;
     height: 120px;
     border-radius: 50%;
-    background: rgb(28, 28, 28);
+    background: var(--primary-dark);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -598,7 +619,7 @@ eleventyExcludeFromCollections: true
     width: 100%;
     height: 100%;
     font-size: 12.6px;
-    fill: rgb(251, 250, 243);
+    fill: var(--primary-light);
     font-family: 'Offbit-Bold', Arial, sans-serif;
     letter-spacing: 0.05rem;
     text-transform: uppercase;
@@ -614,7 +635,7 @@ eleventyExcludeFromCollections: true
     flex-direction: column;
     align-items: flex-start;
     gap: 16.8px;
-    background: rgb(216, 255, 124);
+    background: var(--zap-green);
     padding: 18px 18px 12px 18px;
     opacity: 0;
     transition: opacity 0.4s ease;
@@ -640,7 +661,7 @@ eleventyExcludeFromCollections: true
     font-family: 'PPSupplyMono', monospace;
     font-size: 1.2rem;
     font-weight: 400;
-    color: rgb(28, 28, 28);
+    color: var(--primary-dark);
     letter-spacing: 0.06em;
     text-transform: uppercase;
     line-height: 1;
@@ -652,7 +673,7 @@ eleventyExcludeFromCollections: true
     font-family: 'PPSupplyMono', monospace;
     font-size: 0.85rem;
     font-weight: 400;
-    color: rgb(28, 28, 28);
+    color: var(--primary-dark);
     letter-spacing: 0.06em;
     text-transform: uppercase;
     line-height: 1;
@@ -669,7 +690,7 @@ eleventyExcludeFromCollections: true
     flex-direction: column;
     align-items: center;
     gap: 0;
-    background: rgba(28, 28, 28, 0.9);
+    background: var(--dark-90);
     padding: 0;
     opacity: 0;
     transition: opacity 0.4s ease;
@@ -687,7 +708,7 @@ eleventyExcludeFromCollections: true
     font-family: 'PPSupplyMono', monospace;
     font-size: 1rem;
     font-weight: 400;
-    color: rgb(251, 250, 243);
+    color: var(--primary-light);
     letter-spacing: 0.06em;
     text-transform: uppercase;
     line-height: 1;
@@ -698,10 +719,10 @@ eleventyExcludeFromCollections: true
 </style>
 
 <div id="test-controls" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:flex;gap:8px;z-index:999;display:none">
-  <button onclick="showBookPromo()" style="font-family:monospace;padding:6px 12px;background:rgb(248,194,40);border:none;cursor:pointer">Book Promo</button>
-  <button onclick="showBookSale(140)" style="font-family:monospace;padding:6px 12px;background:rgb(216,255,124);border:none;cursor:pointer">Book Sale</button>
-  <button onclick="window.__testNotification()" style="font-family:monospace;padding:6px 12px;background:rgb(216,255,124);border:none;cursor:pointer">Notification</button>
-  <button onclick="window.__testZap()" style="font-family:monospace;padding:6px 12px;background:rgb(251,250,243);border:none;cursor:pointer">Incoming Zap</button>
+  <button onclick="showBookPromo()" style="font-family:monospace;padding:6px 12px;background:var(--zap-yellow);border:none;cursor:pointer">Book Promo</button>
+  <button onclick="showBookSale(140)" style="font-family:monospace;padding:6px 12px;background:var(--zap-green);border:none;cursor:pointer">Book Sale</button>
+  <button onclick="window.__testNotification()" style="font-family:monospace;padding:6px 12px;background:var(--zap-green);border:none;cursor:pointer">Notification</button>
+  <button onclick="window.__testZap()" style="font-family:monospace;padding:6px 12px;background:var(--primary-light);border:none;cursor:pointer">Incoming Zap</button>
 </div>
 
 <div id="overlay-badge">
@@ -756,6 +777,20 @@ eleventyExcludeFromCollections: true
 
   mempoolReady.then(() => { document.getElementById('mempool-bar').style.opacity = '1'; });
   chatReady.then(()    => { document.getElementById('chat-box').style.opacity    = '1'; });
+
+  function fetchWithTimeout(url, options = {}, timeout = 5000) {
+    return fetch(url, { ...options, signal: AbortSignal.timeout(timeout) });
+  }
+
+  function withoutOverlap(task) {
+    let running = false;
+    return async (...args) => {
+      if (running) return;
+      running = true;
+      try { return await task(...args); }
+      finally { running = false; }
+    };
+  }
 
   const zlScroll     = document.getElementById('zl-scroll');
   const zapIncoming  = document.getElementById('zap-incoming');
@@ -815,7 +850,7 @@ eleventyExcludeFromCollections: true
     zlScroll.style.transition = 'opacity 0.4s ease';
     zlScroll.style.opacity = '0';
     setTimeout(() => {
-      leaderBar.style.background = 'rgb(248, 194, 40)';
+      leaderBar.style.background = 'var(--zap-yellow)';
       setTimeout(() => {
         requestAnimationFrame(() => {
           const singleWidth = track.scrollWidth / 6;
@@ -826,7 +861,7 @@ eleventyExcludeFromCollections: true
             zapIncoming.style.opacity = '0';
             setTimeout(() => {
               zapIncoming.innerHTML = '';
-              leaderBar.style.background = 'rgba(28, 28, 28, 0.9)';
+              leaderBar.style.background = 'var(--dark-90)';
               setTimeout(() => {
                 zlScroll.style.opacity = '1';
                 setTimeout(showNextZap, 10000);
@@ -877,10 +912,10 @@ eleventyExcludeFromCollections: true
   async function fetchMempool() {
     try {
       const [block, mempool, fees, difficulty] = await Promise.all([
-        fetch('https://mempool.space/api/blocks/tip/height').then(r => r.text()),
-        fetch('https://mempool.space/api/mempool').then(r => r.json()),
-        fetch('https://mempool.space/api/v1/fees/recommended').then(r => r.json()),
-        fetch('https://mempool.space/api/v1/difficulty-adjustment').then(r => r.json()),
+        fetchWithTimeout('https://mempool.space/api/blocks/tip/height', {}, 7000).then(r => r.text()),
+        fetchWithTimeout('https://mempool.space/api/mempool', {}, 7000).then(r => r.json()),
+        fetchWithTimeout('https://mempool.space/api/v1/fees/recommended', {}, 7000).then(r => r.json()),
+        fetchWithTimeout('https://mempool.space/api/v1/difficulty-adjustment', {}, 7000).then(r => r.json()),
       ]);
       renderMempool({
         block: parseInt(block),
@@ -941,8 +976,9 @@ eleventyExcludeFromCollections: true
     lastBlockHeight = data.block;
   }
 
-  fetchMempool();
-  setInterval(fetchMempool, 60000);
+  const pollMempool = withoutOverlap(fetchMempool);
+  pollMempool();
+  setInterval(pollMempool, 60000);
 
 
   // ----------------
@@ -991,7 +1027,7 @@ eleventyExcludeFromCollections: true
 
   async function fetchNowPlaying() {
     try {
-      const resp = await fetch('https://lastfm-api.hello-5b9.workers.dev/', { cache: 'no-store' });
+      const resp = await fetchWithTimeout('https://lastfm-api.hello-5b9.workers.dev/', { cache: 'no-store' });
       if (!resp.ok) { setNowPlayingText('NOGOOD RADIO'); return; }
       const tracks = await resp.json();
       const current = tracks.find(t => !t.playedAt);
@@ -1001,8 +1037,9 @@ eleventyExcludeFromCollections: true
     } catch { setNowPlayingText('NOGOOD RADIO'); }
   }
 
-  fetchNowPlaying();
-  setInterval(fetchNowPlaying, 20000);
+  const pollNowPlaying = withoutOverlap(fetchNowPlaying);
+  pollNowPlaying();
+  setInterval(pollNowPlaying, 20000);
 
   // ----------------
   // BADGE
@@ -1056,9 +1093,8 @@ eleventyExcludeFromCollections: true
 
   async function checkNode() {
     try {
-      const res = await fetch('https://btcpay.hello-5b9.workers.dev/health', {
-        cache: 'no-store',
-        signal: AbortSignal.timeout(5000)
+      const res = await fetchWithTimeout('https://btcpay.hello-5b9.workers.dev/health', {
+        cache: 'no-store'
       });
       const data = await res.json();
       res.ok && data.synchronized === true ? setNodeOnline() : setNodeOffline(!nodeInitialized);
@@ -1067,8 +1103,9 @@ eleventyExcludeFromCollections: true
     }
   }
 
-  checkNode();
-  setInterval(checkNode, 120000);
+  const pollNode = withoutOverlap(checkNode);
+  pollNode();
+  setInterval(pollNode, 120000);
 
   // ----------------
   // RELAY STATUS
@@ -1197,8 +1234,8 @@ eleventyExcludeFromCollections: true
 
   async function fetchTotalSold() {
     const [bookData, printData] = await Promise.all([
-      fetch('https://book-stats.hello-5b9.workers.dev/book-sales').then(r => r.json()),
-      fetch('https://book-stats.hello-5b9.workers.dev/print-sales').then(r => r.json()),
+      fetchWithTimeout('https://book-stats.hello-5b9.workers.dev/book-sales').then(r => r.json()),
+      fetchWithTimeout('https://book-stats.hello-5b9.workers.dev/print-sales').then(r => r.json()),
     ]);
     const sold = (bookData.total ?? 0) + (printData.total ?? 0) + PRESALES;
     return { sold, lastOrderDate: bookData.lastOrderDate };
@@ -1233,9 +1270,10 @@ eleventyExcludeFromCollections: true
     } catch {}
   }
 
-  pollBookSales();
+  const pollBookSalesSafely = withoutOverlap(pollBookSales);
+  pollBookSalesSafely();
 
-  setInterval(pollBookSales, 300000);
+  setInterval(pollBookSalesSafely, 300000);
 
   // ----------------
   // BOOK PROMO
