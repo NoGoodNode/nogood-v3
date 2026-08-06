@@ -1,0 +1,117 @@
+@layer components {
+  .panel {
+    background: var(--panel);
+    color: var(--text);
+  }
+
+  .panel--bordered { border: var(--border-width) solid var(--border-subtle); }
+  .panel--accent { border-color: var(--accent); }
+
+  .section-label {
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    color: var(--accent);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  .stat-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+
+  .stat-label {
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    letter-spacing: .04em;
+    text-transform: uppercase;
+  }
+
+  .stat-value {
+    color: var(--text);
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+  }
+
+  .chat-message {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-2);
+    padding: var(--space-3);
+    border: var(--border-width) solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    background: rgb(251 250 243 / 5%);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: var(--text-md);
+    line-height: 1.5;
+  }
+
+  @keyframes chat-message-enter {
+    from { opacity: 0; transform: translateY(16px) scale(.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .chat-message--enter {
+    animation: chat-message-enter var(--duration-normal) var(--ease) both;
+    animation-delay: var(--chat-enter-delay, 0ms);
+  }
+
+  .chat-message--owner {
+    border-color: rgb(251 250 243 / 60%);
+    background: transparent;
+  }
+
+  .chat-message--bot {
+    border-color: var(--radio);
+  }
+
+  .chat-message__sender--bot { color: var(--radio); }
+
+  .chat-message--zap {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  .chat-message--zap-low {
+    border-color: var(--accent);
+    background: var(--accent-subtle);
+  }
+
+  .chat-message--raid {
+    border-color: var(--zap);
+    background: color-mix(in srgb, var(--zap) 35%, transparent);
+    font-family: var(--font-mono);
+  }
+
+  /* A measured ticker. JavaScript sets --ticker-distance to one complete group width. */
+  .ticker-viewport { overflow: hidden; }
+
+  .ticker-track {
+    width: max-content;
+    animation: ticker-scroll var(--ticker-duration, 120s) linear infinite;
+    will-change: transform;
+  }
+
+  .ticker-group { flex-shrink: 0; }
+
+  @keyframes ticker-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(var(--ticker-distance, -50%)); }
+  }
+
+  .notification {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: .04em;
+    text-transform: uppercase;
+  }
+}

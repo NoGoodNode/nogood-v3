@@ -1323,7 +1323,7 @@ eleventyExcludeFromCollections: true
 </script>
 
 <script type="module">
-  import { initNostr, subscribeStreamInfo, subscribeZaps, subscribeChat, subscribeRaids, subscribeNotifications, fetchProfile, queryNostr, getStreamATag } from '/assets/js/radio/nostr.js';
+  import { createOverlayData } from '/assets/js/overlay/nostr-data.js';
   import * as nip19 from '/assets/js/vendor/nostr-nip19.js';
 
   // ----------------
@@ -1333,15 +1333,27 @@ eleventyExcludeFromCollections: true
   const RELAYS    = ['wss://relay.nogood.tech', 'wss://relay.primal.net', 'wss://nos.lol', 'wss://relay.damus.io'];
   const MY_PUBKEY = '55f04590674f3648f4cdc9dc8ce32da2a282074cd0b020596ee033d12d385185';
 
+  const {
+    subscribeStreamInfo,
+    subscribeCombinedZaps: subscribeZaps,
+    subscribeStreamChat: subscribeChat,
+    subscribeStreamRaids: subscribeRaids,
+    subscribeAccountNotifications: subscribeNotifications,
+    fetchProfile,
+    queryNostr,
+    getStreamATag,
+    state,
+  } = createOverlayData({ naddr: NADDR, relays: RELAYS, profilePubkey: MY_PUBKEY });
+
   const MAX_CHAT_DOM = 200;
   const PAGE_LOAD_SECS = Math.floor(Date.now() / 1000);
 
   const chatBox = document.getElementById('chat-box');
   const seenMessages = new Set();
-  const seenZaps = new Set(JSON.parse(localStorage.getItem('ng-seen-zaps') || '[]'));
+  const seenZaps = new Set(state.getStream('seen-zaps', []));
   const seenZapsSession = new Set();
   const renderedRaidIds = new Set();
-  const notifiedRaidIds = new Set(JSON.parse(localStorage.getItem('ng-seen-raids') || '[]'));
+  const notifiedRaidIds = new Set(state.getStream('seen-raids', []));
   const historicalZapsForChat = [];
   const historicalChatMsgs = [];
   const historicalRaids = [];
@@ -1349,8 +1361,6 @@ eleventyExcludeFromCollections: true
   let chatHistoricalDone = false;
   let raidHistoricalDone = false;
   let historicalRendered = false;
-
-  initNostr(NADDR, RELAYS, MY_PUBKEY);
 
   // ----------------
   // ZAP LEADERBOARD BAR
@@ -1479,8 +1489,8 @@ eleventyExcludeFromCollections: true
   const viewersBar = document.getElementById('viewers-bar');
   const LISTENER_MILESTONES = [10, 25, 50, 100, 150, 200, 250, 300, 400, 500];
   for (let n = 550; n <= 10000; n += 50) LISTENER_MILESTONES.push(n);
-  let peakViewers = parseInt(localStorage.getItem('ng-peak-viewers') || '0', 10);
-  const triggeredMilestones = new Set(JSON.parse(localStorage.getItem('ng-triggered-milestones') || '[]'));
+  let peakViewers = parseInt(state.getStream('peak-viewers', '0') || '0', 10);
+  const triggeredMilestones = new Set(state.getStream('triggered-milestones', []));
 
   subscribeStreamInfo(info => {
     if (info.viewers !== null && info.viewers > 0) {
@@ -1488,11 +1498,11 @@ eleventyExcludeFromCollections: true
       viewersBar.style.opacity = '1';
       if (info.viewers > peakViewers) {
         peakViewers = info.viewers;
-        try { localStorage.setItem('ng-peak-viewers', peakViewers); } catch {}
+        try { state.setStream('peak-viewers', peakViewers); } catch {}
         LISTENER_MILESTONES.forEach(m => {
           if (peakViewers >= m && !triggeredMilestones.has(m)) {
             triggeredMilestones.add(m);
-            try { localStorage.setItem('ng-triggered-milestones', JSON.stringify([...triggeredMilestones])); } catch {}
+            try { state.setStream('triggered-milestones', [...triggeredMilestones]); } catch {}
             addNotification(`ATH: ${m} listeners`, 'milestone', null, true);
           }
         });
@@ -1717,7 +1727,7 @@ eleventyExcludeFromCollections: true
     } else {
       if (seenZaps.has(zap.id)) return;
       seenZaps.add(zap.id);
-      try { const arr = [...seenZaps].slice(-200); localStorage.setItem('ng-seen-zaps', JSON.stringify(arr)); } catch {}
+      try { const arr = [...seenZaps].slice(-200); state.setStream('seen-zaps', arr); } catch {}
       if (zap.isStreamZap) appendZapToChat(zap);
       if (zap.timestamp >= PAGE_LOAD_SECS) fetchProfile(zap.senderPubkey || '').then(p => addZap({ sats: zap.amount, name: p.name, avatar: p.picture, message: zap.content }));
     }
@@ -1747,7 +1757,7 @@ eleventyExcludeFromCollections: true
     appendRaidToChat(raid);
     if (!notifiedRaidIds.has(raid.id)) {
       notifiedRaidIds.add(raid.id);
-      try { localStorage.setItem('ng-seen-raids', JSON.stringify([...notifiedRaidIds].slice(-50))); } catch {}
+      try { state.setStream('seen-raids', [...notifiedRaidIds].slice(-50)); } catch {}
       fetchProfile(raid.pubkey).then(p => {
         window.__addOverlayNotification?.('Raid from ' + (p?.name || raid.pubkey.slice(0, 8)), 'raid');
       });
@@ -1772,12 +1782,12 @@ eleventyExcludeFromCollections: true
       time: el.querySelector('.follow-notif-time')?.textContent || '',
       text: el.querySelector('span:not(.follow-notif-time)')?.textContent || '',
     }));
-    try { localStorage.setItem('ng-notif-snapshot', JSON.stringify(items)); } catch {}
+    try { state.setAccount('notif-snapshot', items); } catch {}
   }
 
   function restoreNotifSnapshot() {
     try {
-      const saved = JSON.parse(localStorage.getItem('ng-notif-snapshot') || '[]');
+      const saved = state.getAccount('notif-snapshot', []);
       saved.forEach(({ time, text }) => {
         const item = document.createElement('div');
         item.className = 'follow-notif is-in';
@@ -1795,7 +1805,7 @@ eleventyExcludeFromCollections: true
 
   restoreNotifSnapshot();
 
-  const seenNotifs = new Set(JSON.parse(localStorage.getItem('ng-seen-notifs') || '[]'));
+  const seenNotifs = new Set(state.getAccount('seen-notifs', []));
 
   const NOTIF_LABELS = {
     post:         'posted a new note',
@@ -1895,7 +1905,7 @@ eleventyExcludeFromCollections: true
   setTimeout(() => subscribeNotifications(({ type, pubkey, id, own, amount, targetPubkey }) => {
     if (seenNotifs.has(id)) return;
     seenNotifs.add(id);
-    try { const arr = [...seenNotifs].slice(-200); localStorage.setItem('ng-seen-notifs', JSON.stringify(arr)); } catch {}
+    try { const arr = [...seenNotifs].slice(-200); state.setAccount('seen-notifs', arr); } catch {}
     if (type === 'follow') return;
     if (own && type !== 'post' && type !== 'zap' && type !== 'reaction') return;
     if (own && type === 'zap') {

@@ -1,0 +1,257 @@
+---
+layout: overlay
+title: NoGood Overlay
+permalink: /overlay/nogood-main/
+eleventyExcludeFromCollections: true
+bodyClass: overlay
+stylesheets:
+  - /assets/css/overlays/drawing/tokens.css
+  - /assets/css/overlays/drawing/base.css
+  - /assets/css/overlays/drawing/utilities.css
+  - /assets/css/overlays/drawing/components.css
+  - /assets/css/overlays/drawing/main.css
+---
+
+<div id="capture-viewport" class="absolute" aria-label="Capture card viewport"></div>
+<div id="lower-bar" class="absolute flex items-center bg-accent px-4 gap-5 overflow-hidden">
+  <span class="font-display text-lg text-bg uppercase shrink-0">Zap Messages</span>
+  <div class="ticker-viewport flex-1">
+    <div id="zap-feed-track" class="ticker-track flex items-center whitespace-nowrap">
+      <div class="ticker-group flex items-center gap-8 pr-8">
+        <div class="flex items-center gap-2"><span class="font-display text-lg text-bg">⚡ 2,100</span><span class="font-mono text-lg text-bg uppercase">Zapster</span><span class="font-mono text-sm text-bg">For the artists.</span></div>
+        <div class="flex items-center gap-2"><span class="font-display text-lg text-bg">⚡ 500</span><span class="font-mono text-lg text-bg uppercase">Cactus</span><span class="font-mono text-sm text-bg">Love the stream.</span></div>
+        <div class="flex items-center gap-2"><span class="font-display text-lg text-bg">⚡ 21</span><span class="font-mono text-lg text-bg uppercase">NostrNerd</span><span class="font-mono text-sm text-bg">Keep going.</span></div>
+      </div>
+      <div class="ticker-group flex items-center gap-8 pr-8" aria-hidden="true">
+        <div class="flex items-center gap-2"><span class="font-display text-lg text-bg">⚡ 2,100</span><span class="font-mono text-lg text-bg uppercase">Zapster</span><span class="font-mono text-sm text-bg">For the artists.</span></div>
+        <div class="flex items-center gap-2"><span class="font-display text-lg text-bg">⚡ 500</span><span class="font-mono text-lg text-bg uppercase">Cactus</span><span class="font-mono text-sm text-bg">Love the stream.</span></div>
+        <div class="flex items-center gap-2"><span class="font-display text-lg text-bg">⚡ 21</span><span class="font-mono text-lg text-bg uppercase">NostrNerd</span><span class="font-mono text-sm text-bg">Keep going.</span></div>
+      </div>
+      <div class="ticker-group flex items-center gap-8 pr-8" aria-hidden="true">
+        <div class="flex items-center gap-2"><span class="font-display text-lg text-bg">⚡ 2,100</span><span class="font-mono text-lg text-bg uppercase">Zapster</span><span class="font-mono text-sm text-bg">For the artists.</span></div>
+        <div class="flex items-center gap-2"><span class="font-display text-lg text-bg">⚡ 500</span><span class="font-mono text-lg text-bg uppercase">Cactus</span><span class="font-mono text-sm text-bg">Love the stream.</span></div>
+        <div class="flex items-center gap-2"><span class="font-display text-lg text-bg">⚡ 21</span><span class="font-mono text-lg text-bg uppercase">NostrNerd</span><span class="font-mono text-sm text-bg">Keep going.</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="status-bar" class="absolute flex items-center justify-end bg px-4 gap-8">
+  <span id="stream-timer" class="font-mono text-sm text-light tracking-wide">00:00:00</span>
+  <span id="viewer-count" class="font-mono text-sm text-light uppercase">0 viewers</span>
+</div>
+
+<aside id="info-sidebar" class="absolute flex column justify-between bg-panel p-4">
+  <div class="flex column gap-6">
+  <section class="flex column gap-1">
+    <h2 class="section-label">Mempool</h2>
+    <div class="stat-row"><span class="stat-label">Block</span><span id="bitcoin-block" class="stat-value font-mono text-sm uppercase">—</span></div>
+    <div class="stat-row"><span class="stat-label">Fee</span><span id="bitcoin-fee" class="stat-value font-mono text-sm uppercase">—</span></div>
+    <div class="stat-row"><span class="stat-label">Mempool</span><span id="bitcoin-mempool" class="stat-value font-mono text-sm uppercase">—</span></div>
+    <div class="stat-row"><span class="stat-label">Difficulty</span><span id="bitcoin-difficulty" class="stat-value font-mono text-sm uppercase">—</span></div>
+    </section>
+
+    <section class="flex column gap-2">
+      <h2 class="section-label">Top Zappers</h2>
+      <div id="zap-leaderboard" class="flex column gap-2 overflow-hidden">
+        <p class="notification">Loading zaps</p>
+      </div>
+    </section>
+  </div>
+
+  <section class="flex column gap-2">
+    <h2 class="section-label">Activity</h2>
+    <div id="notification-center" class="flex column gap-2 overflow-hidden">
+      <p class="notification">Waiting for activity</p>
+    </div>
+  </section>
+</aside>
+
+<aside id="chat-column" class="absolute flex column bg-panel text-light overflow-hidden">
+  <div id="chat-box" class="absolute overflow-hidden">
+    <div id="chat-list" class="absolute bottom-4 left-4 right-4 flex column gap-2">
+    <article class="chat-message chat-message--raid font-mono items-center gap-2 rounded-md">
+      <span>RAID FROM</span>
+      <span class="font-mono text-lg uppercase">Nostrartist</span>
+    </article>
+    <article class="chat-message chat-message--zap column gap-1 rounded-md">
+      <div class="flex items-center gap-2">
+        <span class="font-display text-lg">⚡ 2,100</span>
+        <span class="font-mono text-lg uppercase">Zapster</span>
+      </div>
+      <span>For the artists.</span>
+    </article>
+    <article class="chat-message chat-message--zap-low column gap-1 rounded-md">
+      <div class="flex items-center gap-2">
+        <span class="font-display text-lg text-accent">⚡ 500</span>
+        <span class="font-mono text-lg uppercase">Cactus</span>
+      </div>
+      <span>Love the stream.</span>
+    </article>
+    <article class="chat-message chat-message--owner column gap-1 rounded-md">
+      <span class="font-mono text-sm text-accent uppercase">NoGood</span>
+      <span>Welcome to the stream.</span>
+    </article>
+    <article class="chat-message chat-message--bot column gap-1 rounded-md">
+      <span class="chat-message__sender--bot font-mono text-sm uppercase">NoGoodBot</span>
+      <span>Parts are working. For now.</span>
+    </article>
+    <article class="chat-message column gap-1 rounded-md">
+      <span class="font-mono text-sm text-accent uppercase">Satoshipleb</span>
+      <span>Looking good.</span>
+    </article>
+    <article class="chat-message column gap-1 rounded-md">
+      <span class="font-mono text-sm text-accent uppercase">Cactus</span>
+      <span>Love the new overlay.</span>
+    </article>
+    <article class="chat-message column gap-1 rounded-md">
+      <span class="font-mono text-sm text-accent uppercase">NostrNerd</span>
+      <span>⚡ Keep drawing.</span>
+    </article>
+    </div>
+  </div>
+</aside>
+
+<script>
+  window.OVERLAY_CONFIG = {
+    naddr: 'naddr1qqjxxv34vserwef3943nye3s956rxwp495un2wp494jrzden8pjrzcmrxcenwqghwaehxw309aex2mrp0yh8qunfd4skctnwv46z7q3qeaz6dwsnvwkha5sn5puwwyxjgy26uusundrm684lg3vw4ma5c2jsxpqqqpmxwzdl57d',
+    relays: ['wss://relay.primal.net', 'wss://nos.lol', 'wss://relay.damus.io', 'wss://relay.nogood.tech'],
+    profilePubkey: '55f04590674f3648f4cdc9dc8ce32da2a282074cd0b020596ee033d12d385185',
+  };
+</script>
+
+<script type="module">
+  import { createOverlayData } from '/assets/js/overlay/nostr-data.js';
+  import { appendAnimatedChatMessage } from '/assets/js/overlay/chat-feed.js';
+
+  // Future overlay UI can use window.overlayData to subscribe only to the
+  // stream and account feeds it needs.
+  window.overlayData = createOverlayData(window.OVERLAY_CONFIG);
+
+  const chatBox = document.getElementById('chat-list');
+  const demoMessages = [
+    ['Sketchbook', 'That line work is beautiful.'],
+    ['ColorTheory', 'The green is working.'],
+    ['SatsAndInk', 'Watching from Berlin.'],
+    ['NoGoodFriend', 'Keep going.'],
+  ];
+  let demoMessageIndex = 0;
+
+  function addDemoChatMessage() {
+    const [name, text] = demoMessages[demoMessageIndex++ % demoMessages.length];
+    const message = document.createElement('article');
+    message.className = 'chat-message column gap-1 rounded-md';
+
+    const sender = document.createElement('span');
+    sender.className = 'font-mono text-sm text-accent uppercase';
+    sender.textContent = name;
+
+    const content = document.createElement('span');
+    content.textContent = text;
+    message.append(sender, content);
+    appendAnimatedChatMessage(chatBox, message);
+  }
+
+  setTimeout(addDemoChatMessage, 1_000);
+  setInterval(addDemoChatMessage, 10_000);
+
+  const zapLeaderboard = document.getElementById('zap-leaderboard');
+  const zapLeaders = new Map();
+
+  function renderZapLeaderboard() {
+    if (!zapLeaderboard) return;
+    zapLeaderboard.replaceChildren();
+    [...zapLeaders.values()]
+      .sort((a, b) => b.sats - a.sats)
+      .slice(0, 8)
+      .forEach(leader => {
+        const row = document.createElement('div');
+        row.className = 'flex items-center gap-2';
+
+        const avatar = document.createElement('img');
+        avatar.className = 'size-avatar rounded-full object-cover bg-panel-light';
+        avatar.alt = '';
+        if (leader.avatar) avatar.src = leader.avatar;
+
+        const name = document.createElement('span');
+        name.className = 'font-mono text-sm text-light uppercase truncate flex-1';
+        name.textContent = leader.name || 'anon';
+
+        const amount = document.createElement('span');
+        amount.className = 'font-display text-sm text-accent';
+        amount.textContent = `⚡ ${leader.sats.toLocaleString()}`;
+
+        row.append(avatar, name, amount);
+        zapLeaderboard.appendChild(row);
+      });
+  }
+
+  window.overlayData.subscribeCombinedZaps((zap) => {
+    const key = zap.senderPubkey || zap.id;
+    const leader = zapLeaders.get(key) || { sats: 0, name: 'anon', avatar: '' };
+    leader.sats += zap.amount;
+    zapLeaders.set(key, leader);
+    window.overlayData.fetchProfile(zap.senderPubkey).then(profile => {
+      leader.name = profile.name || leader.name;
+      leader.avatar = profile.picture || leader.avatar;
+      renderZapLeaderboard();
+    }).catch(renderZapLeaderboard);
+  });
+
+  const bitcoinBlock = document.getElementById('bitcoin-block');
+  const bitcoinFee = document.getElementById('bitcoin-fee');
+  const bitcoinMempool = document.getElementById('bitcoin-mempool');
+  const bitcoinDifficulty = document.getElementById('bitcoin-difficulty');
+
+  async function updateBitcoinStats() {
+    try {
+      const [block, mempool, fees, difficulty] = await Promise.all([
+        fetch('https://mempool.space/api/blocks/tip/height').then(response => response.text()),
+        fetch('https://mempool.space/api/mempool').then(response => response.json()),
+        fetch('https://mempool.space/api/v1/fees/recommended').then(response => response.json()),
+        fetch('https://mempool.space/api/v1/difficulty-adjustment').then(response => response.json()),
+      ]);
+      bitcoinBlock.textContent = Number(block).toLocaleString();
+      bitcoinFee.textContent = `${fees.halfHourFee} sat/vB`;
+      bitcoinMempool.textContent = `${Number(mempool.count).toLocaleString()} tx`;
+      bitcoinDifficulty.textContent = `${difficulty.difficultyChange >= 0 ? '+' : ''}${difficulty.difficultyChange.toFixed(2)}%`;
+    } catch {
+      bitcoinBlock.textContent = '—';
+      bitcoinFee.textContent = '—';
+      bitcoinMempool.textContent = '—';
+      bitcoinDifficulty.textContent = '—';
+    }
+  }
+
+  updateBitcoinStats();
+  setInterval(updateBitcoinStats, 60_000);
+
+  const zapFeedTrack = document.getElementById('zap-feed-track');
+  const zapFeedViewport = zapFeedTrack?.parentElement;
+
+  function buildSeamlessZapFeed() {
+    if (!zapFeedTrack || !zapFeedViewport || !zapFeedTrack.firstElementChild) return;
+    const itemTemplate = zapFeedTrack.firstElementChild.cloneNode(true);
+    const group = document.createElement('div');
+    group.className = 'ticker-group flex items-center';
+
+    zapFeedTrack.replaceChildren(group);
+
+    // Repeat complete zap items until one group is wider than the visible feed.
+    do {
+      group.appendChild(itemTemplate.cloneNode(true));
+    } while (group.scrollWidth < zapFeedViewport.clientWidth * 1.5);
+
+    const duplicate = group.cloneNode(true);
+    duplicate.setAttribute('aria-hidden', 'true');
+    zapFeedTrack.appendChild(duplicate);
+
+    const distance = group.getBoundingClientRect().width;
+    zapFeedTrack.style.setProperty('--ticker-distance', `-${distance}px`);
+    zapFeedTrack.style.animation = 'none';
+    void zapFeedTrack.offsetWidth;
+    zapFeedTrack.style.animation = '';
+  }
+
+  document.fonts?.ready.then(buildSeamlessZapFeed) || buildSeamlessZapFeed();
+  window.addEventListener('resize', buildSeamlessZapFeed);
+</script>

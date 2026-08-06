@@ -1,0 +1,54 @@
+@layer tokens, base, components, utilities;
+
+@layer tokens {
+  :root {
+    /* Colors: aligned with source/assets/css/color.css */
+    --bg: rgb(28 28 28);
+    --panel: rgb(44 44 44);
+    --panel-light: rgb(81 90 99);
+    --text: rgb(251 250 243);
+    --muted: rgb(233 229 219);
+    --muted-hover: rgb(201 195 177);
+    --accent: #d0fa66;
+    --accent-subtle: rgb(208 250 102 / 15%);
+    --accent-hover: #add05b;
+    --radio: #e94736;
+    --process: rgb(253 235 101);
+    --zap: rgb(160 80 240);
+    --aqua: rgb(111 172 160);
+    --danger: rgb(229 115 115);
+
+    /* Typography */
+    --font-display: 'Offbit-Bold', monospace;
+    --font-mono: 'PPSupplyMono', monospace;
+    --font-body: 'UntitledSans-Regular', sans-serif;
+    --text-xs: .7rem;
+    --text-sm: .8rem;
+    --text-md: .95rem;
+    --text-lg: 1rem;
+    --text-xl: 1.1rem;
+    --text-2xl: 1.25rem;
+
+    /* Spacing: shared by padding, margin, and gap */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 20px;
+    --space-6: 24px;
+    --space-8: 32px;
+    --space-10: 40px;
+    --size-avatar: 28px;
+
+    /* Shape, borders, and motion */
+    --border-width: 1px;
+    --border-subtle: rgb(251 250 243 / 12%);
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 20px;
+    --duration-fast: 150ms;
+    --duration-normal: 300ms;
+    --duration-slow: 600ms;
+    --ease: ease;
+  }
+}

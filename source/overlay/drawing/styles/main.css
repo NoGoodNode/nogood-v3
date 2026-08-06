@@ -1,0 +1,62 @@
+/* Overlay-specific composition styles. */
+#capture-viewport {
+  top: 0;
+  left: 460px;
+  right: 240px;
+  bottom: 62px;
+  pointer-events: none;
+}
+
+#info-sidebar {
+  top: 0;
+  right: 0;
+  bottom: 62px;
+  width: 240px;
+  background-image: linear-gradient(rgb(28 28 28 / 30%), rgb(28 28 28 / 30%)), url('/assets/img/suhgEL8JLO-1400.webp');
+  background-size: cover;
+  background-position: left center;
+  background-repeat: no-repeat;
+}
+
+#lower-bar {
+  left: 460px;
+  right: 0;
+  bottom: 30px;
+  height: 32px;
+}
+
+#status-bar {
+  left: 460px;
+  right: 0;
+  bottom: 0;
+  height: 30px;
+}
+
+#chat-column {
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 460px;
+}
+
+#chat-column::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('/assets/img/lWuz6V7ZF--1400.webp');
+  background-size: auto 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: .3;
+  pointer-events: none;
+}
+
+#chat-box {
+  top: 270px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  overflow: hidden;
+  contain: paint;
+}

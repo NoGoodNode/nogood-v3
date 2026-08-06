@@ -1,0 +1,8 @@
+@layer base {
+  @font-face { font-family: 'Offbit-Bold'; src: url('/assets/fonts/OffBit-Bold.woff2') format('woff2'), url('/assets/fonts/OffBit-Bold.woff') format('woff'); font-weight: 700; font-style: normal; }
+  @font-face { font-family: 'UntitledSans-Regular'; src: url('/assets/fonts/untitled-sans-regular.woff2') format('woff2'); font-weight: 400; font-style: normal; }
+  @font-face { font-family: 'PPSupplyMono'; src: url('/assets/fonts/PPSupplyMono-Regular.woff2') format('woff2'), url('/assets/fonts/PPSupplyMono-Regular.woff') format('woff'); font-weight: 400; font-style: normal; }
+  @font-face { font-family: 'PPSupplyMono'; src: url('/assets/fonts/PPSupplyMono-Bold.woff2') format('woff2'), url('/assets/fonts/PPSupplyMono-Bold.woff') format('woff'); font-weight: 700; font-style: normal; }
+  .overlay { width: 1920px; height: 1080px; color: var(--text); font-family: var(--font-body); }
+  .overlay, .overlay * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+}
