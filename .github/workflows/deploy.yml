@@ -33,7 +33,7 @@ jobs:
           path: |
             .cache/img
             source/assets/img/clippings
-          key: eleventy-img-${{ hashFiles('source/assets/img/**', 'obsidian-vault/**') }}
+          key: eleventy-img-${{ hashFiles('source/assets/img/**', 'clippings/**') }}
           restore-keys: |
             eleventy-img-
 
