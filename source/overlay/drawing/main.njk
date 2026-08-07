@@ -12,31 +12,24 @@ stylesheets:
   - /assets/css/overlays/drawing/main.css
 ---
 
-<div id="capture-viewport" class="absolute" aria-label="Capture card viewport"></div>
+<div id="capture-viewport" class="absolute" aria-label="Screen capture frame">
+  <svg viewBox="0 0 1220 1018" preserveAspectRatio="none" aria-hidden="true">
+    <defs>
+      <mask id="capture-hole-mask">
+        <rect width="1220" height="1018" fill="white" />
+        <rect x="24" y="24" width="1172" height="970" rx="12" fill="black" />
+      </mask>
+    </defs>
+    <rect width="1220" height="1018" fill="black" mask="url(#capture-hole-mask)" />
+  </svg>
+</div>
 <div id="lower-bar" class="absolute flex items-center bg-accent px-4 gap-5 overflow-hidden">
-  <span class="font-display text-lg text-bg uppercase shrink-0">Zap Messages</span>
+  <span class="font-display text-lg text-bg uppercase shrink-0 nudge-down-2">Zap Messages</span>
   <div class="ticker-viewport flex-1">
-    <div id="zap-feed-track" class="ticker-track flex items-center whitespace-nowrap">
-      <div class="ticker-group flex items-center gap-8 pr-8">
-        <div class="flex items-center gap-2"><span class="font-display text-lg text-bg">⚡ 2,100</span><span class="font-mono text-lg text-bg uppercase">Zapster</span><span class="font-mono text-sm text-bg">For the artists.</span></div>
-        <div class="flex items-center gap-2"><span class="font-display text-lg text-bg">⚡ 500</span><span class="font-mono text-lg text-bg uppercase">Cactus</span><span class="font-mono text-sm text-bg">Love the stream.</span></div>
-        <div class="flex items-center gap-2"><span class="font-display text-lg text-bg">⚡ 21</span><span class="font-mono text-lg text-bg uppercase">NostrNerd</span><span class="font-mono text-sm text-bg">Keep going.</span></div>
-      </div>
-      <div class="ticker-group flex items-center gap-8 pr-8" aria-hidden="true">
-        <div class="flex items-center gap-2"><span class="font-display text-lg text-bg">⚡ 2,100</span><span class="font-mono text-lg text-bg uppercase">Zapster</span><span class="font-mono text-sm text-bg">For the artists.</span></div>
-        <div class="flex items-center gap-2"><span class="font-display text-lg text-bg">⚡ 500</span><span class="font-mono text-lg text-bg uppercase">Cactus</span><span class="font-mono text-sm text-bg">Love the stream.</span></div>
-        <div class="flex items-center gap-2"><span class="font-display text-lg text-bg">⚡ 21</span><span class="font-mono text-lg text-bg uppercase">NostrNerd</span><span class="font-mono text-sm text-bg">Keep going.</span></div>
-      </div>
-      <div class="ticker-group flex items-center gap-8 pr-8" aria-hidden="true">
-        <div class="flex items-center gap-2"><span class="font-display text-lg text-bg">⚡ 2,100</span><span class="font-mono text-lg text-bg uppercase">Zapster</span><span class="font-mono text-sm text-bg">For the artists.</span></div>
-        <div class="flex items-center gap-2"><span class="font-display text-lg text-bg">⚡ 500</span><span class="font-mono text-lg text-bg uppercase">Cactus</span><span class="font-mono text-sm text-bg">Love the stream.</span></div>
-        <div class="flex items-center gap-2"><span class="font-display text-lg text-bg">⚡ 21</span><span class="font-mono text-lg text-bg uppercase">NostrNerd</span><span class="font-mono text-sm text-bg">Keep going.</span></div>
-      </div>
-    </div>
+    <div id="zap-feed-track" class="ticker-track flex items-center whitespace-nowrap" aria-live="polite"></div>
   </div>
 </div>
-<div id="status-bar" class="absolute flex items-center justify-end bg px-4 gap-8">
-  <span id="stream-timer" class="font-mono text-sm text-light tracking-wide">00:00:00</span>
+<div id="status-bar" class="absolute flex items-center justify-end bg px-4">
   <span id="viewer-count" class="font-mono text-sm text-light uppercase">0 viewers</span>
 </div>
 
@@ -68,52 +61,13 @@ stylesheets:
 
 <aside id="chat-column" class="absolute flex column bg-panel text-light overflow-hidden">
   <div id="chat-box" class="absolute overflow-hidden">
-    <div id="chat-list" class="absolute bottom-4 left-4 right-4 flex column gap-2">
-    <article class="chat-message chat-message--raid font-mono items-center gap-2 rounded-md">
-      <span>RAID FROM</span>
-      <span class="font-mono text-lg uppercase">Nostrartist</span>
-    </article>
-    <article class="chat-message chat-message--zap column gap-1 rounded-md">
-      <div class="flex items-center gap-2">
-        <span class="font-display text-lg">⚡ 2,100</span>
-        <span class="font-mono text-lg uppercase">Zapster</span>
-      </div>
-      <span>For the artists.</span>
-    </article>
-    <article class="chat-message chat-message--zap-low column gap-1 rounded-md">
-      <div class="flex items-center gap-2">
-        <span class="font-display text-lg text-accent">⚡ 500</span>
-        <span class="font-mono text-lg uppercase">Cactus</span>
-      </div>
-      <span>Love the stream.</span>
-    </article>
-    <article class="chat-message chat-message--owner column gap-1 rounded-md">
-      <span class="font-mono text-sm text-accent uppercase">NoGood</span>
-      <span>Welcome to the stream.</span>
-    </article>
-    <article class="chat-message chat-message--bot column gap-1 rounded-md">
-      <span class="chat-message__sender--bot font-mono text-sm uppercase">NoGoodBot</span>
-      <span>Parts are working. For now.</span>
-    </article>
-    <article class="chat-message column gap-1 rounded-md">
-      <span class="font-mono text-sm text-accent uppercase">Satoshipleb</span>
-      <span>Looking good.</span>
-    </article>
-    <article class="chat-message column gap-1 rounded-md">
-      <span class="font-mono text-sm text-accent uppercase">Cactus</span>
-      <span>Love the new overlay.</span>
-    </article>
-    <article class="chat-message column gap-1 rounded-md">
-      <span class="font-mono text-sm text-accent uppercase">NostrNerd</span>
-      <span>⚡ Keep drawing.</span>
-    </article>
-    </div>
+    <div id="chat-list" class="absolute bottom-4 left-4 right-4 flex column gap-2"></div>
   </div>
 </aside>
 
 <script>
   window.OVERLAY_CONFIG = {
-    naddr: 'naddr1qqjxxv34vserwef3943nye3s956rxwp495un2wp494jrzden8pjrzcmrxcenwqghwaehxw309aex2mrp0yh8qunfd4skctnwv46z7q3qeaz6dwsnvwkha5sn5puwwyxjgy26uusundrm684lg3vw4ma5c2jsxpqqqpmxwzdl57d',
+    naddr: 'naddr1qqjrvwfcv33nydfk94jxgcnr956xzdpk95ukxdmr95crvvrxvfjxzdesvesnqqgwwaehxw309ahx7uewd3hkctczyr85tf46zd366lkjzws83ecs6fq3ttnjrjd500g7haz936h0knp22qcyqqq8vecq9aw68',
     relays: ['wss://relay.primal.net', 'wss://nos.lol', 'wss://relay.damus.io', 'wss://relay.nogood.tech'],
     profilePubkey: '55f04590674f3648f4cdc9dc8ce32da2a282074cd0b020596ee033d12d385185',
   };
@@ -127,74 +81,206 @@ stylesheets:
   // stream and account feeds it needs.
   window.overlayData = createOverlayData(window.OVERLAY_CONFIG);
 
-  const chatBox = document.getElementById('chat-list');
-  const demoMessages = [
-    ['Sketchbook', 'That line work is beautiful.'],
-    ['ColorTheory', 'The green is working.'],
-    ['SatsAndInk', 'Watching from Berlin.'],
-    ['NoGoodFriend', 'Keep going.'],
-  ];
-  let demoMessageIndex = 0;
+  const chatList = document.getElementById('chat-list');
+  const zapFeedTrack = document.getElementById('zap-feed-track');
+  const zapFeedViewport = zapFeedTrack?.parentElement;
+  const latestZaps = new Map();
+  let zapFeedRenderTimer = null;
+  const viewerCount = document.getElementById('viewer-count');
+  const botPubkey = 'c0434367d3e598555e930db7d54eb5e2b4013c0b7673c8f668475fc76b6a6606';
 
-  function addDemoChatMessage() {
-    const [name, text] = demoMessages[demoMessageIndex++ % demoMessages.length];
-    const message = document.createElement('article');
-    message.className = 'chat-message column gap-1 rounded-md';
-
-    const sender = document.createElement('span');
-    sender.className = 'font-mono text-sm text-accent uppercase';
-    sender.textContent = name;
-
-    const content = document.createElement('span');
-    content.textContent = text;
-    message.append(sender, content);
-    appendAnimatedChatMessage(chatBox, message);
+  function appendHistoricalMessage(card, timestamp) {
+    card.dataset.timestamp = String(timestamp || 0);
+    const newerMessage = [...chatList.children].find(child => Number(child.dataset.timestamp) > timestamp);
+    if (newerMessage) chatList.insertBefore(card, newerMessage);
+    else chatList.appendChild(card);
   }
 
-  setTimeout(addDemoChatMessage, 1_000);
-  setInterval(addDemoChatMessage, 10_000);
+  function appendStreamMessage(message, isHistorical, variant = '') {
+    const card = document.createElement('article');
+    const isOwner = message.pubkey === window.OVERLAY_CONFIG.profilePubkey;
+    const isBot = message.pubkey === botPubkey;
+    card.className = `chat-message ${variant} ${isOwner ? 'chat-message--owner' : ''} ${isBot ? 'chat-message--bot' : ''} column gap-1 rounded-md`;
+
+    const sender = document.createElement('span');
+    sender.className = `${isBot ? 'chat-message__sender--bot' : 'text-accent'} font-mono text-sm uppercase`;
+    sender.textContent = '…';
+    const content = document.createElement('span');
+    content.textContent = message.content;
+    card.append(sender, content);
+
+    if (isHistorical) appendHistoricalMessage(card, message.timestamp);
+    else appendAnimatedChatMessage(chatList, card);
+
+    window.overlayData.fetchProfile(message.pubkey).then(profile => {
+      sender.textContent = profile.name || 'anon';
+    }).catch(() => { sender.textContent = 'anon'; });
+  }
+
+  window.overlayData.subscribeStreamChat((message, isHistorical) => {
+    appendStreamMessage(message, isHistorical);
+  });
+
+  window.overlayData.subscribeStreamRaids((raid, isHistorical) => {
+    appendStreamMessage({ ...raid, content: `RAID FROM ${raid.content || 'ANON'}` }, isHistorical, 'chat-message--raid');
+  });
+
+  function appendStreamZap(zap, isHistorical) {
+    const card = document.createElement('article');
+    const isLowValue = zap.amount < 1000;
+    card.className = `chat-message ${isLowValue ? 'chat-message--zap-low' : 'chat-message--zap'} column gap-1 rounded-md`;
+
+    const header = document.createElement('div');
+    header.className = 'flex items-center gap-2';
+    const amount = document.createElement('span');
+    amount.className = `font-display text-lg ${isLowValue ? 'text-accent' : ''}`;
+    amount.textContent = `⚡ ${zap.amount.toLocaleString()}`;
+    const sender = document.createElement('span');
+    sender.className = 'font-mono text-lg uppercase';
+    sender.textContent = '…';
+    header.append(amount, sender);
+    card.appendChild(header);
+
+    if (zap.content) {
+      const content = document.createElement('span');
+      content.textContent = zap.content;
+      card.appendChild(content);
+    }
+
+    if (isHistorical) appendHistoricalMessage(card, zap.timestamp);
+    else appendAnimatedChatMessage(chatList, card);
+
+    window.overlayData.fetchProfile(zap.senderPubkey).then(profile => {
+      sender.textContent = profile.name || 'anon';
+    }).catch(() => { sender.textContent = 'anon'; });
+  }
+
+  window.overlayData.subscribeStreamZaps(appendStreamZap);
+
+  window.overlayData.subscribeStreamInfo(info => {
+    viewerCount.textContent = `${info.viewers ?? 0} viewers`;
+  });
 
   const zapLeaderboard = document.getElementById('zap-leaderboard');
   const zapLeaders = new Map();
+  let leaderboardRenderTimer = null;
+
+  function queueLeaderboardRender() {
+    if (leaderboardRenderTimer) return;
+    leaderboardRenderTimer = setTimeout(() => {
+      leaderboardRenderTimer = null;
+      renderZapLeaderboard();
+    }, 10_000);
+  }
 
   function renderZapLeaderboard() {
     if (!zapLeaderboard) return;
-    zapLeaderboard.replaceChildren();
-    [...zapLeaders.values()]
+    const leaders = [...zapLeaders.values()]
       .sort((a, b) => b.sats - a.sats)
-      .slice(0, 8)
-      .forEach(leader => {
-        const row = document.createElement('div');
-        row.className = 'flex items-center gap-2';
+      .slice(0, 8);
 
-        const avatar = document.createElement('img');
-        avatar.className = 'size-avatar rounded-full object-cover bg-panel-light';
-        avatar.alt = '';
-        if (leader.avatar) avatar.src = leader.avatar;
+    zapLeaderboard.replaceChildren();
+    leaders.forEach(leader => {
+      const row = document.createElement('div');
+      row.className = 'flex items-center gap-2';
 
-        const name = document.createElement('span');
-        name.className = 'font-mono text-sm text-light uppercase truncate flex-1';
-        name.textContent = leader.name || 'anon';
+      const avatar = document.createElement('img');
+      avatar.className = 'size-avatar rounded-full object-cover bg-panel-light';
+      avatar.alt = '';
+      if (leader.avatar) avatar.src = leader.avatar;
 
-        const amount = document.createElement('span');
-        amount.className = 'font-display text-sm text-accent';
-        amount.textContent = `⚡ ${leader.sats.toLocaleString()}`;
+      const name = document.createElement('span');
+      name.className = 'font-mono text-sm text-light uppercase truncate flex-1';
+      name.textContent = leader.name || 'anon';
 
-        row.append(avatar, name, amount);
-        zapLeaderboard.appendChild(row);
-      });
+      const amount = document.createElement('span');
+      amount.className = 'font-display text-sm text-accent';
+      amount.textContent = `⚡ ${leader.sats.toLocaleString()}`;
+
+      row.append(avatar, name, amount);
+      zapLeaderboard.appendChild(row);
+
+      if (!leader.profileRequested && leader.pubkey) {
+        leader.profileRequested = true;
+        window.overlayData.fetchProfile(leader.pubkey).then(profile => {
+          leader.name = profile.name || leader.name;
+          leader.avatar = profile.picture || leader.avatar;
+          queueLeaderboardRender();
+        }).catch(() => {});
+      }
+    });
   }
 
-  window.overlayData.subscribeCombinedZaps((zap) => {
+  function queueZapFeedRender() {
+    if (zapFeedRenderTimer) return;
+    zapFeedRenderTimer = setTimeout(() => {
+      zapFeedRenderTimer = null;
+      renderZapFeed();
+    }, 1_000);
+  }
+
+  function renderZapFeed() {
+    if (!zapFeedTrack) return;
+    const zaps = [...latestZaps.values()]
+      .sort((a, b) => b.timestamp - a.timestamp)
+      .slice(0, 12);
+    if (!zaps.length) return;
+
+    const sequence = document.createElement('div');
+    sequence.className = 'ticker-group flex items-center gap-8 pr-8';
+    zaps.forEach(zap => {
+      const item = document.createElement('div');
+      item.className = 'flex items-center gap-2';
+
+      const amount = document.createElement('span');
+      amount.className = 'font-display text-lg text-bg nudge-down-2';
+      amount.textContent = `⚡ ${zap.amount.toLocaleString()}`;
+
+      const sender = document.createElement('span');
+      sender.className = 'font-mono text-lg text-bg uppercase';
+      sender.textContent = zap.name || '…';
+      item.append(amount, sender);
+
+      if (zap.content) {
+        const content = document.createElement('span');
+        content.className = 'font-mono text-sm text-bg';
+        content.textContent = zap.content;
+        item.appendChild(content);
+      }
+      sequence.appendChild(item);
+
+      if (!zap.profileRequested && zap.senderPubkey) {
+        zap.profileRequested = true;
+        window.overlayData.fetchProfile(zap.senderPubkey).then(profile => {
+          zap.name = profile.name || 'anon';
+          queueZapFeedRender();
+        }).catch(() => { zap.name = 'anon'; });
+      }
+    });
+
+    zapFeedTrack.replaceChildren(sequence);
+    requestAnimationFrame(buildSeamlessZapFeed);
+  }
+
+  window.overlayData.subscribeCombinedZaps(zap => {
     const key = zap.senderPubkey || zap.id;
-    const leader = zapLeaders.get(key) || { sats: 0, name: 'anon', avatar: '' };
+    const leader = zapLeaders.get(key) || {
+      sats: 0,
+      name: 'anon',
+      avatar: '',
+      pubkey: zap.senderPubkey,
+      profileRequested: false,
+    };
     leader.sats += zap.amount;
     zapLeaders.set(key, leader);
-    window.overlayData.fetchProfile(zap.senderPubkey).then(profile => {
-      leader.name = profile.name || leader.name;
-      leader.avatar = profile.picture || leader.avatar;
-      renderZapLeaderboard();
-    }).catch(renderZapLeaderboard);
+    queueLeaderboardRender();
+
+    latestZaps.set(zap.id, { ...zap, name: '', profileRequested: false });
+    if (latestZaps.size > 200) {
+      const oldest = [...latestZaps.values()].sort((a, b) => a.timestamp - b.timestamp)[0];
+      latestZaps.delete(oldest.id);
+    }
+    queueZapFeedRender();
   });
 
   const bitcoinBlock = document.getElementById('bitcoin-block');
@@ -224,9 +310,6 @@ stylesheets:
 
   updateBitcoinStats();
   setInterval(updateBitcoinStats, 60_000);
-
-  const zapFeedTrack = document.getElementById('zap-feed-track');
-  const zapFeedViewport = zapFeedTrack?.parentElement;
 
   function buildSeamlessZapFeed() {
     if (!zapFeedTrack || !zapFeedViewport || !zapFeedTrack.firstElementChild) return;

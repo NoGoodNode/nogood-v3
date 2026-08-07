@@ -7,6 +7,12 @@
   pointer-events: none;
 }
 
+#capture-viewport svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 #info-sidebar {
   top: 0;
   right: 0;
