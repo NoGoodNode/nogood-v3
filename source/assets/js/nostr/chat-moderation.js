@@ -1,5 +1,22 @@
 // Conservative local presentation filter for stream chat.
 // It intentionally combines signals instead of using a broad banned-word list.
+import * as nip19 from '../vendor/nostr-nip19.js';
+
+// Add selected accounts here as npubs. This is local NoGood presentation moderation,
+// not a published Nostr mute list.
+const MANUAL_MUTED_NPUBS = [
+  'npub1gjdw8nwepju7uj2dra58x946zd3l7ytd7wkkl3ck2vkar63ytpcstgr3wy',
+];
+
+const MANUAL_MUTED_PUBKEYS = new Set(MANUAL_MUTED_NPUBS.flatMap(npub => {
+  try {
+    const decoded = nip19.decode(npub);
+    return decoded.type === 'npub' ? [decoded.data] : [];
+  } catch {
+    return [];
+  }
+}));
+
 const URL_PATTERN = /(?:https?:\/\/|www\.)[^\s]+/gi;
 const HASHTAG_PATTERN = /#[\p{L}\p{N}_-]+/gu;
 const PROMO_TERMS = /\b(?:onlyfans|camgirl|escort|adult|nsfw|xxx|porn|nude|dating|telegram|whatsapp)\b/gi;
@@ -21,6 +38,10 @@ export function createChatSpamFilter({ threshold = 5 } = {}) {
 
   return function shouldHideChatMessage({ pubkey = '', content = '', timestamp = 0 }) {
     const now = timestamp ? timestamp * 1000 : Date.now();
+    if (MANUAL_MUTED_PUBKEYS.has(pubkey)) {
+      return { hidden: true, score: 999, reasons: ['manual-mute'] };
+    }
+
     const normalized = content.trim().toLowerCase().replace(/\s+/g, ' ');
     const urls = normalized.match(URL_PATTERN)?.length || 0;
     const hashtags = normalized.match(HASHTAG_PATTERN)?.length || 0;
