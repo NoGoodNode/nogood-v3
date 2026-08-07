@@ -76,6 +76,7 @@ stylesheets:
 <script type="module">
   import { createOverlayData } from '/assets/js/overlay/nostr-data.js';
   import { appendAnimatedChatMessage } from '/assets/js/overlay/chat-feed.js';
+  import { createChatSpamFilter } from '/assets/js/nostr/chat-moderation.js';
 
   // Future overlay UI can use window.overlayData to subscribe only to the
   // stream and account feeds it needs.
@@ -88,6 +89,7 @@ stylesheets:
   let zapFeedRenderTimer = null;
   const viewerCount = document.getElementById('viewer-count');
   const botPubkey = 'c0434367d3e598555e930db7d54eb5e2b4013c0b7673c8f668475fc76b6a6606';
+  const shouldHideChatMessage = createChatSpamFilter();
 
   function appendHistoricalMessage(card, timestamp) {
     card.dataset.timestamp = String(timestamp || 0);
@@ -118,6 +120,7 @@ stylesheets:
   }
 
   window.overlayData.subscribeStreamChat((message, isHistorical) => {
+    if (shouldHideChatMessage(message).hidden) return;
     appendStreamMessage(message, isHistorical);
   });
 

@@ -1325,6 +1325,7 @@ eleventyExcludeFromCollections: true
 <script type="module">
   import { createOverlayData } from '/assets/js/overlay/nostr-data.js';
   import * as nip19 from '/assets/js/vendor/nostr-nip19.js';
+  import { createChatSpamFilter } from '/assets/js/nostr/chat-moderation.js';
 
   // ----------------
   // CONFIG
@@ -1350,6 +1351,7 @@ eleventyExcludeFromCollections: true
 
   const chatBox = document.getElementById('chat-box');
   const seenMessages = new Set();
+  const shouldHideChatMessage = createChatSpamFilter();
   const seenZaps = new Set(state.getStream('seen-zaps', []));
   const seenZapsSession = new Set();
   const renderedRaidIds = new Set();
@@ -1622,7 +1624,7 @@ eleventyExcludeFromCollections: true
   const BOT_PUBKEY = 'c0434367d3e598555e930db7d54eb5e2b4013c0b7673c8f668475fc76b6a6606';
 
   function appendChatMessage(msg) {
-    if (!chatBox) return;
+    if (!chatBox || shouldHideChatMessage(msg).hidden) return;
 
     const isBot = msg.pubkey === BOT_PUBKEY;
 

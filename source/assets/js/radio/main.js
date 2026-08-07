@@ -4,6 +4,7 @@ import { initZapButtons, configureZap } from './zap.js';
 import { initLastFm } from './lastfm.js';
 import { NOGOOD_NOSTR_RELAYS } from '/assets/js/nostr/config.js';
 import * as nip19 from '/assets/js/vendor/nostr-nip19.js';
+import { createChatSpamFilter } from '/assets/js/nostr/chat-moderation.js';
 
 const BOT_PUBKEY = 'c0434367d3e598555e930db7d54eb5e2b4013c0b7673c8f668475fc76b6a6606';
 
@@ -36,6 +37,7 @@ const CHAT_SEND_COOLDOWN_MS = 10000;
 const seenMessages = new Set();
 const seenZaps = new Set();
 const lastMessageTime = new Map();
+const shouldHideChatMessage = createChatSpamFilter();
 let autoScroll = true;
 const historicalZapsForChat = [];
 const historicalChatMsgs = [];
@@ -334,7 +336,7 @@ function renderContentWithMentions(el, text, emojiMap = {}) {
 
 function appendChatMessage(msg) {
   const messagesEl = document.getElementById('chat-messages');
-  if (!messagesEl) return;
+  if (!messagesEl || shouldHideChatMessage(msg).hidden) return;
 
   if (msg.pubkey !== BOT_PUBKEY) {
     const now = msg.timestamp * 1000;
