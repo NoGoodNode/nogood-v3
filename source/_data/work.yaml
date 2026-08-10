@@ -6,37 +6,11 @@
 # For type: video — src (mp4 url), poster (optional)
 # For type: gif — src, alt
 # Metadata: title (falls back to alt), client (falls back to Personal work), category (falls back to Illustration)
-
-featured:
-  - type: image
-    src: ""
-    alt: ""
-    span: false
-    title: ""
-    client: ""
-    category: ""
-    bg:
-
-  - type: image
-    src: ""
-    alt: ""
-    span: false
-    title: ""
-    client: ""
-    category: ""
-    bg:
-
-  - type: image
-    src: ""
-    alt: ""
-    span: false
-    title: ""
-    client: ""
-    category: ""
-    bg:
+# Homepage: featured: true and featured_order: 1–6 (lower numbers appear first)
 
 work:
   - type: image
+    featured: false
     src: "source/assets/img/projects/Collected_BTCBurnout.jpg"
     alt: "BTC Burnout illustration"
     span: true
@@ -45,6 +19,7 @@ work:
     category: ""
 
   - type: image
+    featured: false
     src: "source/assets/img/projects/Collected_AdvancingBitcoin.jpg"
     alt: "Advancing Bitcoin illustration"
     span: false
@@ -52,18 +27,38 @@ work:
     client: "Advancing Bitcoin"
     category: "Event Poster"
     bg:
+    
+  - type: slideshow
+    featured: true
+    span: false
+    title: "Go-Gen3"
+    featured_order: 1
+    client: "Røde"
+    category: "Social Campaign"
+    bg:
+    slides:
+      - src: "source/assets/img/projects/NG_Rode_001.jpg"
+        alt: "Røde Go-Gen3 social illustration"
+      - src: "source/assets/img/projects/NG_Rode_002.jpg"
+        alt: "Røde Go-Gen3 social illustration"
+      - src: "source/assets/img/projects/NG_Rode_003.jpg"
+        alt: "Røde Go-Gen3 social illustration"
+
 
 
   - type: image
+    featured: true
     src: "source/assets/img/projects/RedBull_Header.jpg"
     alt: "Red Bull Game Pop magazine header illustration"
     span: false
     title: "Press Start"
+    featured_order: 2
     client: "Red Bull"
     category: "Editorial"
     bg:
 
   - type: video
+    featured: false
     src: "/assets/img/radio-bg.mp4"
     span: false
     title: "NoGood Radio"
@@ -72,6 +67,7 @@ work:
     bg:
     
   - type: image
+    featured: false
     src: "source/assets/img/projects/Collected_AgentsAtWork.jpg"
     alt: "Agents at Work illustration"
     span: false
@@ -81,6 +77,7 @@ work:
     bg:
 
   - type: slideshow
+    featured: false
     span: false
     title: "SEC-05"
     client: "Sovereign Engineering"
@@ -92,8 +89,9 @@ work:
       - src: "source/assets/img/projects/Collected_SEC065.jpg"
         alt: "Sovereign Engineering illustration"  
 
-  - type: gif
-    src: "source/assets/img/projects/Collected_BTCBackup.gif"
+  - type: video
+    featured: false
+    src: "/assets/img/projects/Collected_BTCBackup.mp4"
     alt: "BTC Backup floppy animation"
     span: false
     title: "Chain Backup"
@@ -102,14 +100,17 @@ work:
     bg:
 
   - type: image
+    featured: true
     src: "source/assets/img/projects/TABConf_Poster_05.jpg"
     alt: "TABConf 2025 poster illustration"
     span: false
     title: "Quantum Resistance"
+    featured_order: 3
     client: "TABConf"
     category: "event poster"
 
   - type: image
+    featured: false
     src: "source/assets/img/projects/Collected_TABConf_02.jpg"
     alt: "TABConf illustration"
     span: false
@@ -119,6 +120,7 @@ work:
     bg:
 
   - type: image
+    featured: false
     src: "source/assets/img/projects/SEC_Poster_02.jpg"
     alt: "SEC-04 illustration"
     span: false
@@ -128,6 +130,7 @@ work:
     bg: bg-highlight
 
   - type: image
+    featured: false
     src: "source/assets/img/projects/Collected_BitcoinMagazine.jpg"
     alt: "Bitcoin Magazine illustration"
     span: false
@@ -137,6 +140,7 @@ work:
     bg: bg-muted
 
   - type: image
+    featured: false
     src: "source/assets/img/projects/Collected_SEC06.jpg"
     alt: "Sovereign Engineering illustration"
     span: false
@@ -146,6 +150,7 @@ work:
     bg:
 
   - type: image
+    featured: false
     src: "source/assets/img/projects/Collected_CitadelDispatch.jpg"
     alt: "Citadel Dispatch illustration"
     span: false
@@ -155,6 +160,7 @@ work:
     bg:
 
   - type: image
+    featured: false
     src: "source/assets/img/projects/Collected_Satstreamers.jpg"
     alt: "Satstreamer illustration"
     span: false
@@ -164,6 +170,7 @@ work:
     bg:
 
   - type: slideshow
+    featured: false
     span: false
     title: "High Voltage"
     client: "Voltage"
@@ -176,6 +183,7 @@ work:
         alt: "Voltage air freshener illustration"
 
   - type: image
+    featured: false
     src: "source/assets/img/shop/NoGoodBook_Main.jpg"
     alt: "Illustration of The NoGood Book"
     span: false
@@ -185,6 +193,7 @@ work:
     bg:
 
   - type: slideshow
+    featured: false
     span: false
     title: "Graffiti"
     client: "Satoshi Radio"
@@ -201,15 +210,18 @@ work:
         alt: "Satoshi Radio P2P E-cash poster design"
 
   - type: image
+    featured: true
     src: "source/assets/img/projects/SovereignElectronics_Shopkeeper.jpg"
     alt: "Blockstream Sovereign Electronics shopkeeper illustration"
     span: false
     title: "Sovereign Electronics"
+    featured_order: 4
     client: "Blockstream"
     category: ""
     bg:
 
   - type: gif
+    featured: false
     src: "source/assets/img/projects/Collected_Error.gif"
     alt: "Error animation"
     span: false
@@ -219,6 +231,7 @@ work:
     bg:
 
   - type: image
+    featured: false
     src: "source/assets/img/projects/Featured_CTDL21.jpg"
     alt: "CTDL21 illustration"
     span: false
@@ -228,6 +241,7 @@ work:
     bg:
 
   - type: image
+    featured: false
     src: "source/assets/img/projects/Gamekings_Main.jpg"
     alt: "Gamekings 25th anniversary poster illustration"
     span: false
@@ -237,6 +251,7 @@ work:
     bg:
 
   - type: image
+    featured: false
     src: "source/assets/img/projects/Collected_Mindcrowave.jpg"
     alt: "Mindcrowave illustration"
     span: false
@@ -245,8 +260,9 @@ work:
     category: ""
     bg:
 
-  - type: gif
-    src: "source/assets/img/projects/Collected_PCB.gif"
+  - type: video
+    featured: false
+    src: "/assets/img/projects/Collected_PCB.mp4"
     alt: "PCB animation"
     span: false
     title: "PCB"
@@ -255,15 +271,18 @@ work:
     bg: bg-offwhite
 
   - type: image
+    featured: true
     src: "source/assets/img/projects/SatoshiRadio_Poster_MiningCorp.jpg"
     alt: "Satoshi Radio Mining Corp poster illustration"
     span: false
     title: "SR Mining Corp."
+    featured_order: 6
     client: "Satoshi Radio"
     category: "event poster"
     bg:
 
   - type: slideshow
+    featured: false
     span: false
     title: "Items"
     client: "TABConf"
@@ -280,6 +299,7 @@ work:
         alt: "TABConf tech spot illustration"
 
   - type: image
+    featured: false
     src: "source/assets/img/projects/Collected_OffchainRamen.jpg"
     alt: "Offchain Ramen illustration"
     span: false
@@ -289,6 +309,7 @@ work:
     bg:
 
   - type: image
+    featured: false
     src: "source/assets/img/projects/Collected_Zapstream_001.jpg"
     alt: "Zapstream illustration"
     span: false
@@ -298,6 +319,7 @@ work:
     bg:
 
   - type: image
+    featured: false
     src: "source/assets/img/projects/Collected_Zapstream_002.jpg"
     alt: "Zapstream illustration"
     span: false
@@ -307,6 +329,7 @@ work:
     bg:
 
   - type: image
+    featured: false
     src: "source/assets/img/projects/Collected_ZeroTrust.jpg"
     alt: "Zero Trust illustration"
     span: false

@@ -183,6 +183,10 @@ DARK SECTION OVERRIDES
     color: var(--primary-light);
 }
 
+.bg-dark .tag-available {
+    color: var(--primary-dark);
+}
+
 .bg-dark .tag-dark {
     background-color: var(--primary-light);
     border-color: transparent;
