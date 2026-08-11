@@ -51,7 +51,7 @@ work:
     src: "source/assets/img/projects/RedBull_Header.jpg"
     alt: "Red Bull Game Pop magazine header illustration"
     span: false
-    title: "Press Start"
+    title: "Gamepop"
     featured_order: 2
     client: "Red Bull"
     category: "Editorial"
@@ -251,11 +251,12 @@ work:
     bg:
 
   - type: image
-    featured: false
+    featured: true
     src: "source/assets/img/projects/Collected_Mindcrowave.jpg"
     alt: "Mindcrowave illustration"
     span: false
     title: "Run The Code"
+    featured_order: 6
     client: "Mindcrowave"
     category: ""
     bg:
@@ -276,7 +277,7 @@ work:
     alt: "Satoshi Radio Mining Corp poster illustration"
     span: false
     title: "SR Mining Corp."
-    featured_order: 6
+    featured_order: 5
     client: "Satoshi Radio"
     category: "event poster"
     bg:

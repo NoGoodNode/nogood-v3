@@ -173,50 +173,40 @@ bodyColor: bg-highlight
         {% endfor %}
     </div>
 </div>
-{# ABOUT #}
-<div id="background" class="section bg-muted large-grid">
+{# RADIO INTRODUCTION #}
+<div class="section medium-grid bg-muted">
     <div class="section-column sticky-two-rows">
         <div class="sticky-wrapper">
             <div class="sticky">
-                <h1>
-                    My illustrations, through the rickety hardware and clunky modded devices they feature, are informed
-                    by notions of ownership and control.
-                </h1>
+                <h1>On the side, I tinker with open-web tools and run experiments that barely work at all.</h1>
+                <div class="spacer-large"></div>
             </div>
         </div>
-        <div class="spacer-small hide-medium hide-large"></div>
-        <div class="flex-row gap-large hide-medium hide-large">
-            <a href="/work/">See work</a>
-            <a href="/about/">Learn more</a>
-        </div>
-        <div class="spacer hide-small"></div>
-        <div class="place-bottom padding-right-small hide-small">
-            <p class="text-large">
-                I established NoGood in 2021.
-                More than a pseudonym, I found that NoGood provided a space to experiment.
-                Since then, my commissioned projects and my personal work started to blend,
-                establishing a throughline that spans multiple years.
-            </p>
-            <div class="spacer-small"></div>
-            <div class="flex-row flex-align-center gap-large">
-                <span
-                    class="tag pixel-font self-center {% if status.available %}tag-available{% else %}tag-unavailable{% endif %}">
-                    {% if status.available %}{{ status.availability_label }}{% else %}{{ status.unavailability_label
-                    }}{% endif %}
-                </span>
-                <span class="text-small">Get in touch: <a href="mailto:{{ settings.metadata.site_email }}">{{
-                        settings.metadata.site_email }}</a></span>
-            </div>
+        <div class="place-bottom">
+            <p class="text-large">I established NoGood in 2021. More than a pseudonym, I found that NoGood provided a space to experiment. Since then, my commissioned projects and my personal work started to blend, establishing a throughline that spans multiple years.</p>
         </div>
     </div>
-    {# SELF PORTRAIT #}
     <div class="section-column">
-        <div class="image-padding-extralarge bg-dark no-blend">
-            {% image "source/assets/img/NoGood_Selfpotrait_Dark.png", "NoGood self portrait" %}
+        <div class="bg-dark no-blend image-padding">
+            {% image "source/assets/img/NoGood_Selfpotrait.png", "NoGood self portrait" %}
         </div>
     </div>
-
+    <div class="section-column">
+        <div class="inner-column">
+            <h5 class="uppercase pixel-font">The infrastructure</h5>
+            <div class="spacer"></div>
+            <div class="list three-col-list">
+                <div>NoGood Radio</div><div>24/7 Nostr-integrated pirate radio</div><div class="align-right">Mac Mini</div><div class="row-border"></div>
+                <div>Radio Chat Bot</div><div>Helps run the radio chat</div><div class="align-right">Mac Mini</div><div class="row-border"></div>
+                <div>Nostr Bot</div><div>Posts to Nostr on event triggers</div><div class="align-right">RPI 5</div><div class="row-border"></div>
+                <div>Relay</div><div>My personal Nostr relay</div><div class="align-right">RPI 5</div><div class="row-border"></div>
+                <div>Freebies</div><div>Always-on torrent hosting</div><div class="align-right">RPI 5</div><div class="row-border"></div>
+                <div>BTCPay Server</div><div>Enables BTC payments in the shop</div><div class="align-right">RPI 3</div><div class="row-border"></div>
+            </div>
+        </div>
+    </div>
 </div>
+
 {# RADIO #}
 <div class="section relative hide-small bg-highlight">
     {# VIDEO #}
