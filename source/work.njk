@@ -7,8 +7,14 @@ description: "Illustration projects by NoGood — branding, editorial, and visua
 
 <div class="section">
     <div class="section-column">
-        <h1 class="pixel-font uppercase">Selected work</h1>
-        <div class="spacer-large"></div>
+        <h1 class="padding-right-small">My illustrations, through the rickety hardware and clunky modded devices they feature, are informed by notions of ownership and control.</h1>
+        <div class="spacer-extralarge"></div>
+        <div class="flex-row flex-align-center gap-small">
+            <span class="tag pixel-font {% if status.available %}tag-available{% else %}tag-unavailable{% endif %}">
+                {% if status.available %}{{ status.availability_label }}{% else %}{{ status.unavailability_label }}{% endif %}
+            </span>
+            <span class="text-small"><a href="mailto:{{ settings.metadata.site_email }}">{{ settings.metadata.site_email }}</a></span>
+        </div>
     </div>
 </div>
 
