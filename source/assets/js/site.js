@@ -157,46 +157,6 @@ document.addEventListener('DOMContentLoaded', () => {
         window.addEventListener('scroll', updateHtmlBg, { passive: true });
     }
 
-    // Portfolio carousel
-    document.querySelectorAll('.portfolio-carousel').forEach(carousel => {
-        if (window.innerWidth <= 768) return;
-
-        const track = carousel.querySelector('.portfolio-carousel-track');
-        const realCount = track.querySelectorAll('.portfolio-item:not([aria-hidden="true"])').length;
-        let currentIndex = 0;
-        let isAnimating = false;
-
-        function getItemWidth() {
-            const item = track.querySelector('.portfolio-item');
-            const gap = parseFloat(getComputedStyle(track).gap) || 0;
-            return item.getBoundingClientRect().width + gap;
-        }
-
-        function slideTo(index, animate = true) {
-            if (animate && isAnimating) return;
-            if (animate) isAnimating = true;
-            track.style.transition = animate ? 'transform 0.6s ease' : 'none';
-            track.style.transform = `translateX(-${index * getItemWidth()}px)`;
-            if (!animate) void track.offsetHeight;
-            currentIndex = index;
-            if (animate) {
-                setTimeout(() => {
-                    if (currentIndex >= realCount) {
-                        track.style.transition = 'none';
-                        currentIndex = 0;
-                        track.style.transform = 'translateX(0)';
-                    }
-                    isAnimating = false;
-                }, 650);
-            }
-        }
-
-        setInterval(() => {
-            if (isAnimating) return;
-            slideTo(currentIndex + 1);
-        }, 3000);
-
-    });
 });
 
 // Node status + nav status indicators

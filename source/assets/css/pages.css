@@ -86,29 +86,6 @@ SHOP
 }
 
 /* ----------------
-PORTFOLIO
----------------- */
-.home-portfolio {
-    grid-template-columns: 2fr 3fr;
-}
-
-.portfolio-carousel {
-    overflow: hidden;
-    position: relative;
-}
-
-
-.portfolio-carousel-track {
-    display: flex;
-    gap: 10px;
-}
-
-.portfolio-carousel-track .portfolio-item {
-    flex: 0 0 calc(33.33% - 7px);
-}
-
-
-/* ----------------
 PROJECT
 ---------------- */
 #project {
