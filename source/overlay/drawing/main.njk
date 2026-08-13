@@ -77,6 +77,8 @@ stylesheets:
   import { createOverlayData } from '/assets/js/overlay/nostr-data.js';
   import { appendAnimatedChatMessage } from '/assets/js/overlay/chat-feed.js';
   import { createChatSpamFilter } from '/assets/js/nostr/chat-moderation.js';
+  import { shortenNostrEventReferences } from '/assets/js/nostr/chat-content.js';
+  import { createChatFeed } from '/assets/js/nostr/chat-feed.js';
 
   // Future overlay UI can use window.overlayData to subscribe only to the
   // stream and account feeds it needs.
@@ -98,7 +100,7 @@ stylesheets:
     else chatList.appendChild(card);
   }
 
-  function appendStreamMessage(message, isHistorical, variant = '') {
+  function renderStreamMessage(message, variant = '') {
     const card = document.createElement('article');
     const isOwner = message.pubkey === window.OVERLAY_CONFIG.profilePubkey;
     const isBot = message.pubkey === botPubkey;
@@ -108,24 +110,35 @@ stylesheets:
     sender.className = `${isBot ? 'chat-message__sender--bot' : 'text-accent'} font-mono text-sm uppercase`;
     sender.textContent = '…';
     const content = document.createElement('span');
-    content.textContent = message.content;
+    content.textContent = shortenNostrEventReferences(message.content);
     card.append(sender, content);
-
-    if (isHistorical) appendHistoricalMessage(card, message.timestamp);
-    else appendAnimatedChatMessage(chatList, card);
 
     window.overlayData.fetchProfile(message.pubkey).then(profile => {
       sender.textContent = profile.name || 'anon';
     }).catch(() => { sender.textContent = 'anon'; });
+    return card;
   }
 
+  function placeStreamMessage({ element, message, isHistorical }) {
+    if (isHistorical) appendHistoricalMessage(element, message.timestamp);
+    else appendAnimatedChatMessage(chatList, element);
+  }
+
+  const chatFeed = createChatFeed({
+    getContainer: () => chatList,
+    shouldHideMessage: shouldHideChatMessage,
+    maxMessages: 200,
+    renderMessage: renderStreamMessage,
+    placeMessage: placeStreamMessage,
+  });
+
   window.overlayData.subscribeStreamChat((message, isHistorical) => {
-    if (shouldHideChatMessage(message).hidden) return;
-    appendStreamMessage(message, isHistorical);
+    chatFeed.append(message, { isHistorical });
   });
 
   window.overlayData.subscribeStreamRaids((raid, isHistorical) => {
-    appendStreamMessage({ ...raid, content: `RAID FROM ${raid.content || 'ANON'}` }, isHistorical, 'chat-message--raid');
+    const message = { ...raid, content: `RAID FROM ${raid.content || 'ANON'}` };
+    placeStreamMessage({ element: renderStreamMessage(message, 'chat-message--raid'), message, isHistorical });
   });
 
   function appendStreamZap(zap, isHistorical) {
