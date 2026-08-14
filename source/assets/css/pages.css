@@ -221,6 +221,10 @@ PRESS KIT
     grid-template-columns: 1fr 1fr 3fr;
 }
 
+#press-contact .press-contact-link {
+    margin-bottom: 0;
+}
+
 .press-book-title {
     font-size: 6.75rem;
     font-weight: 700;
