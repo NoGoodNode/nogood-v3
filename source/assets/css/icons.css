@@ -5,6 +5,11 @@ a.download-icon::after {
     background: url("/assets/icons/nogood_download.svg");
 }
 
+.bg-dark a.download-icon::after {
+    background-image: url("/assets/icons/nogood_download.svg");
+    filter: invert(1);
+}
+
 /* ----------------
 EXTERNAL LINK
 ---------------- */

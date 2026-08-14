@@ -63,12 +63,18 @@ document.addEventListener('DOMContentLoaded', () => {
             const items = masonryGrid.querySelectorAll('.masonry-item');
 
             if (window.innerWidth <= MOBILE_BREAKPOINT) {
-                items.forEach(item => { item.style.gridRowEnd = ''; });
+                items.forEach(item => {
+                    item.classList.remove('masonry-item--row-fill');
+                    item.style.gridRowEnd = '';
+                });
                 return;
             }
 
-            // Reset spans so heights are natural, then read all rects in one pass
-            items.forEach(item => { item.style.gridRowEnd = ''; });
+            // Reset spans and stretching so heights are natural, then read all rects in one pass
+            items.forEach(item => {
+                item.classList.remove('masonry-item--row-fill');
+                item.style.gridRowEnd = '';
+            });
 
             const gridRect = masonryGrid.getBoundingClientRect();
             const colW = gridRect.width / 3;
@@ -80,6 +86,8 @@ document.addEventListener('DOMContentLoaded', () => {
             rects.forEach((rect, i) => {
                 items[i].style.gridRowEnd = 'span ' + Math.ceil(rect.height);
             });
+            // Fill the rounded grid area only after natural heights have been measured.
+            items.forEach(item => item.classList.add('masonry-item--row-fill'));
 
             // Re-read rects after spans are applied (positions have changed)
             const placed = Array.from(items).map(item => item.getBoundingClientRect());

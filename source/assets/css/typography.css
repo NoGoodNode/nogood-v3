@@ -28,6 +28,24 @@ CUSTOM FONTS
 }
 
 @font-face {
+    font-family: 'PPSupplyMono';
+    src: url('/assets/fonts/PPSupplyMono-Medium.woff2') format('woff2'),
+        url('/assets/fonts/PPSupplyMono-Medium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'PPSupplyMono';
+    src: url('/assets/fonts/PPSupplyMono-Bold.woff2') format('woff2'),
+        url('/assets/fonts/PPSupplyMono-Bold.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
     font-family: 'UntitledSans-Bold';
     src: url('/assets/fonts/untitled-sans-bold.woff2') format('woff2');
     font-weight: 700;
@@ -62,14 +80,14 @@ HEADERS
 h1 {
     font-size: 3rem;
     letter-spacing: -0.03rem;
-    text-wrap: pretty;
+    text-wrap: balance;
 }
 
 h2 {
     font-size: 2rem;
     line-height: 1.1;
     letter-spacing: -0.02rem;
-    text-wrap: pretty;
+    text-wrap: balance;
 }
 
 h3 {
@@ -156,6 +174,11 @@ OTHER
 .pixel-font {
     font-family: 'Offbit-Bold', Arial, Helvetica, sans-serif;
     letter-spacing: 0.05rem;
+}
+
+.mono {
+    font-family: 'PPSupplyMono', monospace;
+    font-weight: 500;
 }
 
 .uppercase {

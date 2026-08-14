@@ -244,6 +244,8 @@
     #similar-products,
     #post,
     #context-articles,
+    #press-about,
+    #press-contact,
     #now {
         grid-template-columns: 1fr;
         align-items: start;
