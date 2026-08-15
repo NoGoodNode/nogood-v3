@@ -29,8 +29,8 @@ unlisted: true
       <div class="spacer"></div>
       <div class="press-actions">
         <div class="press-actions__downloads">
-          <a class="button icon download-icon pixel-font uppercase" href="{{ bookpress.downloads.press_kit.url }}" download>Press Kit / {{ bookpress.downloads.press_kit.format }}</a>
-          <a class="button icon external-icon pixel-font uppercase" href="{{ bookpress.downloads.image_collection.url }}" target="_blank" rel="noopener">Image Bank</a>
+          <a class="button icon download-icon pixel-font uppercase" href="{{ bookpress.downloads.press_kit.url }}" download data-umami-event="press-kit-download" data-umami-event-format="{{ bookpress.downloads.press_kit.format }}" data-umami-event-location="hero">Press Kit / {{ bookpress.downloads.press_kit.format }}</a>
+          <a class="button icon external-icon pixel-font uppercase" href="{{ bookpress.downloads.image_collection.url }}" target="_blank" rel="noopener" data-umami-event="press-image-bank-click" data-umami-event-provider="{{ bookpress.downloads.image_collection.provider }}" data-umami-event-location="hero">Image Bank</a>
         </div>
       </div>
     </div>
@@ -103,7 +103,7 @@ unlisted: true
     <div class="spacer-extralarge hide-medium hide-large"></div>
     <h4 class="pixel-font uppercase">Publication details</h4>
     <div class="spacer"></div>
-    <div class="list two-col-list">
+    <div class="list two-col-list press-publication-details">
       <div>Release date</div><div class="align-right">August 2026</div><div class="row-border"></div>
       <div>Price</div><div class="align-right">€70</div><div class="row-border"></div>
       <div>Edition</div><div class="align-right">Limited run of 400</div><div class="row-border"></div>
@@ -152,8 +152,8 @@ unlisted: true
     <div class="spacer"></div>
     <div class="press-actions press-actions--dark">
       <div class="press-actions__downloads">
-        <a class="button icon download-icon pixel-font uppercase" href="{{ bookpress.downloads.press_kit.url }}" download>Press Kit / {{ bookpress.downloads.press_kit.format }}</a>
-        <a class="button icon external-icon pixel-font uppercase" href="{{ bookpress.downloads.image_collection.url or bookpress.links.image_bank.url }}"{% if bookpress.downloads.image_collection.url %} target="_blank" rel="noopener"{% endif %}>Image Bank</a>
+        <a class="button icon download-icon pixel-font uppercase" href="{{ bookpress.downloads.press_kit.url }}" download data-umami-event="press-kit-download" data-umami-event-format="{{ bookpress.downloads.press_kit.format }}" data-umami-event-location="image-bank">Press Kit / {{ bookpress.downloads.press_kit.format }}</a>
+        <a class="button icon external-icon pixel-font uppercase" href="{{ bookpress.downloads.image_collection.url or bookpress.links.image_bank.url }}"{% if bookpress.downloads.image_collection.url %} target="_blank" rel="noopener"{% endif %} data-umami-event="press-image-bank-click" data-umami-event-provider="{{ bookpress.downloads.image_collection.provider or 'On-page image bank' }}" data-umami-event-location="image-bank">Image Bank</a>
       </div>
     </div>
   </div>
@@ -180,7 +180,7 @@ unlisted: true
           <span class="pixel-font">{{ item.title }}</span>
           <span class="normal-case offset-up-1"><span class="press-copyright">© {{ item.credit }}</span>{% if item.photography_credit %} {{ item.photography_credit }}{% endif %}</span>
         </div>
-        <a class="tag tag-dark pixel-font uppercase" href="{{ downloadUrl }}">{{ item.download_label }}</a>
+        <a class="tag tag-dark pixel-font uppercase" href="{{ downloadUrl }}" data-umami-event="press-asset-download" data-umami-event-asset="{{ item.title }}" data-umami-event-filename="{{ item.filename }}" data-umami-event-type="{{ item.type }}" data-umami-event-format="{{ item.format }}">{{ item.download_label }}</a>
       </div>
     </article>
     {% endfor %}
@@ -245,7 +245,7 @@ unlisted: true
     </div>
   </div>
   <div class="section-column">
-    <h2>NoGood, freelance illustrator inspired by retro tech and fuelled by the open-source movement, has previously collaborated with a variety of clients like Red Bull, Røde, Wired, Miro and Blockstream.</h2>
     <div class="spacer-large hide-medium hide-large"></div>
+    <h2>NoGood, freelance illustrator inspired by retro tech and fuelled by the open-source movement, has previously collaborated with a variety of clients like Red Bull, Røde, Wired, Miro and Blockstream.</h2>
   </div>
 </section>

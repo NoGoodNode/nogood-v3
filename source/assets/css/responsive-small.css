@@ -233,6 +233,11 @@
         text-decoration: underline;
     }
 
+    .press-publication-details {
+        grid-template-columns: max-content minmax(0, 1fr);
+        column-gap: 1rem;
+    }
+
     /* ----------------
     PAGE COLUMN OVERRIDES
     ---------------- */
