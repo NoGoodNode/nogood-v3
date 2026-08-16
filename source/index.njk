@@ -33,6 +33,7 @@ bodyColor: bg-highlight
                     <h1 class="header">
                         Illustration inspired by retro tech and fuelled by open web counterculture.
                     </h1>
+                    <div class="spacer-large"></div>
                 </div>
             </div>
         </div>
@@ -43,18 +44,34 @@ bodyColor: bg-highlight
                 I’m Thomas, a freelance illustrator based in Amsterdam. I established NoGood in 2021. More than a pseudonym, I found that NoGood provided a space to experiment.
             </p>
             <div class="spacer line"></div>
-            <div class="spacer-small"></div>
-            <span
-                class="tag pixel-font self-center {% if status.available %}tag-available{% else %}tag-unavailable{% endif %}">
-                {% if status.available %}{{ status.availability_label }}{% else %}{{ status.unavailability_label }}{%
-                endif %}
-            </span>
-            <div class="spacer-small"></div>
-            <p>
-                Get in touch: <a href="mailto:{{ settings.metadata.site_email }}">{{ settings.metadata.site_email
-                    }}</a><br>
-                Based in Amsterdam, The Netherlands — working worldwide.
-            </p>
+            <div class="flex-space-between flex-align-center">
+                <span class="text-small uppercase pixel-font offset-down-2">LATEST PROJECT</span>
+                <a href="/work/">Røde Go Gen3</a>
+            </div>
+            <div class="spacer line"></div>
+            <div class="flex-space-between flex-align-center">
+                <span class="text-small uppercase pixel-font offset-down-2">LATEST PRODUCT</span>
+                <a href="/the-nogood-book/">The NoGood Book</a>
+            </div>
+            <div class="spacer line"></div>
+            <div class="flex-space-between flex-align-center">
+                <span class="text-small uppercase pixel-font offset-down-2">LATEST ADDITION</span>
+                <a href="/press/the-nogood-book/">The NoGood Book Press Kit</a>
+            </div>
+            <div class="spacer line"></div>
+            <div class="flex-space-between flex-align-center">
+                <span class="text-small uppercase pixel-font offset-down-2">LATEST UPDATE</span>
+                {% for post in collections.feedPosts %}
+                    {% if loop.first %}<a href="{{ post.url }}">{{ post.data.title }}</a>{% endif %}
+                {% endfor %}
+            </div>
+            <div class="spacer line"></div>
+            <div class="flex-space-between flex-align-center">
+                <span class="text-small uppercase pixel-font offset-down-2">LATEST CLIPPING</span>
+                {% for item in collections.clippingsAll %}
+                    {% if loop.first %}<a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.title | truncate(30, true, "…") }}</a>{% endif %}
+                {% endfor %}
+            </div>
         </div>
     </div>
     {# STATUS #}
@@ -76,7 +93,7 @@ bodyColor: bg-highlight
                 <div class="latest-product">
                     <h5 class="uppercase pixel-font">
                         <a href="/shop/">Shop</a>
-                        > Latest addition
+                        > Latest
                     </h5>
                     <div class="spacer-small"></div>
                     {% for post in collections.product | reverse %}

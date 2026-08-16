@@ -194,6 +194,11 @@ OTHER
     top: -1px;
 }
 
+.offset-down-2 {
+    position: relative;
+    top: 2px;
+}
+
 .text-tabular {
     font-variant-numeric: tabular-nums;
 }
