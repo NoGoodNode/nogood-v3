@@ -40,34 +40,36 @@ bodyColor: bg-highlight
 
         {# CONTACT #}
         <div class="place-bottom">
-            <p class="text-large">
+            <p class="text-large margin-bottom-none">
                 I’m Thomas, a freelance illustrator based in Amsterdam. I established NoGood in 2021. More than a pseudonym, I found that NoGood provided a space to experiment.
             </p>
             <div class="spacer line"></div>
+            <h5 class="uppercase pixel-font">Terminal</h5>
+            <div class="spacer-large"></div>
             <div class="flex-space-between flex-align-center">
-                <span class="text-small uppercase pixel-font offset-down-2">LATEST PROJECT</span>
+                <span class="text-small uppercase pixel-font offset-down-2">PROJECT</span>
                 <a href="/work/">Røde Go Gen3</a>
             </div>
             <div class="spacer line"></div>
             <div class="flex-space-between flex-align-center">
-                <span class="text-small uppercase pixel-font offset-down-2">LATEST PRODUCT</span>
+                <span class="text-small uppercase pixel-font offset-down-2">PRODUCT</span>
                 <a href="/the-nogood-book/">The NoGood Book</a>
             </div>
             <div class="spacer line"></div>
             <div class="flex-space-between flex-align-center">
-                <span class="text-small uppercase pixel-font offset-down-2">LATEST ADDITION</span>
+                <span class="text-small uppercase pixel-font offset-down-2">ADDITION</span>
                 <a href="/press/the-nogood-book/">The NoGood Book Press Kit</a>
             </div>
             <div class="spacer line"></div>
             <div class="flex-space-between flex-align-center">
-                <span class="text-small uppercase pixel-font offset-down-2">LATEST UPDATE</span>
+                <span class="text-small uppercase pixel-font offset-down-2">UPDATE</span>
                 {% for post in collections.feedPosts %}
                     {% if loop.first %}<a href="{{ post.url }}">{{ post.data.title }}</a>{% endif %}
                 {% endfor %}
             </div>
             <div class="spacer line"></div>
             <div class="flex-space-between flex-align-center">
-                <span class="text-small uppercase pixel-font offset-down-2">LATEST CLIPPING</span>
+                <span class="text-small uppercase pixel-font offset-down-2">CLIPPING</span>
                 {% for item in collections.clippingsAll %}
                     {% if loop.first %}<a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.title | truncate(30, true, "…") }}</a>{% endif %}
                 {% endfor %}
@@ -132,11 +134,11 @@ bodyColor: bg-highlight
         <div class="inner-column">
             <h2 class="padding-right-small">My illustrations, through the rickety hardware and clunky modded devices they feature, are informed by notions of ownership and control.</h2>
             <div class="spacer-extralarge"></div>
-            <div class="flex-row flex-align-center gap-small">
+            <div class="flex-row flex-align-center gap">
                 <span class="tag pixel-font {% if status.available %}tag-available{% else %}tag-unavailable{% endif %}">
                     {% if status.available %}{{ status.availability_label }}{% else %}{{ status.unavailability_label }}{% endif %}
                 </span>
-                <span class="text-small"><a href="mailto:{{ settings.metadata.site_email }}">{{ settings.metadata.site_email }}</a></span>
+                <span class="offset-up-1"><a href="mailto:{{ settings.metadata.site_email }}">{{ settings.metadata.site_email }}</a></span>
             </div>
         </div>
     </div>

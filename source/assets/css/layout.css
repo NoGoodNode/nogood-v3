@@ -306,6 +306,10 @@ FLEX UTILITIES
     gap: 0.5rem;
 }
 
+.gap {
+    gap: 1rem;
+}
+
 .gap-large {
     gap: 2rem;
 }

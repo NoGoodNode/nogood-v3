@@ -184,6 +184,7 @@ DARK SECTION OVERRIDES
 }
 
 .bg-dark .tag-available {
+    border-color: var(--highlight);
     color: var(--primary-dark);
 }
 

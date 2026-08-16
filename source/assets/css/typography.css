@@ -73,6 +73,10 @@ p:not(:last-child) {
     margin-bottom: 1.25rem;
 }
 
+p.margin-bottom-none {
+    margin-bottom: 0;
+}
+
 /* ----------------
 HEADERS
 ---------------- */
