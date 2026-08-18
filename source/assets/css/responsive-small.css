@@ -26,38 +26,6 @@
     }
 
     /* ----------------
-    PORTFOLIO CAROUSEL
-    ---------------- */
-    .portfolio-carousel {
-        overflow: hidden;
-    }
-
-    .portfolio-carousel-track {
-        display: grid;
-        transform: none !important;
-        transition: none !important;
-    }
-
-    .portfolio-carousel-track .portfolio-item {
-        grid-area: 1 / 1 / 2 / 2;
-        width: 100%;
-        opacity: 0;
-        animation: slideshow-6 18s steps(1) infinite;
-    }
-
-    .portfolio-carousel-track .portfolio-item[aria-hidden="true"] {
-        display: none;
-    }
-
-    .portfolio-carousel-track .portfolio-item:nth-of-type(1) { animation-delay: 0s; }
-    .portfolio-carousel-track .portfolio-item:nth-of-type(2) { animation-delay: 3s; }
-    .portfolio-carousel-track .portfolio-item:nth-of-type(3) { animation-delay: 6s; }
-    .portfolio-carousel-track .portfolio-item:nth-of-type(4) { animation-delay: 9s; }
-    .portfolio-carousel-track .portfolio-item:nth-of-type(5) { animation-delay: 12s; }
-    .portfolio-carousel-track .portfolio-item:nth-of-type(6) { animation-delay: 15s; }
-
-
-    /* ----------------
     BODY
     ---------------- */
     body {
@@ -265,6 +233,11 @@
         text-decoration: underline;
     }
 
+    .press-publication-details {
+        grid-template-columns: max-content minmax(0, 1fr);
+        column-gap: 1rem;
+    }
+
     /* ----------------
     PAGE COLUMN OVERRIDES
     ---------------- */
@@ -276,6 +249,8 @@
     #similar-products,
     #post,
     #context-articles,
+    #press-about,
+    #press-contact,
     #now {
         grid-template-columns: 1fr;
         align-items: start;

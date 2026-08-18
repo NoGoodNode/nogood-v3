@@ -246,6 +246,10 @@ MASONRY
     grid-column: span 2;
 }
 
+.masonry-item--row-fill {
+    align-self: stretch;
+}
+
 .masonry-item--last-col {
     border-right: none;
 }
@@ -300,6 +304,10 @@ FLEX UTILITIES
 
 .gap-small {
     gap: 0.5rem;
+}
+
+.gap {
+    gap: 1rem;
 }
 
 .gap-large {

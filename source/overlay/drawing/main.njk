@@ -77,7 +77,8 @@ stylesheets:
   import { createOverlayData } from '/assets/js/overlay/nostr-data.js';
   import { appendAnimatedChatMessage } from '/assets/js/overlay/chat-feed.js';
   import { createChatSpamFilter } from '/assets/js/nostr/chat-moderation.js';
-  import { renderNostrName } from '/assets/js/nostr/emojis.js';
+  import { shortenNostrEventReferences } from '/assets/js/nostr/chat-content.js';
+  import { createChatFeed } from '/assets/js/nostr/chat-feed.js';
 
   // Future overlay UI can use window.overlayData to subscribe only to the
   // stream and account feeds it needs.
@@ -92,19 +93,14 @@ stylesheets:
   const botPubkey = 'c0434367d3e598555e930db7d54eb5e2b4013c0b7673c8f668475fc76b6a6606';
   const shouldHideChatMessage = createChatSpamFilter();
 
-  function insertChatMessage(card, timestamp, isHistorical) {
-    const createdAt = Number(timestamp || 0);
-    card.dataset.timestamp = String(createdAt);
-    const newerMessage = [...chatList.children]
-      .find(child => Number(child.dataset.timestamp) > createdAt);
-
-    // Late relay history belongs in chronological order, not after newer live cards.
+  function appendHistoricalMessage(card, timestamp) {
+    card.dataset.timestamp = String(timestamp || 0);
+    const newerMessage = [...chatList.children].find(child => Number(child.dataset.timestamp) > timestamp);
     if (newerMessage) chatList.insertBefore(card, newerMessage);
-    else if (isHistorical) chatList.appendChild(card);
-    else appendAnimatedChatMessage(chatList, card);
+    else chatList.appendChild(card);
   }
 
-  function appendStreamMessage(message, isHistorical, variant = '') {
+  function renderStreamMessage(message, variant = '') {
     const card = document.createElement('article');
     const isOwner = message.pubkey === window.OVERLAY_CONFIG.profilePubkey;
     const isBot = message.pubkey === botPubkey;
@@ -114,19 +110,30 @@ stylesheets:
     sender.className = `${isBot ? 'chat-message__sender--bot' : 'text-accent'} font-mono text-sm uppercase`;
     sender.textContent = '…';
     const content = document.createElement('span');
-    content.textContent = message.content;
+    content.textContent = shortenNostrEventReferences(message.content);
     card.append(sender, content);
-
-    insertChatMessage(card, message.timestamp, isHistorical);
 
     window.overlayData.fetchProfile(message.pubkey).then(profile => {
       renderNostrName(sender, profile.name, profile.emojis);
     }).catch(() => { sender.textContent = 'anon'; });
+    return card;
   }
+
+  function placeStreamMessage({ element, message, isHistorical }) {
+    if (isHistorical) appendHistoricalMessage(element, message.timestamp);
+    else appendAnimatedChatMessage(chatList, element);
+  }
+
+  const chatFeed = createChatFeed({
+    getContainer: () => chatList,
+    shouldHideMessage: shouldHideChatMessage,
+    maxMessages: 200,
+    renderMessage: renderStreamMessage,
+    placeMessage: placeStreamMessage,
+  });
 
   const CHAT_HISTORY_KEY = 'overlay-chat-history-v1';
   const MAX_CACHED_CHAT_MESSAGES = 50;
-  const seenChatMessageIds = new Set();
 
   function cachedChatMessages() {
     const cached = window.overlayData.state.getStream(CHAT_HISTORY_KEY, []);
@@ -139,30 +146,21 @@ stylesheets:
   function rememberChatMessage(message) {
     if (!message.id) return;
     const messages = new Map(cachedChatMessages().map(item => [item.id, item]));
-    messages.set(message.id, {
-      id: message.id,
-      pubkey: message.pubkey || '',
-      content: message.content,
-      timestamp: Number(message.timestamp || 0),
-    });
+    messages.set(message.id, { id: message.id, pubkey: message.pubkey || '', content: message.content, timestamp: Number(message.timestamp || 0) });
     window.overlayData.state.setStream(CHAT_HISTORY_KEY, [...messages.values()]
-      .sort((a, b) => a.timestamp - b.timestamp)
-      .slice(-MAX_CACHED_CHAT_MESSAGES));
+      .sort((a, b) => a.timestamp - b.timestamp).slice(-MAX_CACHED_CHAT_MESSAGES));
   }
 
-  function showChatMessage(message, isHistorical) {
-    if (!message.id || seenChatMessageIds.has(message.id)) return;
-    seenChatMessageIds.add(message.id);
+  cachedChatMessages().forEach(message => chatFeed.append(message, { isHistorical: true }));
+  window.overlayData.subscribeStreamChat((message, isHistorical) => {
     if (shouldHideChatMessage(message).hidden) return;
     rememberChatMessage(message);
-    appendStreamMessage(message, isHistorical);
-  }
-
-  cachedChatMessages().forEach(message => showChatMessage(message, true));
-  window.overlayData.subscribeStreamChat(showChatMessage);
+    chatFeed.append(message, { isHistorical });
+  });
 
   window.overlayData.subscribeStreamRaids((raid, isHistorical) => {
-    appendStreamMessage({ ...raid, content: `RAID FROM ${raid.content || 'ANON'}` }, isHistorical, 'chat-message--raid');
+    const message = { ...raid, content: `RAID FROM ${raid.content || 'ANON'}` };
+    placeStreamMessage({ element: renderStreamMessage(message, 'chat-message--raid'), message, isHistorical });
   });
 
   function appendStreamZap(zap, isHistorical) {
@@ -187,7 +185,8 @@ stylesheets:
       card.appendChild(content);
     }
 
-    insertChatMessage(card, zap.timestamp, isHistorical);
+    if (isHistorical) appendHistoricalMessage(card, zap.timestamp);
+    else appendAnimatedChatMessage(chatList, card);
 
     window.overlayData.fetchProfile(zap.senderPubkey).then(profile => {
       renderNostrName(sender, profile.name, profile.emojis);

@@ -28,6 +28,24 @@ CUSTOM FONTS
 }
 
 @font-face {
+    font-family: 'PPSupplyMono';
+    src: url('/assets/fonts/PPSupplyMono-Medium.woff2') format('woff2'),
+        url('/assets/fonts/PPSupplyMono-Medium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'PPSupplyMono';
+    src: url('/assets/fonts/PPSupplyMono-Bold.woff2') format('woff2'),
+        url('/assets/fonts/PPSupplyMono-Bold.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
     font-family: 'UntitledSans-Bold';
     src: url('/assets/fonts/untitled-sans-bold.woff2') format('woff2');
     font-weight: 700;
@@ -55,6 +73,10 @@ p:not(:last-child) {
     margin-bottom: 1.25rem;
 }
 
+p.margin-bottom-none {
+    margin-bottom: 0;
+}
+
 /* ----------------
 HEADERS
 ---------------- */
@@ -62,13 +84,14 @@ HEADERS
 h1 {
     font-size: 3rem;
     letter-spacing: -0.03rem;
-    text-wrap: pretty;
+    text-wrap: balance;
 }
 
 h2 {
     font-size: 2rem;
+    line-height: 1.1;
     letter-spacing: -0.02rem;
-    text-wrap: pretty;
+    text-wrap: balance;
 }
 
 h3 {
@@ -157,6 +180,11 @@ OTHER
     letter-spacing: 0.05rem;
 }
 
+.mono {
+    font-family: 'PPSupplyMono', monospace;
+    font-weight: 500;
+}
+
 .uppercase {
     text-transform: uppercase;
 }
@@ -168,6 +196,11 @@ OTHER
 .offset-up-1 {
     position: relative;
     top: -1px;
+}
+
+.offset-down-2 {
+    position: relative;
+    top: 2px;
 }
 
 .text-tabular {

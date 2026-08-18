@@ -31,26 +31,49 @@ bodyColor: bg-highlight
             <div class="sticky">
                 <div class="header-introduction">
                     <h1 class="header">
-                        I’m a freelance illustrator inspired by retro tech and fuelled by open web counterculture.
+                        Illustration inspired by retro tech and fuelled by open web counterculture.
                     </h1>
+                    <div class="spacer-large"></div>
                 </div>
             </div>
         </div>
 
         {# CONTACT #}
         <div class="place-bottom">
-            <div class="spacer-large"></div>
-            <span
-                class="tag pixel-font self-center {% if status.available %}tag-available{% else %}tag-unavailable{% endif %}">
-                {% if status.available %}{{ status.availability_label }}{% else %}{{ status.unavailability_label }}{%
-                endif %}
-            </span>
-            <div class="spacer-small"></div>
-            <p>
-                Get in touch: <a href="mailto:{{ settings.metadata.site_email }}">{{ settings.metadata.site_email
-                    }}</a><br>
-                Based in Amsterdam, The Netherlands — working worldwide.
+            <p class="text-large margin-bottom-none">
+                I’m Thomas, a freelance illustrator based in Amsterdam. I established NoGood in 2021. More than a pseudonym, I found that NoGood provided a space to experiment.
             </p>
+            <div class="spacer line"></div>
+            <h5 class="uppercase pixel-font">Terminal</h5>
+            <div class="spacer-large"></div>
+            <div class="flex-space-between flex-align-center">
+                <span class="text-small uppercase pixel-font offset-down-2">PROJECT</span>
+                <a href="/work/">Røde Go Gen3</a>
+            </div>
+            <div class="spacer line"></div>
+            <div class="flex-space-between flex-align-center">
+                <span class="text-small uppercase pixel-font offset-down-2">PRODUCT</span>
+                <a href="/the-nogood-book/">The NoGood Book</a>
+            </div>
+            <div class="spacer line"></div>
+            <div class="flex-space-between flex-align-center">
+                <span class="text-small uppercase pixel-font offset-down-2">ADDITION</span>
+                <a href="/press/the-nogood-book/">The NoGood Book Press Kit</a>
+            </div>
+            <div class="spacer line"></div>
+            <div class="flex-space-between flex-align-center">
+                <span class="text-small uppercase pixel-font offset-down-2">UPDATE</span>
+                {% for post in collections.feedPosts %}
+                    {% if loop.first %}<a href="{{ post.url }}">{{ post.data.title }}</a>{% endif %}
+                {% endfor %}
+            </div>
+            <div class="spacer line"></div>
+            <div class="flex-space-between flex-align-center">
+                <span class="text-small uppercase pixel-font offset-down-2">CLIPPING</span>
+                {% for item in collections.clippingsAll %}
+                    {% if loop.first %}<a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.title | truncate(30, true, "…") }}</a>{% endif %}
+                {% endfor %}
+            </div>
         </div>
     </div>
     {# STATUS #}
@@ -62,7 +85,7 @@ bodyColor: bg-highlight
                     <h5 class="uppercase pixel-font">Now</h5>
                     <p>
                         Shipped all <a href="/the-nogood-book/">The NoGood Book</a> pre-orders and just finished a
-                        fairly large illustration project. Taking some time to step back and recharge.
+                        fairly large illustration project for <a href="https://rode.com/">Røde</a>. Taking some time to step back and recharge.
                     </p>
                     <div class="spacer-small"></div>
                     <a href="/now/">Read more</a>
@@ -72,7 +95,7 @@ bodyColor: bg-highlight
                 <div class="latest-product">
                     <h5 class="uppercase pixel-font">
                         <a href="/shop/">Shop</a>
-                        > Latest addition
+                        > Latest
                     </h5>
                     <div class="spacer-small"></div>
                     {% for post in collections.product | reverse %}
@@ -84,7 +107,7 @@ bodyColor: bg-highlight
                 </div>
                 <div class="spacer-small"></div>
                 <div>
-                    <a href="{{ post.url }}">{{ post.data.title }}</a>
+                    <a href="{{ post.url }}">{{ post.data.title }} — {% if post.data.site.sold_out === true %}Sold out{% else %}€{{ post.data.snipcart.price }}{% endif %}</a>
                 </div>
                 {% endif %}
                 {% endfor %}
@@ -101,75 +124,108 @@ bodyColor: bg-highlight
 </div>
 </div>
 {# PORTFOLIO #}
-<div id="portfolio" class="section bg-dark text-light">
-    <div class="section-column pixel-font uppercase">
-        <h3>featured work / <a href="/work/">all work</a></h3>
-        <div class="spacer-large"></div>
+<div id="portfolio" class="section large-grid bg-dark text-light">
+    <div class="section-column">
+        <div class="inner-column pixel-font uppercase">
+            <h3>featured work / <a href="/work/">all work</a></h3>
+        </div>
     </div>
-    {# CAROUSEL #}
-    <div class="section-column portfolio-carousel">
-        <div class="portfolio-carousel-track">
-            {% for item in featuredimg.items %}
-            <div class="inner-column portfolio-item">
-                <div class="portfolio-featured-img bg-light">
-                    {% image item.src, item.alt %}
-                </div>
+    <div class="section-column">
+        <div class="inner-column">
+            <h2 class="padding-right-small">My illustrations, through the rickety hardware and clunky modded devices they feature, are informed by notions of ownership and control.</h2>
+            <div class="spacer-extralarge"></div>
+            <div class="flex-row flex-align-center gap">
+                <span class="tag pixel-font {% if status.available %}tag-available{% else %}tag-unavailable{% endif %}">
+                    {% if status.available %}{{ status.availability_label }}{% else %}{{ status.unavailability_label }}{% endif %}
+                </span>
+                <span class="offset-up-1"><a href="mailto:{{ settings.metadata.site_email }}">{{ settings.metadata.site_email }}</a></span>
             </div>
-            {% endfor %}
-            {% for item in featuredimg.items %}
-            <div class="inner-column portfolio-item" aria-hidden="true">
-                <div class="portfolio-featured-img">
-                    {% image item.src, item.alt %}
-                </div>
-            </div>
-            {% endfor %}
         </div>
     </div>
 </div>
-{# ABOUT #}
-<div id="background" class="section bg-muted large-grid">
+<div class="section section-fullwidth bg-dark text-light">
+    <div class="marquee client-marquee pixel-font header-large uppercase" role="marquee" aria-label="Selected clients">
+        <ul class="marquee-content">
+            {% for client in clients.items %}
+            <li>{{ client }}</li>
+            {% endfor %}
+        </ul>
+        <ul class="marquee-content" aria-hidden="true">
+            {% for client in clients.items %}
+            <li>{{ client }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+<div class="section section-fullwidth bg-dark text-light">
+    <div class="masonry">
+        {% for item in work.work | selectattr("featured") | sort(false, false, "featured_order") %}
+            {% if loop.index <= 6 %}
+                <div class="masonry-item{% if item.span %} masonry-item--wide{% endif %}">
+                    <div class="fade-in{% if item.bg %} {{ item.bg }}{% endif %}">
+                        {% if item.type === "image" %}
+                            {% image item.src, item.alt %}
+                        {% elif item.type === "slideshow" %}
+                            <div class="slideshow slideshow-{{ item.slides | length }}">
+                                {% for slide in item.slides %}
+                                    {% image slide.src, slide.alt %}
+                                {% endfor %}
+                            </div>
+                        {% elif item.type === "video" %}
+                            <video autoplay muted loop playsinline preload="metadata" width="100%" height="auto"{% if item.poster %} poster="{{ item.poster }}"{% endif %}>
+                                <source src="{{ item.src }}">
+                            </video>
+                        {% elif item.type === "gif" %}
+                            {% image item.src, item.alt, null, null, { gif: true } %}
+                        {% endif %}
+                    </div>
+                    <div class="margin-top-small flex-row flex-align-baseline text-small uppercase">
+                        <div class="flex-row flex-grow gap-small">
+                            <span class="pixel-font">{{ item.title or item.alt }}</span>
+                            <span class="pixel-font">/</span>
+                            <span class="normal-case offset-up-1">{{ item.client or 'Personal work' }}</span>
+                        </div>
+                        <span class="tag tag-dark pixel-font uppercase">{{ item.category or 'Illustration' }}</span>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{# RADIO INTRODUCTION #}
+<div class="section medium-grid bg-muted">
     <div class="section-column sticky-two-rows">
         <div class="sticky-wrapper">
             <div class="sticky">
-                <h1>
-                    My illustrations, through the rickety hardware and clunky modded devices they feature, are informed
-                    by notions of ownership and control.
-                </h1>
+                <h1>I tinker with the tools in the open-web toolbox, and run experiments that sometimes work.</h1>
+                <div class="spacer-large"></div>
             </div>
         </div>
-        <div class="spacer-small hide-medium hide-large"></div>
-        <div class="flex-row gap-large hide-medium hide-large">
-            <a href="/work/">See work</a>
-            <a href="/about/">Learn more</a>
-        </div>
-        <div class="spacer hide-small"></div>
-        <div class="place-bottom padding-right-small hide-small">
-            <p class="text-large">
-                I established NoGood in 2021.
-                More than a pseudonym, I found that NoGood provided a space to experiment.
-                Since then, my commissioned projects and my personal work started to blend,
-                establishing a throughline that spans multiple years.
-            </p>
-            <div class="spacer-small"></div>
-            <div class="flex-row flex-align-center gap-large">
-                <span
-                    class="tag pixel-font self-center {% if status.available %}tag-available{% else %}tag-unavailable{% endif %}">
-                    {% if status.available %}{{ status.availability_label }}{% else %}{{ status.unavailability_label
-                    }}{% endif %}
-                </span>
-                <span class="text-small">Get in touch: <a href="mailto:{{ settings.metadata.site_email }}">{{
-                        settings.metadata.site_email }}</a></span>
-            </div>
+        <div class="place-bottom">
+            <p class="text-large">The bots, self-hosted software, and NoGood Radio—my most complicated experiment to date—all belong to the world I’ve been building since I established NoGood.</p>
         </div>
     </div>
-    {# SELF PORTRAIT #}
     <div class="section-column">
-        <div class="image-padding-extralarge bg-dark no-blend">
-            {% image "source/assets/img/NoGood_Selfpotrait_Dark.png", "NoGood self portrait" %}
+        <div class="bg-dark no-blend image-padding">
+            {% image "source/assets/img/NoGood_Selfpotrait.png", "NoGood self portrait" %}
         </div>
     </div>
-
+    <div class="section-column">
+        <div class="inner-column sticky">
+            <h5 class="uppercase pixel-font">The infrastructure</h5>
+            <div class="spacer"></div>
+            <div class="list three-col-list">
+                <div>NoGood Radio</div><div>24/7 Nostr-integrated pirate radio</div><div class="align-right">Mac Mini</div><div class="row-border"></div>
+                <div>Radio Chat Bot</div><div>Helps run the radio chat</div><div class="align-right">Mac Mini</div><div class="row-border"></div>
+                <div>Nostr Bot</div><div>Posts to Nostr on event triggers</div><div class="align-right">RPI 5</div><div class="row-border"></div>
+                <div>Relay</div><div>My personal Nostr relay</div><div class="align-right">RPI 5</div><div class="row-border"></div>
+                <div>Freebies</div><div>Always-on torrent hosting</div><div class="align-right">RPI 5</div><div class="row-border"></div>
+                <div>BTCPay Server</div><div>Enables BTC payments in the shop</div><div class="align-right">RPI 3</div><div class="row-border"></div>
+            </div>
+        </div>
+    </div>
 </div>
+
 {# RADIO #}
 <div class="section relative hide-small bg-highlight">
     {# VIDEO #}

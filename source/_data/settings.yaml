@@ -11,3 +11,12 @@ metadata:
   # SVG image used for sharing/bookmark icons
   site_icon_svg: /assets/img/favicon.svg
 
+# Social profiles
+socials:
+  nostr:
+    label: NOSTR
+    url: https://primal.net/nogood
+  bluesky:
+    label: Bluesky
+    url: https://bsky.app/profile/nogood.studio
+

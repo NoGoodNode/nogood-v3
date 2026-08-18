@@ -70,6 +70,10 @@ MARQUEE
 	animation: scroll 20s linear infinite;
 }
 
+.client-marquee .marquee-content {
+	animation-duration: 30s;
+}
+
 .marquee-content li {
 	margin-top: 0;
 	margin-bottom: 0;

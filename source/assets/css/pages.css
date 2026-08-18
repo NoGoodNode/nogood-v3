@@ -86,29 +86,6 @@ SHOP
 }
 
 /* ----------------
-PORTFOLIO
----------------- */
-.home-portfolio {
-    grid-template-columns: 2fr 3fr;
-}
-
-.portfolio-carousel {
-    overflow: hidden;
-    position: relative;
-}
-
-
-.portfolio-carousel-track {
-    display: flex;
-    gap: 10px;
-}
-
-.portfolio-carousel-track .portfolio-item {
-    flex: 0 0 calc(33.33% - 7px);
-}
-
-
-/* ----------------
 PROJECT
 ---------------- */
 #project {
@@ -231,6 +208,119 @@ NOW
 #radio {
     grid-template-columns: 3fr 1fr;
     align-items: start;
+}
+
+/* ----------------
+PRESS KIT
+---------------- */
+#press-about {
+    grid-template-columns: 2fr 3fr;
+}
+
+#press-contact {
+    grid-template-columns: 1fr 1fr 3fr;
+}
+
+#press-contact .press-contact-link {
+    margin-bottom: 0;
+}
+
+.press-book-title {
+    font-size: 6.75rem;
+    font-weight: 700;
+    line-height: 0.82;
+}
+
+.press-opener-image {
+    overflow: hidden;
+}
+
+.press-opener-image img {
+    transform: scale(1.12);
+    transform-origin: center;
+}
+
+.press-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.press-actions .button {
+    width: auto;
+}
+
+.press-actions__downloads {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 10px;
+}
+
+.press-actions__downloads .button {
+    display: inline-flex;
+    align-items: center;
+    background: var(--highlight);
+    color: var(--primary-dark);
+    border: 1px solid var(--highlight);
+}
+
+.press-actions__downloads a.icon::after {
+    position: static;
+    order: -1;
+    width: 1.2rem;
+    height: 0.85rem;
+    flex-shrink: 0;
+    align-self: center;
+    margin-right: 0.6rem;
+    background-image: none;
+    background-color: currentColor;
+    transform: none;
+    filter: none;
+}
+
+.press-actions__downloads a.download-icon::after {
+    -webkit-mask: url("/assets/icons/nogood_download.svg") center / contain no-repeat;
+    mask: url("/assets/icons/nogood_download.svg") center / contain no-repeat;
+}
+
+.press-actions__downloads a.external-icon::after {
+    position: relative;
+    top: -2px;
+    -webkit-mask: url("/assets/icons/nogood_external-link.svg") center / contain no-repeat;
+    mask: url("/assets/icons/nogood_external-link.svg") center / contain no-repeat;
+}
+
+.press-actions__downloads .button:hover {
+    background: var(--primary-dark);
+    color: var(--highlight);
+}
+
+.press-actions--dark .press-actions__downloads .button {
+    background: var(--primary-dark);
+    color: var(--primary-light);
+    border: 1px solid var(--primary-dark);
+}
+
+.press-actions--dark .press-actions__downloads .button:hover {
+    background: var(--highlight);
+    color: var(--primary-dark);
+}
+
+.press-copyright {
+    font-family: 'UntitledSans-Bold', sans-serif;
+    font-weight: 700;
+}
+
+.press-masonry .tag:hover {
+    background-color: var(--highlight);
+    color: var(--primary-dark);
+}
+
+.press-masonry video {
+    display: block;
+    width: 100%;
+    height: auto;
 }
 
 /* ----------------

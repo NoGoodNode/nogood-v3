@@ -3,8 +3,9 @@ import { initNostr, subscribeStreamInfo, subscribeZaps, subscribeChat, subscribe
 import { initZapButtons, configureZap } from './zap.js';
 import { initLastFm } from './lastfm.js';
 import { NOGOOD_NOSTR_RELAYS } from '/assets/js/nostr/config.js';
-import * as nip19 from '/assets/js/vendor/nostr-nip19.js';
 import { createChatSpamFilter } from '/assets/js/nostr/chat-moderation.js';
+import { renderChatContent } from '/assets/js/nostr/chat-content.js';
+import { createChatFeed } from '/assets/js/nostr/chat-feed.js';
 
 const BOT_PUBKEY = 'c0434367d3e598555e930db7d54eb5e2b4013c0b7673c8f668475fc76b6a6606';
 
@@ -34,7 +35,6 @@ function waitForGlobal(name, timeout = 3000) {
 const MAX_CHAT_DOM = 200;
 const CHAT_RATE_LIMIT_MS = 15000;
 const CHAT_SEND_COOLDOWN_MS = 10000;
-const seenMessages = new Set();
 const seenZaps = new Set();
 const lastMessageTime = new Map();
 const shouldHideChatMessage = createChatSpamFilter();
@@ -285,66 +285,7 @@ function appendRaidToChat(raid) {
     .catch(() => { sender.textContent = `RAID FROM ${raid.pubkey.slice(0, 8)}`; });
 }
 
-function renderContentWithMentions(el, text, emojiMap = {}) {
-  const tokenPattern = /(https?:\/\/[^\s]+)|(?:nostr:|@)(npub1[a-z0-9]+|nprofile1[a-z0-9]+)|:([a-zA-Z0-9_]+):/g;
-  let lastIndex = 0;
-  let match;
-  while ((match = tokenPattern.exec(text)) !== null) {
-    if (match.index > lastIndex) {
-      el.appendChild(document.createTextNode(text.slice(lastIndex, match.index)));
-    }
-    if (match[1]) {
-      const span = document.createElement('span');
-      span.className = 'chat__message-link';
-      span.textContent = match[1].length > 30 ? match[1].slice(0, 30) + '…' : match[1];
-      el.appendChild(span);
-    } else if (match[2]) {
-      try {
-        const decoded = nip19.decode(match[2]);
-        const pk = decoded.type === 'npub' ? decoded.data : decoded.data?.pubkey;
-        const a = document.createElement('a');
-        a.href = `https://njump.me/${match[2]}`;
-        a.target = '_blank';
-        a.rel = 'noopener';
-        a.className = 'nostr-mention';
-        if (pk) {
-          fetchProfile(pk).then(profile => {
-            a.textContent = `@${profile?.display_name || profile?.name || match[2].slice(0, 12) + '…'}`;
-          });
-        } else {
-          a.textContent = `@${match[2].slice(0, 12)}…`;
-        }
-        el.appendChild(a);
-      } catch {
-        el.appendChild(document.createTextNode(match[0]));
-      }
-    } else if (match[3] && emojiMap[match[3]]) {
-      const img = document.createElement('img');
-      img.src = emojiMap[match[3]];
-      img.alt = `:${match[3]}:`;
-      img.className = 'chat__emoji';
-      el.appendChild(img);
-    } else {
-      el.appendChild(document.createTextNode(match[0]));
-    }
-    lastIndex = match.index + match[0].length;
-  }
-  if (lastIndex < text.length) {
-    el.appendChild(document.createTextNode(text.slice(lastIndex)));
-  }
-}
-
-function appendChatMessage(msg) {
-  const messagesEl = document.getElementById('chat-messages');
-  if (!messagesEl || shouldHideChatMessage(msg).hidden) return;
-
-  if (msg.pubkey !== BOT_PUBKEY) {
-    const now = msg.timestamp * 1000;
-    const last = lastMessageTime.get(msg.pubkey) || 0;
-    if (now - last < CHAT_RATE_LIMIT_MS) return;
-    lastMessageTime.set(msg.pubkey, now);
-  }
-
+function renderChatMessage(msg) {
   const el = document.createElement('div');
   el.className = msg.pubkey === BOT_PUBKEY ? 'chat__message chat__message--bot' : 'chat__message';
 
@@ -364,11 +305,38 @@ function appendChatMessage(msg) {
 
   const text = document.createElement('span');
   text.className = 'chat__message-text';
-  renderContentWithMentions(text, msg.content, emojiMap);
+  renderChatContent(text, msg.content, {
+    emojiMap,
+    fetchProfile,
+    linkClass: 'chat__message-link',
+    mentionClass: 'nostr-mention',
+    emojiClass: 'chat__emoji',
+    mentionLink: true,
+    profileName: profile => profile?.display_name || profile?.name,
+  });
 
   el.appendChild(sender);
   el.appendChild(text);
-  insertInOrder(el, msg.timestamp, messagesEl);
+  return el;
+}
+
+const chatFeed = createChatFeed({
+  getContainer: () => document.getElementById('chat-messages'),
+  shouldHideMessage: shouldHideChatMessage,
+  maxMessages: MAX_CHAT_DOM,
+  renderMessage: renderChatMessage,
+  canRenderMessage(msg) {
+    if (msg.pubkey === BOT_PUBKEY) return true;
+    const now = msg.timestamp * 1000;
+    const last = lastMessageTime.get(msg.pubkey) || 0;
+    if (now - last < CHAT_RATE_LIMIT_MS) return false;
+    lastMessageTime.set(msg.pubkey, now);
+    return true;
+  },
+});
+
+function appendChatMessage(msg) {
+  chatFeed.append(msg);
 }
 
 function maybeRenderHistorical() {
@@ -452,9 +420,6 @@ async function initChat() {
   });
 
   subscribeChat((msg, isHistorical) => {
-    if (seenMessages.has(msg.id)) return;
-    seenMessages.add(msg.id);
-
     if (isHistorical) {
       historicalChatMsgs.push(msg);
       return;

@@ -1324,8 +1324,9 @@ eleventyExcludeFromCollections: true
 
 <script type="module">
   import { createOverlayData } from '/assets/js/overlay/nostr-data.js';
-  import * as nip19 from '/assets/js/vendor/nostr-nip19.js';
   import { createChatSpamFilter } from '/assets/js/nostr/chat-moderation.js';
+  import { renderChatContent } from '/assets/js/nostr/chat-content.js';
+  import { createChatFeed } from '/assets/js/nostr/chat-feed.js';
 
   // ----------------
   // CONFIG
@@ -1350,7 +1351,6 @@ eleventyExcludeFromCollections: true
   const PAGE_LOAD_SECS = Math.floor(Date.now() / 1000);
 
   const chatBox = document.getElementById('chat-box');
-  const seenMessages = new Set();
   const shouldHideChatMessage = createChatSpamFilter();
   const seenZaps = new Set(state.getStream('seen-zaps', []));
   const seenZapsSession = new Set();
@@ -1579,53 +1579,9 @@ eleventyExcludeFromCollections: true
     }
   }
 
-  function renderContentWithMentions(el, text, emojiMap = {}) {
-    const tokenPattern = /(https?:\/\/[^\s]+)|(?:nostr:|@)(npub1[a-z0-9]+|nprofile1[a-z0-9]+)|:([a-zA-Z0-9_]+):/g;
-    let lastIndex = 0;
-    let match;
-    while ((match = tokenPattern.exec(text)) !== null) {
-      if (match.index > lastIndex) el.appendChild(document.createTextNode(text.slice(lastIndex, match.index)));
-      if (match[1]) {
-        const span = document.createElement('span');
-        span.className = 'ov-msg-link';
-        span.textContent = match[1].length > 30 ? match[1].slice(0, 30) + '…' : match[1];
-        el.appendChild(span);
-      } else if (match[2]) {
-        try {
-          const decoded = nip19.decode(match[2]);
-          const pk = decoded.type === 'npub' ? decoded.data : decoded.data?.pubkey;
-          const span = document.createElement('span');
-          span.className = 'ov-msg-mention';
-          if (pk) {
-            fetchProfile(pk).then(p => {
-              span.textContent = `@${p?.name || match[2].slice(0, 12) + '…'}`;
-            });
-          } else {
-            span.textContent = `@${match[2].slice(0, 12)}…`;
-          }
-          el.appendChild(span);
-        } catch {
-          el.appendChild(document.createTextNode(match[0]));
-        }
-      } else if (match[3] && emojiMap[match[3]]) {
-        const img = document.createElement('img');
-        img.src = emojiMap[match[3]];
-        img.alt = `:${match[3]}:`;
-        img.className = 'ov-emoji';
-        el.appendChild(img);
-      } else {
-        el.appendChild(document.createTextNode(match[0]));
-      }
-      lastIndex = match.index + match[0].length;
-    }
-    if (lastIndex < text.length) el.appendChild(document.createTextNode(text.slice(lastIndex)));
-  }
-
   const BOT_PUBKEY = 'c0434367d3e598555e930db7d54eb5e2b4013c0b7673c8f668475fc76b6a6606';
 
-  function appendChatMessage(msg) {
-    if (!chatBox || shouldHideChatMessage(msg).hidden) return;
-
+  function renderChatMessage(msg) {
     const isBot = msg.pubkey === BOT_PUBKEY;
 
     const el = document.createElement('div');
@@ -1654,7 +1610,13 @@ eleventyExcludeFromCollections: true
     }
 
     const text = document.createElement('span');
-    renderContentWithMentions(text, msg.content, emojiMap);
+    renderChatContent(text, msg.content, {
+      emojiMap,
+      fetchProfile,
+      linkClass: 'ov-msg-link',
+      mentionClass: 'ov-msg-mention',
+      emojiClass: 'ov-emoji',
+    });
 
     body.appendChild(sender);
     body.appendChild(text);
@@ -1667,7 +1629,18 @@ eleventyExcludeFromCollections: true
       else if (!isBot) { el.querySelector('.ov-msg-avatar')?.remove(); }
     });
 
-    insertInOrder(el, msg.timestamp);
+    return el;
+  }
+
+  const chatFeed = createChatFeed({
+    getContainer: () => chatBox,
+    shouldHideMessage: shouldHideChatMessage,
+    maxMessages: MAX_CHAT_DOM,
+    renderMessage: renderChatMessage,
+  });
+
+  function appendChatMessage(msg) {
+    chatFeed.append(msg);
   }
 
   function appendRaidToChat(raid) {
@@ -1743,8 +1716,6 @@ eleventyExcludeFromCollections: true
   });
 
   subscribeChat((msg, isHistorical) => {
-    if (seenMessages.has(msg.id)) return;
-    seenMessages.add(msg.id);
     if (isHistorical) { historicalChatMsgs.push(msg); return; }
     appendChatMessage(msg);
   }, () => {
