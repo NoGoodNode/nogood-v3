@@ -59,27 +59,33 @@ unlisted: true
   </div>
 </section>
 
-<section id="press-about" class="section large-grid bg-offwhite">
+<section id="press-about" class="section medium-grid bg-offwhite">
   <div class="section-column">
-    <div class="inner-column">
+    <div class="sticky">
       <h4 class="pixel-font uppercase">About NoGood</h4>
-      <div class="spacer-large"></div>
+    </div>
+  </div>
+  <div class="section-column">
+    <div class="video-fill">
+      <video autoplay muted loop playsinline preload="metadata">
+        <source src="/assets/img/about-opener.mp4" type="video/mp4">
+      </video>
+    </div>
+  </div>
+  <div class="section-column">
+    <div class="inner-column sticky">
       <p class="text-large">Thomas is an Amsterdam-based illustrator. His work has taken him from client commissions to his self-initiated projects, and NoGood is the through-line that emerged naturally.</p>
       <p class="text-large">Never a carefully considered plan, it grew from a decade spent finding a way to make meaningful work, rooted in the philosophy of the open web and open-source software.</p>
       <p class="text-large">Self-publishing felt like the natural next step. A tool in a toolbox, similar to a personal website, podcasting, Bitcoin, and VPNs; permissionless, grassroots, and owned by none other than the person using them.</p>
     </div>
   </div>
-  <div class="section-column sticky-two-rows">
-    <div class="sticky-wrapper">
-      <div class="sticky">
-        <div class="spacer-extralarge hide-medium hide-large"></div>
-        <h2>“It felt inevitable for the work to be bundled in a book, the most honest expression of myself; to make one substantial, lasting thing rather than an endless stream of lighter ones. Its format—printed, heavy, definitive, and unchangeable—serves as an antidote to the pressures of keeping up with the algorithms that I steered clear of, long ago.”</h2>
-        <div class="spacer-large"></div>
-      </div>
-    </div>
-    <div class="place-bottom">
-      <p class="pixel-font uppercase">Thomas / NoGood</p>
-    </div>
+</section>
+
+<section id="press-quote" class="section bg-offwhite">
+  <div class="section-column">
+    <h2 class="padding-right-small">“It felt inevitable for the work to be bundled in a book, the most honest expression of myself; to make one substantial, lasting thing rather than an endless stream of lighter ones. Its format—printed, heavy, definitive, and unchangeable—serves as an antidote to the pressures of keeping up with the algorithms that I steered clear of, long ago.”</h2>
+    <div class="spacer-large"></div>
+    <p class="pixel-font uppercase">Thomas / NoGood</p>
   </div>
 </section>
 
@@ -200,7 +206,7 @@ unlisted: true
         <source src="/assets/img/book-promo.mp4" type="video/mp4">
       </video>
       <div class="spacer"></div>
-      <h4 class="uppercase pixel-font">Blog</h4>
+      <h4 class="uppercase pixel-font">Book Updates</h4>
       <div class="spacer-small"></div>
       <div class="list tag-list">
         {% for post in collections.feedPosts %}
