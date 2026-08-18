@@ -1,0 +1,87 @@
+/* Drawing pause overlay: the right 1344px stays transparent for an OBS video source. */
+#pause-panel {
+  top: 0;
+  left: 0;
+  width: 576px;
+  height: 1080px;
+  background: var(--panel);
+}
+
+#pause-right-column {
+  top: 0;
+  right: 0;
+  width: 420px;
+  height: 1080px;
+}
+
+#pause-bar {
+  --pause-bar-text-size: 42px;
+  --pause-bar-padding: 8px;
+  position: relative;
+  width: calc(var(--pause-bar-text-size) + (var(--pause-bar-padding) * 2));
+  flex: 0 0 calc(var(--pause-bar-text-size) + (var(--pause-bar-padding) * 2));
+  overflow: hidden;
+  color: var(--bg);
+  background: var(--accent);
+}
+
+
+.pause-bar__marquee {
+  position: absolute;
+  top: 50%;
+  /* Optical adjustment for the display font's asymmetric glyph bearings. */
+  left: calc(50% + 4px);
+  width: 2160px;
+  margin-top: calc(var(--pause-bar-text-size) / -2);
+  margin-left: -1080px;
+  transform: rotate(-90deg);
+}
+
+.pause-bar__marquee .ticker-track {
+  --ticker-distance: -50%;
+}
+
+.pause-bar__ticker-group {
+  display: flex;
+  flex-shrink: 0;
+  gap: 72px;
+  padding-right: 72px;
+  color: var(--bg);
+  font-family: var(--font-display);
+  font-size: var(--pause-bar-text-size);
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+#pause-chat {
+  min-width: 0;
+  background: var(--panel);
+}
+
+#pause-chat::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('/assets/img/lWuz6V7ZF--1400.webp');
+  background-size: auto 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: .3;
+  pointer-events: none;
+}
+
+#pause-chat-box {
+  top: 270px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  contain: paint;
+}
+
+
+#pause-chat-list .chat-message__sender--bot {
+  color: var(--accent);
+}
+

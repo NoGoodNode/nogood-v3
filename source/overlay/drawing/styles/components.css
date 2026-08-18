@@ -9,7 +9,7 @@
 
   .section-label {
     font-family: var(--font-display);
-    font-size: var(--text-sm);
+    font-size: var(--text-lg);
     color: var(--accent);
     letter-spacing: .08em;
     text-transform: uppercase;
@@ -36,6 +36,21 @@
     font-size: var(--text-lg);
   }
 
+  .activity-row {
+    display: flex;
+    gap: var(--space-2);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    line-height: 1.35;
+  }
+
+  .activity-row__time {
+    flex: 0 0 auto;
+    color: var(--muted);
+    font-family: var(--font-mono);
+  }
+
   .chat-message {
     display: flex;
     align-items: flex-start;
@@ -46,7 +61,7 @@
     background: rgb(251 250 243 / 5%);
     color: var(--text);
     font-family: var(--font-body);
-    font-size: var(--text-md);
+    font-size: var(--text-xl);
     line-height: 1.5;
   }
 
@@ -70,6 +85,64 @@
   }
 
   .chat-message__sender--bot { color: var(--radio); }
+
+  /* Compact recent-supporter rows, reusable across stream overlays. */
+  .supporter-feed {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .supporter-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    color: var(--bg);
+  }
+
+  .supporter-row--latest {
+    color: var(--accent);
+    background: var(--bg);
+  }
+
+  .supporter-row__rank {
+    flex-shrink: 0;
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+  }
+
+  .supporter-row__sender {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    font-family: var(--font-body);
+    font-size: var(--text-lg);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .supporter-row__amount {
+    flex-shrink: 0;
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+  }
+
+  .nostr-emoji {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    margin-inline: .06em;
+    vertical-align: -.16em;
+    object-fit: contain;
+  }
+
+  .nostr-unicode-emoji {
+    font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
+    font-size: 1em;
+    line-height: 1;
+  }
 
   .chat-message--zap {
     border-color: var(--accent);

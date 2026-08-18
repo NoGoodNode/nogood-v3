@@ -1,0 +1,251 @@
+---
+layout: overlay
+title: NoGood Drawing Pause Overlay
+permalink: /overlay/nogood-pause/
+eleventyExcludeFromCollections: true
+bodyClass: overlay overlay--pause
+stylesheets:
+  - /assets/css/overlays/drawing/tokens.css
+  - /assets/css/overlays/drawing/base.css
+  - /assets/css/overlays/drawing/utilities.css
+  - /assets/css/overlays/drawing/components.css
+  - /assets/css/overlays/drawing/pause.css
+---
+
+<aside id="pause-panel" class="absolute flex text-light overflow-hidden">
+  <div id="pause-bar">
+    <div class="pause-bar__marquee" role="marquee" aria-label="Taking a break">
+      <div class="ticker-viewport">
+        <div class="ticker-track flex items-center scroll-reverse scroll-slow">
+          <div class="ticker-group pause-bar__ticker-group">
+            <span>Taking a break</span><span>Taking a break</span><span>Taking a break</span><span>Taking a break</span>
+          </div>
+          <div class="ticker-group pause-bar__ticker-group" aria-hidden="true">
+            <span>Taking a break</span><span>Taking a break</span><span>Taking a break</span><span>Taking a break</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section id="pause-chat" class="relative flex-1 overflow-hidden border-right border-accent" aria-label="Stream chat">
+    <div id="pause-chat-box" class="absolute overflow-hidden">
+      <div id="pause-chat-list" class="absolute bottom-4 left-4 right-4 flex column gap-2" aria-live="polite"></div>
+    </div>
+  </section>
+</aside>
+
+<aside id="pause-right-column" class="absolute bg-accent p-4" aria-label="Supporters">
+  <h2 class="section-label text-bg">Top zappers</h2>
+  <div class="supporter-feed mt-3" id="pause-top-zappers" aria-live="polite"></div>
+
+  <h2 class="section-label text-bg mt-6">Recent supporters</h2>
+  <div class="supporter-feed mt-3" id="pause-supporter-feed" aria-live="polite"></div>
+</aside>
+
+<script>
+  window.OVERLAY_CONFIG = {
+    naddr: 'naddr1qqjrvwfcv33nydfk94jxgcnr956xzdpk95ukxdmr95crvvrxvfjxzdesvesnqqgwwaehxw309ahx7uewd3hkctczyr85tf46zd366lkjzws83ecs6fq3ttnjrjd500g7haz936h0knp22qcyqqq8vecq9aw68',
+    relays: ['wss://relay.primal.net', 'wss://nos.lol', 'wss://relay.damus.io', 'wss://relay.nogood.tech'],
+    profilePubkey: '55f04590674f3648f4cdc9dc8ce32da2a282074cd0b020596ee033d12d385185',
+  };
+</script>
+
+<script type="module">
+  import { createOverlayData } from '/assets/js/overlay/nostr-data.js';
+  import { appendAnimatedChatMessage } from '/assets/js/overlay/chat-feed.js';
+  import { createChatSpamFilter } from '/assets/js/nostr/chat-moderation.js';
+  import { renderNostrName } from '/assets/js/nostr/emojis.js';
+
+  const chatList = document.getElementById('pause-chat-list');
+  const botPubkey = 'c0434367d3e598555e930db7d54eb5e2b4013c0b7673c8f668475fc76b6a6606';
+  const shouldHideChatMessage = createChatSpamFilter();
+  const overlayData = createOverlayData(window.OVERLAY_CONFIG);
+
+  function insertChatMessage(card, timestamp, isHistorical) {
+    const createdAt = Number(timestamp || 0);
+    card.dataset.timestamp = String(createdAt);
+    const newerMessage = [...chatList.children]
+      .find(child => Number(child.dataset.timestamp) > createdAt);
+
+    if (newerMessage) chatList.insertBefore(card, newerMessage);
+    else if (isHistorical) chatList.appendChild(card);
+    else appendAnimatedChatMessage(chatList, card, { maxMessages: 100 });
+  }
+
+  function appendStreamMessage(message, isHistorical, variant = '') {
+    const card = document.createElement('article');
+    const isOwner = message.pubkey === window.OVERLAY_CONFIG.profilePubkey;
+    const isBot = message.pubkey === botPubkey;
+    card.className = `chat-message ${variant} ${isOwner ? 'chat-message--owner' : ''} ${isBot ? 'chat-message--bot' : ''} column gap-1 rounded-md`;
+
+    const sender = document.createElement('span');
+    sender.className = `${isBot ? 'chat-message__sender--bot' : 'text-accent'} font-mono text-sm uppercase`;
+    sender.textContent = '…';
+    const content = document.createElement('span');
+    content.textContent = message.content;
+    card.append(sender, content);
+
+    insertChatMessage(card, message.timestamp, isHistorical);
+    overlayData.fetchProfile(message.pubkey).then(profile => {
+      renderNostrName(sender, profile.name, profile.emojis);
+    }).catch(() => { sender.textContent = 'anon'; });
+  }
+
+  const CHAT_HISTORY_KEY = 'overlay-chat-history-v1';
+  const MAX_CACHED_CHAT_MESSAGES = 50;
+  const seenChatMessageIds = new Set();
+
+  function cachedChatMessages() {
+    const cached = overlayData.state.getStream(CHAT_HISTORY_KEY, []);
+    return Array.isArray(cached) ? cached
+      .filter(message => message && typeof message.id === 'string' && typeof message.content === 'string')
+      .sort((a, b) => Number(a.timestamp || 0) - Number(b.timestamp || 0))
+      .slice(-MAX_CACHED_CHAT_MESSAGES) : [];
+  }
+
+  function rememberChatMessage(message) {
+    if (!message.id) return;
+    const messages = new Map(cachedChatMessages().map(item => [item.id, item]));
+    messages.set(message.id, {
+      id: message.id,
+      pubkey: message.pubkey || '',
+      content: message.content,
+      timestamp: Number(message.timestamp || 0),
+    });
+    overlayData.state.setStream(CHAT_HISTORY_KEY, [...messages.values()]
+      .sort((a, b) => a.timestamp - b.timestamp)
+      .slice(-MAX_CACHED_CHAT_MESSAGES));
+  }
+
+  function showChatMessage(message, isHistorical) {
+    if (!message.id || seenChatMessageIds.has(message.id)) return;
+    seenChatMessageIds.add(message.id);
+    if (shouldHideChatMessage(message).hidden) return;
+    rememberChatMessage(message);
+    appendStreamMessage(message, isHistorical);
+  }
+
+  cachedChatMessages().forEach(message => showChatMessage(message, true));
+  overlayData.subscribeStreamChat(showChatMessage);
+
+  overlayData.subscribeStreamRaids((raid, isHistorical) => {
+    appendStreamMessage(
+      { ...raid, content: `RAID FROM ${raid.content || 'ANON'}` },
+      isHistorical,
+      'chat-message--raid',
+    );
+  });
+
+  function appendStreamZap(zap, isHistorical) {
+    const card = document.createElement('article');
+    const isLowValue = zap.amount < 1000;
+    card.className = `chat-message ${isLowValue ? 'chat-message--zap-low' : 'chat-message--zap'} column gap-1 rounded-md`;
+
+    const header = document.createElement('div');
+    header.className = 'flex items-center gap-2';
+    const amount = document.createElement('span');
+    amount.className = `font-display text-lg ${isLowValue ? 'text-accent' : ''}`;
+    amount.textContent = `⚡ ${zap.amount.toLocaleString()}`;
+    const sender = document.createElement('span');
+    sender.className = 'font-mono text-lg uppercase';
+    sender.textContent = '…';
+    header.append(amount, sender);
+    card.appendChild(header);
+
+    if (zap.content) {
+      const content = document.createElement('span');
+      content.textContent = zap.content;
+      card.appendChild(content);
+    }
+
+    insertChatMessage(card, zap.timestamp, isHistorical);
+    overlayData.fetchProfile(zap.senderPubkey).then(profile => {
+      renderNostrName(sender, profile.name, profile.emojis);
+    }).catch(() => { sender.textContent = 'anon'; });
+  }
+
+  overlayData.subscribeStreamZaps(appendStreamZap);
+
+  const supporterFeed = document.getElementById('pause-supporter-feed');
+  const recentSupporters = new Map();
+  const topZappers = new Map();
+  const supporterProfiles = new Map();
+  const topZappersFeed = document.getElementById('pause-top-zappers');
+
+  function formatSats(amount) {
+    if (amount >= 1_000_000) return `${(amount / 1_000_000).toFixed(1)}M`;
+    if (amount >= 1_000) return `${(amount / 1_000).toFixed(amount % 1_000 === 0 ? 0 : 1)}k`;
+    return String(amount);
+  }
+
+  function renderSupporters() {
+    const supporters = [...recentSupporters.values()]
+      .sort((a, b) => b.timestamp - a.timestamp)
+      .slice(0, 10);
+
+    supporterFeed.replaceChildren();
+    supporters.forEach((zap, index) => {
+      const row = document.createElement('div');
+      row.className = `supporter-row border border-bg rounded-small ${index === 0 ? 'supporter-row--latest' : ''}`;
+
+      const sender = document.createElement('span');
+      sender.className = 'supporter-row__sender';
+      const profile = supporterProfiles.get(zap.senderPubkey);
+      if (profile) renderNostrName(sender, profile.name, profile.emojis);
+      else sender.textContent = '…';
+
+      const amount = document.createElement('span');
+      amount.className = 'supporter-row__amount tracking-wide uppercase nudge-down-2';
+      amount.textContent = `⚡ ${formatSats(zap.amount)}`;
+      row.append(sender, amount);
+      supporterFeed.appendChild(row);
+    });
+  }
+
+  function renderTopZappers() {
+    const zappers = [...topZappers.values()]
+      .sort((a, b) => b.amount - a.amount)
+      .slice(0, 5);
+
+    topZappersFeed.replaceChildren();
+    zappers.forEach((zapper, index) => {
+      const row = document.createElement('div');
+      row.className = `supporter-row border border-bg rounded-small ${index === 0 ? 'supporter-row--latest' : ''}`;
+
+      const rank = document.createElement('span');
+      rank.className = 'supporter-row__rank nudge-down-2';
+      rank.textContent = String(index + 1).padStart(2, '0');
+
+      const sender = document.createElement('span');
+      sender.className = 'supporter-row__sender';
+      const profile = supporterProfiles.get(zapper.pubkey);
+      if (profile) renderNostrName(sender, profile.name, profile.emojis);
+      else sender.textContent = '…';
+
+      const amount = document.createElement('span');
+      amount.className = 'supporter-row__amount tracking-wide uppercase nudge-down-2';
+      amount.textContent = `⚡ ${formatSats(zapper.amount)}`;
+      row.append(rank, sender, amount);
+      topZappersFeed.appendChild(row);
+    });
+  }
+
+  overlayData.subscribeCombinedZaps((zap) => {
+    if (recentSupporters.has(zap.id)) return;
+    recentSupporters.set(zap.id, zap);
+    if (zap.senderPubkey) {
+      const zapper = topZappers.get(zap.senderPubkey) || { pubkey: zap.senderPubkey, amount: 0 };
+      zapper.amount += zap.amount;
+      topZappers.set(zap.senderPubkey, zapper);
+    }
+    renderSupporters();
+    renderTopZappers();
+
+    overlayData.fetchProfile(zap.senderPubkey).then(profile => {
+      supporterProfiles.set(zap.senderPubkey, profile);
+      renderSupporters();
+      renderTopZappers();
+    }).catch(() => {});
+  });
+</script>

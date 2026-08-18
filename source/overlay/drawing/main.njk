@@ -77,6 +77,7 @@ stylesheets:
   import { createOverlayData } from '/assets/js/overlay/nostr-data.js';
   import { appendAnimatedChatMessage } from '/assets/js/overlay/chat-feed.js';
   import { createChatSpamFilter } from '/assets/js/nostr/chat-moderation.js';
+  import { renderNostrName } from '/assets/js/nostr/emojis.js';
 
   // Future overlay UI can use window.overlayData to subscribe only to the
   // stream and account feeds it needs.
@@ -91,11 +92,16 @@ stylesheets:
   const botPubkey = 'c0434367d3e598555e930db7d54eb5e2b4013c0b7673c8f668475fc76b6a6606';
   const shouldHideChatMessage = createChatSpamFilter();
 
-  function appendHistoricalMessage(card, timestamp) {
-    card.dataset.timestamp = String(timestamp || 0);
-    const newerMessage = [...chatList.children].find(child => Number(child.dataset.timestamp) > timestamp);
+  function insertChatMessage(card, timestamp, isHistorical) {
+    const createdAt = Number(timestamp || 0);
+    card.dataset.timestamp = String(createdAt);
+    const newerMessage = [...chatList.children]
+      .find(child => Number(child.dataset.timestamp) > createdAt);
+
+    // Late relay history belongs in chronological order, not after newer live cards.
     if (newerMessage) chatList.insertBefore(card, newerMessage);
-    else chatList.appendChild(card);
+    else if (isHistorical) chatList.appendChild(card);
+    else appendAnimatedChatMessage(chatList, card);
   }
 
   function appendStreamMessage(message, isHistorical, variant = '') {
@@ -111,18 +117,49 @@ stylesheets:
     content.textContent = message.content;
     card.append(sender, content);
 
-    if (isHistorical) appendHistoricalMessage(card, message.timestamp);
-    else appendAnimatedChatMessage(chatList, card);
+    insertChatMessage(card, message.timestamp, isHistorical);
 
     window.overlayData.fetchProfile(message.pubkey).then(profile => {
-      sender.textContent = profile.name || 'anon';
+      renderNostrName(sender, profile.name, profile.emojis);
     }).catch(() => { sender.textContent = 'anon'; });
   }
 
-  window.overlayData.subscribeStreamChat((message, isHistorical) => {
+  const CHAT_HISTORY_KEY = 'overlay-chat-history-v1';
+  const MAX_CACHED_CHAT_MESSAGES = 50;
+  const seenChatMessageIds = new Set();
+
+  function cachedChatMessages() {
+    const cached = window.overlayData.state.getStream(CHAT_HISTORY_KEY, []);
+    return Array.isArray(cached) ? cached
+      .filter(message => message && typeof message.id === 'string' && typeof message.content === 'string')
+      .sort((a, b) => Number(a.timestamp || 0) - Number(b.timestamp || 0))
+      .slice(-MAX_CACHED_CHAT_MESSAGES) : [];
+  }
+
+  function rememberChatMessage(message) {
+    if (!message.id) return;
+    const messages = new Map(cachedChatMessages().map(item => [item.id, item]));
+    messages.set(message.id, {
+      id: message.id,
+      pubkey: message.pubkey || '',
+      content: message.content,
+      timestamp: Number(message.timestamp || 0),
+    });
+    window.overlayData.state.setStream(CHAT_HISTORY_KEY, [...messages.values()]
+      .sort((a, b) => a.timestamp - b.timestamp)
+      .slice(-MAX_CACHED_CHAT_MESSAGES));
+  }
+
+  function showChatMessage(message, isHistorical) {
+    if (!message.id || seenChatMessageIds.has(message.id)) return;
+    seenChatMessageIds.add(message.id);
     if (shouldHideChatMessage(message).hidden) return;
+    rememberChatMessage(message);
     appendStreamMessage(message, isHistorical);
-  });
+  }
+
+  cachedChatMessages().forEach(message => showChatMessage(message, true));
+  window.overlayData.subscribeStreamChat(showChatMessage);
 
   window.overlayData.subscribeStreamRaids((raid, isHistorical) => {
     appendStreamMessage({ ...raid, content: `RAID FROM ${raid.content || 'ANON'}` }, isHistorical, 'chat-message--raid');
@@ -150,15 +187,77 @@ stylesheets:
       card.appendChild(content);
     }
 
-    if (isHistorical) appendHistoricalMessage(card, zap.timestamp);
-    else appendAnimatedChatMessage(chatList, card);
+    insertChatMessage(card, zap.timestamp, isHistorical);
 
     window.overlayData.fetchProfile(zap.senderPubkey).then(profile => {
-      sender.textContent = profile.name || 'anon';
+      renderNostrName(sender, profile.name, profile.emojis);
     }).catch(() => { sender.textContent = 'anon'; });
   }
 
   window.overlayData.subscribeStreamZaps(appendStreamZap);
+
+  // Account activity: persist a compact recent list so scene changes retain it.
+  const notificationCenter = document.getElementById('notification-center');
+  const MAX_ACTIVITY_ITEMS = 5;
+  const seenNotificationIds = new Set(window.overlayData.state.getAccount('seen-activity', []));
+  const ACTIVITY_LABELS = {
+    post: 'posted a new note',
+    zap: 'zapped NoGood',
+    comment: 'replied to NoGood',
+    reaction: "liked NoGood's post",
+    reply: 'replied to NoGood',
+  };
+
+  function saveActivity() {
+    window.overlayData.state.setAccount('activity-snapshot', [...notificationCenter.children]
+      .map(row => ({ time: row.dataset.time || '', text: row.dataset.text || '' })));
+  }
+
+  function addActivity(text, time = new Date()) {
+    if (!text) return;
+    const row = document.createElement('div');
+    row.className = 'activity-row';
+    row.dataset.time = typeof time === 'string' ? time : `${String(time.getHours()).padStart(2, '0')}:${String(time.getMinutes()).padStart(2, '0')}`;
+    row.dataset.text = text;
+    const timeLabel = document.createElement('span');
+    timeLabel.className = 'activity-row__time';
+    timeLabel.textContent = row.dataset.time;
+    const message = document.createElement('span');
+    message.textContent = text;
+    row.append(timeLabel, message);
+    notificationCenter.prepend(row);
+    while (notificationCenter.children.length > MAX_ACTIVITY_ITEMS) notificationCenter.lastElementChild.remove();
+    saveActivity();
+  }
+
+  const savedActivity = window.overlayData.state.getAccount('activity-snapshot', []);
+  if (Array.isArray(savedActivity) && savedActivity.length) {
+    notificationCenter.replaceChildren();
+    savedActivity.slice(0, MAX_ACTIVITY_ITEMS).reverse().forEach(item => addActivity(item.text, item.time));
+  }
+
+  setTimeout(() => window.overlayData.subscribeAccountNotifications(({ type, pubkey, id, own, amount, targetPubkey }) => {
+    if (!id || seenNotificationIds.has(id)) return;
+    seenNotificationIds.add(id);
+    window.overlayData.state.setAccount('seen-activity', [...seenNotificationIds].slice(-200));
+    if (type === 'follow' || (own && type !== 'post' && type !== 'zap' && type !== 'reaction')) return;
+    if (own && type === 'zap') {
+      addActivity(`NoGood zapped ${amount ? `${amount.toLocaleString()} sats` : ''}`.trim());
+      return;
+    }
+    if (own && type === 'reaction') {
+      if (!targetPubkey) return addActivity('NoGood liked a post');
+      window.overlayData.fetchProfile(targetPubkey)
+        .then(profile => addActivity(`NoGood liked ${profile.name}'s post`))
+        .catch(() => addActivity('NoGood liked a post'));
+      return;
+    }
+    const label = ACTIVITY_LABELS[type];
+    if (!label) return;
+    window.overlayData.fetchProfile(pubkey)
+      .then(profile => addActivity(`${profile.name} ${label}`))
+      .catch(() => addActivity(`anon ${label}`));
+  }), 6000);
 
   window.overlayData.subscribeStreamInfo(info => {
     viewerCount.textContent = `${info.viewers ?? 0} viewers`;

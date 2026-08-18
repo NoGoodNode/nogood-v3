@@ -174,7 +174,7 @@ async function flushProfileQueue() {
   const pubkeys = [...profileFetchQueue.keys()];
   const waiting = new Map(profileFetchQueue);
   profileFetchQueue.clear();
-  const fallback = { name: 'anon', lud16: null, picture: null };
+  const fallback = { name: 'anon', lud16: null, picture: null, emojis: {} };
   let events = [];
   try {
     events = await activeRadioNostr.hub.query({ kinds: [0], authors: pubkeys });
@@ -192,7 +192,14 @@ async function flushProfileQueue() {
     if (event) {
       try {
         const parsed = JSON.parse(event.content);
-        profile = { name: parsed.display_name || parsed.name || truncateNpub(pubkey), lud16: parsed.lud16 || null, picture: parsed.picture || null };
+        profile = {
+          name: parsed.display_name || parsed.name || truncateNpub(pubkey),
+          lud16: parsed.lud16 || null,
+          picture: parsed.picture || null,
+          emojis: Object.fromEntries(event.tags
+            .filter(tag => tag[0] === 'emoji' && tag[1] && tag[2])
+            .map(tag => [tag[1], tag[2]])),
+        };
       } catch {}
     }
     PROFILE_CACHE.set(pubkey, profile);
@@ -201,7 +208,7 @@ async function flushProfileQueue() {
 }
 
 export function fetchProfile(pubkey) {
-  if (!pubkey) return Promise.resolve({ name: 'anon', lud16: null, picture: null });
+  if (!pubkey) return Promise.resolve({ name: 'anon', lud16: null, picture: null, emojis: {} });
   if (PROFILE_CACHE.has(pubkey)) return Promise.resolve(PROFILE_CACHE.get(pubkey));
   return new Promise(resolve => {
     if (!profileFetchQueue.has(pubkey)) profileFetchQueue.set(pubkey, []);
