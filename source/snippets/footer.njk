@@ -47,10 +47,16 @@
         <div class="section-column footer-menu align-right">
                 <ul class="place-bottom text-large uppercase pixel-font">
                     <li>
-                        <a href="{{ settings.socials.nostr.url }}" target="_blank" rel="noopener">{{ settings.socials.nostr.label }}</a>
+                        <a href="{{ settings.socials.nostr.url }}" target="_blank" rel="noopener">{{ settings.socials.nostr.label }}</a> {{ settings.socials.nostr.status }}
                     </li>
                     <li>
-                        <a href="{{ settings.socials.bluesky.url }}" target="_blank" rel="noopener">{{ settings.socials.bluesky.label }}</a>
+                        <a href="{{ settings.socials.bluesky.url }}" target="_blank" rel="noopener">{{ settings.socials.bluesky.label }}</a> {{ settings.socials.bluesky.status }}
+                    </li>
+                    <li>
+                        <a href="{{ settings.socials.twitter.url }}" target="_blank" rel="noopener">{{ settings.socials.twitter.label }}</a> {{ settings.socials.twitter.status }}
+                    </li>
+                    <li>
+                        <a href="{{ settings.socials.instagram.url }}" target="_blank" rel="noopener">{{ settings.socials.instagram.label }}</a> {{ settings.socials.instagram.status }}
                     </li>
                 </ul>
         </div>

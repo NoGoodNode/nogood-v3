@@ -16,7 +16,17 @@ socials:
   nostr:
     label: NOSTR
     url: https://primal.net/nogood
+    status: "☺"
   bluesky:
     label: Bluesky
     url: https://bsky.app/profile/nogood.studio
+    status: "☺"
+  twitter:
+    label: X
+    url: https://x.com/nogood_studio
+    status: "☹"
+  instagram:
+    label: Instagram
+    url: https://instagram.com/nogood_studio
+    status: "☹"
 
