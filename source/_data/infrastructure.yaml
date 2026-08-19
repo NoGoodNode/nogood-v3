@@ -1,0 +1,13 @@
+items:
+  - name: "NoGood Radio"
+    description: "24/7 Nostr-integrated pirate radio"
+  - name: "Radio Chat Bot"
+    description: "Helps run the radio chat"
+  - name: "Mainframe"
+    description: "Posts to Nostr on event triggers"
+  - name: "NoGood Relay"
+    description: "Nostr relay and Blossom server"
+  - name: "NoGood Downloads"
+    description: "Always-on torrent hosting"
+  - name: "NoGood Node"
+    description: "Enables BTC payments in the shop"

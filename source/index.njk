@@ -43,8 +43,8 @@ bodyColor: bg-highlight
             <p class="text-large margin-bottom-none">
                 I’m Thomas, a freelance illustrator based in Amsterdam. I established NoGood in 2021. More than a pseudonym, I found that NoGood provided a space to experiment.
             </p>
-            <div class="spacer line"></div>
-            <h5 class="uppercase pixel-font">Terminal</h5>
+            <div class="spacer-large line"></div>
+            <h5 class="uppercase pixel-font">System Log</h5>
             <div class="spacer-large"></div>
             <div class="flex-space-between flex-align-center">
                 <span class="text-small uppercase pixel-font offset-down-2">PROJECT</span>
@@ -212,15 +212,12 @@ bodyColor: bg-highlight
     </div>
     <div class="section-column">
         <div class="inner-column sticky">
-            <h5 class="uppercase pixel-font">The infrastructure</h5>
+            <h5 class="uppercase pixel-font">Running systems</h5>
             <div class="spacer"></div>
-            <div class="list three-col-list">
-                <div>NoGood Radio</div><div>24/7 Nostr-integrated pirate radio</div><div class="align-right">Mac Mini</div><div class="row-border"></div>
-                <div>Radio Chat Bot</div><div>Helps run the radio chat</div><div class="align-right">Mac Mini</div><div class="row-border"></div>
-                <div>Nostr Bot</div><div>Posts to Nostr on event triggers</div><div class="align-right">RPI 5</div><div class="row-border"></div>
-                <div>Relay</div><div>My personal Nostr relay</div><div class="align-right">RPI 5</div><div class="row-border"></div>
-                <div>Freebies</div><div>Always-on torrent hosting</div><div class="align-right">RPI 5</div><div class="row-border"></div>
-                <div>BTCPay Server</div><div>Enables BTC payments in the shop</div><div class="align-right">RPI 3</div><div class="row-border"></div>
+            <div class="list two-col-list">
+                {% for item in infrastructure.items %}
+                    <div>{{ item.name }}</div><div class="align-right">{{ item.description }}</div><div class="row-border"></div>
+                {% endfor %}
             </div>
         </div>
     </div>
@@ -307,6 +304,14 @@ bodyColor: bg-highlight
         <div class="home-torrent-list place-bottom hide-small hide-medium">
             <div class="spacer line"></div>
             {% include "source/snippets/downloads.njk" %}
+            <div class="spacer-small"></div>
+            <div class="slideshow slideshow-5">
+                {% image "source/assets/img/shop/Downloads_01.jpg", "NoGood wallpaper pack preview" %}
+                {% image "source/assets/img/shop/Downloads_02.jpg", "NoGood wallpaper pack preview" %}
+                {% image "source/assets/img/shop/Downloads_03.jpg", "NoGood wallpaper pack preview" %}
+                {% image "source/assets/img/shop/Downloads_04.jpg", "NoGood wallpaper pack preview" %}
+                {% image "source/assets/img/shop/Downloads_05.jpg", "NoGood wallpaper pack preview" %}
+            </div>
             <div class="spacer"></div>
             {# NOTE #}
             <div class="note bg-offwhite padding-small">
@@ -369,7 +374,7 @@ bodyColor: bg-highlight
                 {% include "source/snippets/list-tag.njk" %}
                 {% endfor %}
             </div>
-            <div class="spacer line"></div>
+            <div class="spacer-extralarge"></div>
             <h4 class="uppercase pixel-font">Podcast appearances</h4>
             <div class="spacer-large"></div>
             <div class="list two-col-list">
