@@ -251,6 +251,7 @@
     #context-articles,
     #press-about,
     #press-contact,
+    #press-contact.product-contact-grid,
     #now {
         grid-template-columns: 1fr;
         align-items: start;

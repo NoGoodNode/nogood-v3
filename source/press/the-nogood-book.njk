@@ -102,7 +102,7 @@ unlisted: true
       </div>
     </div>
     <div class="place-bottom">
-      <p class="text-large padding-right-small">In keeping with its self-published roots and the ethos of the open web, <a href="{{ bookpress.links.book.url }}">The NoGood Book</a> is available exclusively through nogood.studio. Bitcoin payments are handled through self-hosted infrastructure, and every order is carefully packed and shipped from the NoGood studio in Amsterdam.</p>
+      <p class="text-large padding-right-small">In keeping with its self-published roots and the ethos of the open web, <a href="{{ bookpress.links.book.url }}">The NoGood Book</a> is available exclusively through nogood.studio.</p>
     </div>
   </div>
   <div class="section-column">
@@ -110,33 +110,17 @@ unlisted: true
     <h4 class="pixel-font uppercase">Publication details</h4>
     <div class="spacer"></div>
     <div class="list two-col-list press-publication-details">
-      <div>Release date</div><div class="align-right">August 2026</div><div class="row-border"></div>
-      <div>Price</div><div class="align-right">€70</div><div class="row-border"></div>
-      <div>Edition</div><div class="align-right">Limited run of 400</div><div class="row-border"></div>
-      <div>Dimensions</div><div class="align-right">180 × 250 mm</div><div class="row-border"></div>
-      <div>Pages</div><div class="align-right">272</div><div class="row-border"></div>
-      <div>Language</div><div class="align-right">English</div><div class="row-border"></div>
-      <div>Binding</div><div class="align-right">Exposed spine, softcover</div><div class="row-border"></div>
-      <div>Published by</div><div class="align-right">NoGood</div><div class="row-border"></div>
-      <div>Printed by</div><div class="align-right">Wilco Art Books</div><div class="row-border"></div>
-      <div>Text and editing</div><div class="align-right">Daniël van der Winden</div><div class="row-border"></div>
-      <div>Typeset by</div><div class="align-right">Wonderwerk</div><div class="row-border"></div>
-      <div>Typography</div><div class="align-right">Supply Mono, Untitled Sans &amp; Serif</div><div class="row-border"></div>
-      <div>Paper</div><div class="align-right">Munken CW &amp; Rainbow 18</div><div class="row-border"></div>
-      <div>Availability</div><div class="align-right">Worldwide shipping</div><div class="row-border"></div>
+      {% for item in bookspecs.specs %}
+        <div>{{ item.title }}</div><div class="align-right">{{ item.description | safe }}</div><div class="row-border"></div>
+      {% endfor %}
     </div>
     <div class="spacer-extralarge"></div>
     <h4 class="pixel-font uppercase">Featuring contributions by</h4>
     <div class="spacer"></div>
     <div class="list two-col-list">
-      <div>Douglas Rushkoff</div><div class="align-right"><a href="https://rushkoff.com" target="_blank" rel="noopener">rushkoff.com</a></div><div class="row-border"></div>
-      <div>Joan Westenberg</div><div class="align-right"><a href="https://joanwestenberg.com" target="_blank" rel="noopener">joanwestenberg.com</a></div><div class="row-border"></div>
-      <div>Cory Doctorow</div><div class="align-right"><a href="https://craphound.com" target="_blank" rel="noopener">craphound.com</a></div><div class="row-border"></div>
-      <div>Mike Masnick</div><div class="align-right"><a href="https://techdirt.com" target="_blank" rel="noopener">techdirt.com</a></div><div class="row-border"></div>
-      <div>Shawn Yeager</div><div class="align-right"><a href="https://shawnyeager.com" target="_blank" rel="noopener">shawnyeager.com</a></div><div class="row-border"></div>
-      <div>Em</div><div class="align-right"><a href="https://privacyguides.org" target="_blank" rel="noopener">privacyguides.org</a></div><div class="row-border"></div>
-      <div>Bart Mol</div><div class="align-right"><a href="https://bartmol.io" target="_blank" rel="noopener">bartmol.io</a></div><div class="row-border"></div>
-      <div>Daniël van der Winden</div><div class="align-right"><a href="https://daniel.pizza" target="_blank" rel="noopener">daniel.pizza</a></div><div class="row-border"></div>
+      {% for contributor in bookspecs.contributors %}
+        <div>{{ contributor.name }}</div><div class="align-right"><a href="{{ contributor.url }}" target="_blank" rel="noopener">{{ contributor.website }}</a></div><div class="row-border"></div>
+      {% endfor %}
     </div>
   </div>
 </section>
