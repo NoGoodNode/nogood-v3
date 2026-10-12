@@ -202,7 +202,7 @@ bodyColor: bg-highlight
             </div>
         </div>
         <div class="place-bottom">
-            <p class="text-large"><a href="https://patreon.com/nogood_studio" target="_blank" rel="noopener">Patreon</a> is where I share more about the process and thinking behind my illustrations, look back on finished projects and talk about the obsessions shaping my new work.</p>
+            <p class="text-large"><a href="https://patreon.com/nogood_studio" target="_blank" rel="noopener">Patreon</a> is where I share more about the process and thinking behind my illustrations, look back on finished projects and talk about my obsessions shaping the new ones.</p>
             <div class="button-wrapper">
                 <a href="https://patreon.com/nogood_studio" target="_blank" rel="noopener" class="button pixel-font uppercase" data-umami-event="patreon-click" data-umami-event-location="homepage">Join on Patreon</a>
             </div>
@@ -354,48 +354,6 @@ bodyColor: bg-highlight
         <div class="grid-span-full border-bottom"></div>
         {# REGULAR ITEMS #}
         {% include "source/snippets/product-grid.njk" %}
-    </div>
-</div>
-{# BLOG #}
-<div class="section home-blog medium-grid bg-dark">
-    <div class="section-column sticky-two-rows">
-        <div class="sticky-wrapper">
-            <div class="sticky">
-                <h1>Studio notes, updates, and behind-the-scenes from ongoing projects.</h1>
-            </div>
-        </div>
-        <div class="spacer-large"></div>
-    </div>
-    <div class="section-column">
-        <div class="inner-column sticky">
-            <video autoplay muted loop playsinline preload="metadata" poster="/assets/img/book/Book_Promo_Poster.jpg">
-                <source src="/assets/img/book-promo.mp4" type="video/mp4">
-            </video>
-            <div class="spacer"></div>
-            <h4 class="uppercase pixel-font">Blog</h4>
-            <div class="spacer-large"></div>
-            <div class="list tag-list">
-                {% for post in collections.feedPosts %}
-                {% include "source/snippets/list-tag.njk" %}
-                {% endfor %}
-            </div>
-            <div class="spacer-extralarge"></div>
-            <h4 class="uppercase pixel-font">Podcast appearances</h4>
-            <div class="spacer-large"></div>
-            <div class="list two-col-list">
-                {% for episode in podcasts.episodes | reverse %}
-                    <div><a href="{{ episode.url }}" target="_blank" rel="noopener">{{ episode.show }}</a></div>
-                    <div class="align-right text-tabular">{{ episode.date | postDate }}</div>
-                    <div class="row-border"></div>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-    <div class="section-column">
-        <div class="inner-column sticky">
-        {% set clippingsItems = collections.clippingsHome %}
-        {% include "source/snippets/clippings.njk" %}
-        </div>
     </div>
 </div>
 <script type="module" src="/assets/js/zap-feed.js"></script>
