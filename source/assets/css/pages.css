@@ -67,6 +67,64 @@ HOME
 }
 
 /* ----------------
+PATREON
+---------------- */
+.patreon-section {
+    grid-template-columns: 2fr 3fr;
+}
+
+.patreon-illustration {
+    position: relative;
+}
+
+.patreon-badge {
+    top: 20%;
+    right: auto;
+    left: 80px;
+}
+
+/* ----------------
+RADIO INTRODUCTION
+---------------- */
+.radio-intro {
+    grid-template-columns: 30fr 45fr 25fr;
+}
+
+.radio-intro-title {
+    margin-top: 0.1em;
+    font-size: 5.5rem;
+    font-weight: 700;
+    line-height: 0.82;
+}
+
+.home-radio-player {
+    position: relative;
+}
+
+.home-radio-play-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+}
+
+.home-radio-play-overlay[hidden] {
+    display: none;
+}
+
+.home-radio-play-button {
+    width: 96px;
+    height: 96px;
+}
+
+.home-radio-play-button::before {
+    border-width: 16px 0 16px 29px;
+    margin-left: 5px;
+}
+
+/* ----------------
 SHOP
 ---------------- */
 .home-shop {

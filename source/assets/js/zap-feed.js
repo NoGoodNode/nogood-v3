@@ -8,29 +8,15 @@ const STREAM_ADDRESS = '30311:cf45a6ba1363ad7ed213a078e710d24115ae721c9b47bd1ebf
 const RELAYS = NOGOOD_ZAP_RELAYS;
 const MAX_ZAPS = 5;
 const MAX_LEADERBOARD = 5;
-
-const isRadio = !!document.getElementById('radio-zap-feed');
-const container = isRadio ? document.getElementById('radio-zap-feed') : document.getElementById('home-zap-feed');
-const leaderboardContainer = isRadio ? document.getElementById('radio-zap-leaderboard') : document.getElementById('home-zap-leaderboard');
-if (!container) throw new Error('No zap feed element found');
-
-const filter = isRadio
-  ? { kinds: [9735], '#a': [STREAM_ADDRESS], limit: 100 }
-  : { kinds: [9735], '#p': [PUBKEY], limit: 100 };
-
 const hub = getEventHub();
 
 function truncateNpub(pubkey) {
   try {
     const npub = nip19.npubEncode(pubkey);
     return npub.slice(0, 8) + '...' + npub.slice(-4);
-  } catch { return pubkey.slice(0, 8); }
-}
-
-function parseZap(event) {
-  return parseZapReceipt(event, {
-    expectedATag: isRadio ? STREAM_ADDRESS : null,
-  });
+  } catch {
+    return pubkey.slice(0, 8);
+  }
 }
 
 function formatSats(n) {
@@ -39,7 +25,7 @@ function formatSats(n) {
   return n.toString();
 }
 
-function renderZap(zap, name) {
+function renderZap(container, zap, name) {
   const el = document.createElement('div');
   el.className = 'chat__message chat__message--zap';
 
@@ -56,13 +42,12 @@ function renderZap(zap, name) {
   container.appendChild(el);
 }
 
-async function init() {
-  // Single query for all zap events — cap wait so slow relays don't stall render
+async function initFeed({ container, filter, expectedATag = null, leaderboardContainer = null }) {
   const events = await hub.query(filter, { relays: RELAYS, maxWait: 1500 });
 
   const allParsed = events
-    .filter(e => !isRadio || e.tags.some(t => t[0] === 'a' && t[1] === STREAM_ADDRESS))
-    .map(parseZap)
+    .filter(event => !expectedATag || event.tags.some(tag => tag[0] === 'a' && tag[1] === expectedATag))
+    .map(event => parseZapReceipt(event, { expectedATag }))
     .filter(zap => zap && zap.senderPubkey !== PUBKEY);
 
   const recentZaps = allParsed
@@ -70,46 +55,53 @@ async function init() {
     .sort((a, b) => b.timestamp - a.timestamp)
     .slice(0, MAX_ZAPS);
 
-  // Leaderboard aggregation
   const totals = new Map();
   allParsed.forEach(zap => {
     if (!zap.senderPubkey) return;
     totals.set(zap.senderPubkey, (totals.get(zap.senderPubkey) || 0) + zap.amount);
   });
+
   const top = [...totals.entries()]
     .sort((a, b) => b[1] - a[1])
     .slice(0, MAX_LEADERBOARD);
 
-  // Collect all unique pubkeys and fetch profiles in one query
   const allPubkeys = [...new Set([
-    ...recentZaps.map(z => z.senderPubkey),
-    ...top.map(([pk]) => pk),
+    ...recentZaps.map(zap => zap.senderPubkey),
+    ...top.map(([pubkey]) => pubkey),
   ].filter(Boolean))];
 
   const profileMap = new Map();
   if (allPubkeys.length) {
-    const profileEvents = await hub.query({ kinds: [0], authors: allPubkeys }, { relays: RELAYS, maxWait: 1500 });
-    profileEvents.forEach(e => {
-      if (profileMap.has(e.pubkey)) return;
+    const profileEvents = await hub.query(
+      { kinds: [0], authors: allPubkeys },
+      { relays: RELAYS, maxWait: 1500 }
+    );
+
+    profileEvents.forEach(event => {
+      if (profileMap.has(event.pubkey)) return;
       try {
-        const p = JSON.parse(e.content);
-        profileMap.set(e.pubkey, p.display_name || p.name || truncateNpub(e.pubkey));
-      } catch { profileMap.set(e.pubkey, 'anon'); }
+        const profile = JSON.parse(event.content);
+        profileMap.set(event.pubkey, profile.display_name || profile.name || truncateNpub(event.pubkey));
+      } catch {
+        profileMap.set(event.pubkey, 'anon');
+      }
     });
   }
 
-  const getName = pk => profileMap.get(pk) || truncateNpub(pk);
+  const getName = pubkey => profileMap.get(pubkey) || truncateNpub(pubkey);
 
-  recentZaps.forEach(zap => renderZap(zap, zap.senderPubkey ? getName(zap.senderPubkey) : 'anon'));
+  recentZaps.forEach(zap => {
+    renderZap(container, zap, zap.senderPubkey ? getName(zap.senderPubkey) : 'anon');
+  });
 
   if (leaderboardContainer) {
-    top.forEach(([pk, total], i) => {
+    top.forEach(([pubkey, total], index) => {
       const el = document.createElement('div');
       el.className = 'chat__message chat__message--zap';
 
       const rankEl = document.createElement('span');
       rankEl.className = 'chat__message-sender';
-      rankEl.textContent = `${i + 1}. ${getName(pk)}`;
+      rankEl.textContent = `${index + 1}. ${getName(pubkey)}`;
 
       const amountEl = document.createElement('span');
       amountEl.className = 'chat__message-zap-amount pixel-font';
@@ -120,7 +112,27 @@ async function init() {
       leaderboardContainer.appendChild(el);
     });
   }
-
 }
 
-init();
+const feeds = [
+  {
+    container: document.getElementById('home-zap-feed'),
+    leaderboardContainer: document.getElementById('home-zap-leaderboard'),
+    filter: { kinds: [9735], '#p': [PUBKEY], limit: 100 },
+  },
+  {
+    container: document.getElementById('home-radio-zap-feed'),
+    filter: { kinds: [9735], '#a': [STREAM_ADDRESS], limit: 100 },
+    expectedATag: STREAM_ADDRESS,
+  },
+  {
+    container: document.getElementById('radio-zap-feed'),
+    leaderboardContainer: document.getElementById('radio-zap-leaderboard'),
+    filter: { kinds: [9735], '#a': [STREAM_ADDRESS], limit: 100 },
+    expectedATag: STREAM_ADDRESS,
+  },
+].filter(feed => feed.container);
+
+Promise.all(feeds.map(initFeed)).catch(error => {
+  console.error('[zap-feed]', error);
+});

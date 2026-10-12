@@ -25,6 +25,10 @@
         grid-template-columns: 7fr 3fr;
     }
 
+    .radio-intro-title {
+        font-size: 4rem;
+    }
+
     /* ----------------
     FOOTER
     ---------------- */    

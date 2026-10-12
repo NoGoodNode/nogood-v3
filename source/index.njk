@@ -41,7 +41,7 @@ bodyColor: bg-highlight
         {# CONTACT #}
         <div class="place-bottom">
             <p class="text-large margin-bottom-none">
-                I’m Thomas, a freelance illustrator based in Amsterdam. I established NoGood in 2021. More than a pseudonym, I found that NoGood provided a space to experiment.
+                I’m Thomas, aka NoGood, an illustrator based in Amsterdam. I established NoGood in 2021. More than a pseudonym, I found that NoGood provided a space to experiment.
             </p>
             <div class="spacer-large line"></div>
             <h5 class="uppercase pixel-font">System Log</h5>
@@ -192,33 +192,53 @@ bodyColor: bg-highlight
         {% endfor %}
     </div>
 </div>
-{# RADIO INTRODUCTION #}
-<div class="section medium-grid bg-muted">
+{# PATREON #}
+<div class="section large-grid patreon-section">
     <div class="section-column sticky-two-rows">
         <div class="sticky-wrapper">
             <div class="sticky">
-                <h1>I tinker with the tools in the open-web toolbox, and run experiments that sometimes work.</h1>
+                <h1>Support NoGood on <a href="https://patreon.com/nogood_studio" target="_blank" rel="noopener">Patreon</a> and help me make more independent work.</h1>
                 <div class="spacer-large"></div>
             </div>
         </div>
         <div class="place-bottom">
-            <p class="text-large">The bots, self-hosted software, and NoGood Radio—my most complicated experiment to date—all belong to the world I’ve been building since I established NoGood.</p>
-        </div>
-    </div>
-    <div class="section-column">
-        <div class="bg-dark no-blend image-padding">
-            {% image "source/assets/img/NoGood_Selfpotrait.png", "NoGood self portrait" %}
-        </div>
-    </div>
-    <div class="section-column">
-        <div class="inner-column sticky">
-            <h5 class="uppercase pixel-font">Running systems</h5>
-            <div class="spacer"></div>
-            <div class="list two-col-list">
-                {% for item in infrastructure.items %}
-                    <div>{{ item.name }}</div><div class="align-right">{{ item.description }}</div><div class="row-border"></div>
-                {% endfor %}
+            <p class="text-large"><a href="https://patreon.com/nogood_studio" target="_blank" rel="noopener">Patreon</a> is where I share more about the process and thinking behind my illustrations, look back on finished projects and talk about the obsessions shaping my new work.</p>
+            <div class="button-wrapper">
+                <a href="https://patreon.com/nogood_studio" target="_blank" rel="noopener" class="button pixel-font uppercase" data-umami-event="patreon-click" data-umami-event-location="homepage">Join on Patreon</a>
             </div>
+        </div>
+    </div>
+    <div class="section-column">
+        <div class="patreon-illustration image-square bg-muted no-blend image-padding">
+            {% image "source/assets/img/NoGood_Selfpotrait.png", "NoGood self portrait" %}
+            <a href="https://patreon.com/nogood_studio" target="_blank" rel="noopener" class="header-badge patreon-badge flex-center no-blend hide-small fade-in" aria-label="Support NoGood on Patreon" data-umami-event="patreon-click" data-umami-event-location="badge">
+                {% image "source/assets/img/nogood_sign.png", "" %}
+                <svg class="header-badge-text" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <defs>
+                        <path id="patreon-circle-path" d="M 50,50 m -35,0 a 35,35 0 1,1 70,0 a 35,35 0 1,1 -70,0" />
+                    </defs>
+                    <text>
+                        <textPath href="#patreon-circle-path" class="uppercase pixel-font">SUPPORT NOGOOD ⚡ ON PATREON ⚡</textPath>
+                    </text>
+                </svg>
+            </a>
+        </div>
+    </div>
+</div>
+
+{# RADIO INTRODUCTION #}
+<div class="section medium-grid radio-intro bg-highlight hide-small">
+    <div class="section-column">
+        <h1 class="radio-intro-title header-extra-large mono uppercase">NoGood<br>Radio</h1>
+    </div>
+    <div class="section-column">
+        <h2>A 24/7 pirate radio station running on scrap parts and broadcasting from a basement somewhere.</h2>
+    </div>
+    <div class="section-column">
+        <div class="inner-column">
+            <h5 class="uppercase pixel-font">Latest Radio zaps</h5>
+            <div class="spacer-small"></div>
+            <div id="home-radio-zap-feed" class="zap-feed animate-in"></div>
         </div>
     </div>
 </div>
@@ -227,13 +247,18 @@ bodyColor: bg-highlight
 <div class="section relative hide-small bg-highlight">
     {# VIDEO #}
     <div class="section-column no-blend">
-        <div class="video-fill">
-            <video id="home-stream-video" muted playsinline></video>
+        <div class="home-radio-player video-fill">
+            <video id="home-stream-video" playsinline></video>
+            <div id="home-stream-play-overlay" class="home-radio-play-overlay">
+                <button id="home-stream-play" class="embed-play home-radio-play-button" aria-label="Play NoGood Radio"></button>
+            </div>
         </div>
     </div>
 </div>
 <script type="module">
     const video = document.getElementById('home-stream-video');
+    const playOverlay = document.getElementById('home-stream-play-overlay');
+    const playButton = document.getElementById('home-stream-play');
     const HLS_URL = 'https://api-core.zap.stream/537a365c-f1ec-44ac-af10-22d14a7319fb/hls/live.m3u8';
     const FALLBACK = '/assets/img/radio-bg.mp4';
     function useFallback() {
@@ -241,6 +266,12 @@ bodyColor: bg-highlight
         video.loop = true;
         video.play().catch(() => {});
     }
+    video.addEventListener('playing', () => {
+        playOverlay.hidden = true;
+    });
+    playButton.addEventListener('click', () => {
+        video.play().catch(() => {});
+    });
     async function initStream() {
         if (video.canPlayType('application/vnd.apple.mpegurl')) {
             video.src = HLS_URL;
@@ -300,27 +331,6 @@ bodyColor: bg-highlight
                 </div>
             </div>
         </div>
-        {# FREEBIES #}
-        <div class="home-torrent-list place-bottom hide-small hide-medium">
-            <div class="spacer line"></div>
-            {% include "source/snippets/downloads.njk" %}
-            <div class="spacer-small"></div>
-            <div class="slideshow slideshow-5">
-                {% image "source/assets/img/shop/Downloads_01.jpg", "NoGood wallpaper pack preview" %}
-                {% image "source/assets/img/shop/Downloads_02.jpg", "NoGood wallpaper pack preview" %}
-                {% image "source/assets/img/shop/Downloads_03.jpg", "NoGood wallpaper pack preview" %}
-                {% image "source/assets/img/shop/Downloads_04.jpg", "NoGood wallpaper pack preview" %}
-                {% image "source/assets/img/shop/Downloads_05.jpg", "NoGood wallpaper pack preview" %}
-            </div>
-            <div class="spacer"></div>
-            {# NOTE #}
-            <div class="note bg-offwhite padding-small">
-                <p class="">Rocking the wallpapers? Zap torrent-files on
-                    <a href="https://dtan.xyz/p/nprofile1qqs9tuz9jpn57djg7nxunhyvuvk69g5zqaxdpvpqt9hwqv7395u9rpg6zq5uw"
-                        target="_blank" rel="noopener" class="">dtan.xyz</a>
-                </p>
-            </div>
-        </div>
     </div>
     {# GRID #}
     <div class="section-column large-grid">
@@ -355,11 +365,6 @@ bodyColor: bg-highlight
             </div>
         </div>
         <div class="spacer-large"></div>
-        <div class="place-bottom hide-small hide-medium">
-            <div class="">
-                <p class="">View all blog posts and clippings in <a href="/archive/">the archive</a>.</p>
-            </div>
-        </div>
     </div>
     <div class="section-column">
         <div class="inner-column sticky">

@@ -183,12 +183,12 @@ shirt_model:
               {% include "source/snippets/order-button.njk" %}
               <div class="item-description text-small">
                 <span class="book-sales-total"></span>
-                / {{ booksales.book_run }} available
+                / <span class="book-run-total">{{ booksales.book_run }}</span> available
               </div>
             </div>
             <div class="spacer-small"></div>
             {# REGULAR EDITION + PRINT #}
-            <div class="order-option inner-column outline padding-small">
+            <div class="book-print-option order-option inner-column outline padding-small">
               <div class="flex-space-between flex-align-start">
                 <div class="flex-align-center gap-small">
                   <div class="circle-thumb-group">
@@ -239,16 +239,30 @@ shirt_model:
           });
         });
       fetch('https://book-stats.hello-5b9.workers.dev/print-sales')
-        .then(r => r.json())
-        .then(data => {
-          document.querySelectorAll('.print-sales-total').forEach(element => {
-            element.textContent = printRun - ((data.total ?? 0) + presales);
-          });
+        .then(r => {
+          if (!r.ok) throw new Error(`Print sales request failed: ${r.status}`);
+          return r.json();
         })
-        .catch(() => {
+        .then(data => {
+          const remaining = Math.max(printRun - ((data.total ?? 0) + presales), 0);
+
           document.querySelectorAll('.print-sales-total').forEach(element => {
-            element.textContent = printRun - presales;
+            element.textContent = remaining;
           });
+
+          if (remaining === 0) {
+            document.querySelectorAll('.book-print-option').forEach(option => {
+              const spacer = option.previousElementSibling;
+              if (spacer?.classList.contains('spacer-small')) spacer.remove();
+              option.remove();
+            });
+            document.querySelectorAll('.book-run-total').forEach(element => {
+              element.textContent = bookRun + printRun;
+            });
+          }
+        })
+        .catch(error => {
+          console.error('[book-print-stock]', error);
         });
     </script>
 
@@ -386,11 +400,11 @@ shirt_model:
           {% include "source/snippets/order-button.njk" %}
           <div class="item-description text-small">
             <span class="book-sales-total"></span>
-            / {{ booksales.book_run }} available
+            / <span class="book-run-total">{{ booksales.book_run }}</span> available
           </div>
         </div>
         <div class="spacer-small"></div>
-        <div class="order-option inner-column outline padding-small">
+        <div class="book-print-option order-option inner-column outline padding-small">
           <div class="flex-space-between flex-align-start">
             <div class="flex-align-center gap-small">
               <div class="circle-thumb-group">
