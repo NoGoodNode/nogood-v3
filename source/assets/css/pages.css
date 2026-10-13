@@ -97,6 +97,37 @@ RADIO INTRODUCTION
     line-height: 0.82;
 }
 
+.radio-intro-stats,
+.radio-intro-copy {
+    align-content: space-between;
+}
+
+#home-stream-viewers {
+    color: var(--highlight);
+}
+
+.home-radio-now-playing[hidden] {
+    display: none;
+}
+
+.home-radio-current-track {
+    display: flex;
+    align-items: center;
+    max-width: 100%;
+    overflow: hidden;
+    line-height: 1.3;
+    white-space: nowrap;
+}
+
+.home-radio-current-track > span:last-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.home-radio-current-track .soundbars span {
+    background-color: var(--primary-dark);
+}
+
 .home-radio-player {
     position: relative;
 }
@@ -122,6 +153,122 @@ RADIO INTRODUCTION
 .home-radio-play-button::before {
     border-width: 16px 0 16px 29px;
     margin-left: 5px;
+}
+
+.home-radio-controls {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 36px 12px 12px;
+    color: var(--primary-light);
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.75));
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.home-radio-player.has-started:hover .home-radio-controls,
+.home-radio-controls:focus-within {
+    opacity: 1;
+}
+
+.home-radio-controls[hidden] {
+    display: none;
+}
+
+.home-radio-control-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 4px;
+    color: inherit;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: opacity 0.15s;
+}
+
+.home-radio-control-button:hover,
+.home-radio-control-button:focus-visible {
+    opacity: 1;
+}
+
+.home-radio-control-button svg {
+    display: block;
+    width: 18px;
+    height: 18px;
+}
+
+.home-radio-live-badge {
+    margin-left: 4px;
+    padding: 0.15em 0.45em;
+    color: var(--highlight);
+    border: 1px solid currentColor;
+    font-size: 0.6rem;
+    line-height: 1.6;
+}
+
+.home-radio-controls-spacer {
+    flex: 1;
+}
+
+.home-radio-quality {
+    position: relative;
+}
+
+.home-radio-quality[hidden] {
+    display: none;
+}
+
+.home-radio-quality-toggle {
+    width: auto;
+    min-width: 40px;
+    font-size: 0.6rem;
+}
+
+.home-radio-quality-menu {
+    position: absolute;
+    right: 0;
+    bottom: 100%;
+    display: none;
+    flex-direction: column;
+    min-width: 72px;
+    margin-bottom: 4px;
+    padding: 4px;
+    background: rgba(0, 0, 0, 0.85);
+}
+
+.home-radio-quality-menu.is-open {
+    display: flex;
+}
+
+.home-radio-quality-option {
+    padding: 6px 10px;
+    color: var(--primary-light);
+    text-align: left;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    opacity: 0.7;
+}
+
+.home-radio-quality-option:hover,
+.home-radio-quality-option.is-active {
+    color: var(--highlight);
+    opacity: 1;
+}
+
+@media (hover: none) {
+    .home-radio-player.has-started .home-radio-controls {
+        opacity: 1;
+    }
 }
 
 /* ----------------

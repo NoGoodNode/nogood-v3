@@ -41,7 +41,7 @@ bodyColor: bg-highlight
         {# CONTACT #}
         <div class="place-bottom">
             <p class="text-large margin-bottom-none">
-                I’m Thomas, aka NoGood, an illustrator based in Amsterdam. I started working under the pseudonym in 2021, giving myself space to experiment and create the work I genuinely cared about.
+                I’m Thomas, aka NoGood, an illustrator based in Amsterdam. I started working under the pseudonym in 2021. It provided a space to experiment and create work I found meaningful.
             </p>
             <div class="spacer-large line"></div>
             <h5 class="uppercase pixel-font">System Log</h5>
@@ -202,7 +202,7 @@ bodyColor: bg-highlight
             </div>
         </div>
         <div class="place-bottom">
-            <p class="text-large"><a href="https://patreon.com/nogood_studio" target="_blank" rel="noopener">Patreon</a> is where I share more about the process and thinking behind my illustrations, look back on finished projects and talk about my obsessions shaping the new ones.</p>
+            <p class="text-large"><a href="https://patreon.com/nogood_studio" target="_blank" rel="noopener">Patreon</a> is where I share the process and thinking behind my illustrations, look back on finished projects and talk about my obsessions shaping the new ones.</p>
             <div class="button-wrapper">
                 <a href="https://patreon.com/nogood_studio" target="_blank" rel="noopener" class="button pixel-font uppercase" data-umami-event="patreon-click" data-umami-event-location="homepage">Join on Patreon</a>
             </div>
@@ -228,11 +228,21 @@ bodyColor: bg-highlight
 
 {# RADIO INTRODUCTION #}
 <div class="section medium-grid radio-intro bg-highlight hide-small">
-    <div class="section-column">
+    <div class="section-column radio-intro-stats">
         <h1 class="radio-intro-title header-extra-large mono uppercase">NoGood<br>Radio</h1>
+        <div class="tag-row place-bottom">
+            <span id="home-stream-viewers" class="tag tag-dark pixel-font uppercase" style="display:none;"></span>
+            <span id="home-stream-uptime" class="tag pixel-font uppercase" style="display:none;"></span>
+        </div>
     </div>
-    <div class="section-column">
+    <div class="section-column radio-intro-copy">
         <h2>A 24/7 pirate radio station running on scrap parts and broadcasting from a basement somewhere.</h2>
+        <div id="home-radio-now-playing" class="home-radio-now-playing place-bottom" hidden>
+            <a class="home-radio-current-track" data-current-track target="_blank" rel="noopener">
+                <span class="soundbars" aria-hidden="true"><span></span><span></span><span></span></span>
+                <span><span data-current-artist></span> — <span data-current-title></span></span>
+            </a>
+        </div>
     </div>
     <div class="section-column">
         <div class="inner-column">
@@ -247,18 +257,57 @@ bodyColor: bg-highlight
 <div class="section relative hide-small bg-highlight">
     {# VIDEO #}
     <div class="section-column no-blend">
-        <div class="home-radio-player video-fill">
+        <div id="home-radio-player" class="home-radio-player video-fill">
             <video id="home-stream-video" playsinline></video>
             <div id="home-stream-play-overlay" class="home-radio-play-overlay">
                 <button id="home-stream-play" class="embed-play home-radio-play-button" aria-label="Play NoGood Radio"></button>
+            </div>
+            <div id="home-stream-controls" class="home-radio-controls" hidden>
+                <button id="home-stream-play-pause" class="home-radio-control-button" aria-label="Pause">
+                    <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M3 2h4v12H3zm6 0h4v12H9z"/></svg>
+                </button>
+                <span class="home-radio-live-badge pixel-font uppercase">Live</span>
+                <div class="home-radio-controls-spacer"></div>
+                <button id="home-stream-mute" class="home-radio-control-button" aria-label="Mute">
+                    <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M2 5v6h3l5 4V1L5 5H2z"/><path d="M11.5 5.5a4 4 0 0 1 0 5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+                </button>
+                <div id="home-quality-selector" class="home-radio-quality" hidden>
+                    <button id="home-quality-toggle" class="home-radio-control-button home-radio-quality-toggle pixel-font uppercase" aria-label="Video quality">
+                        <span id="home-quality-label">Auto</span>
+                    </button>
+                    <div id="home-quality-menu" class="home-radio-quality-menu"></div>
+                </div>
+                <button id="home-stream-fullscreen" class="home-radio-control-button" aria-label="Fullscreen">
+                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"/></svg>
+                </button>
             </div>
         </div>
     </div>
 </div>
 <script type="module">
+    import { initCurrentTrack } from '/assets/js/radio/lastfm.js';
+    import { initStandaloneStreamInfo } from '/assets/js/radio/stream-info.js';
+
+    initCurrentTrack('home-radio-now-playing');
+    initStandaloneStreamInfo({
+        viewers: document.getElementById('home-stream-viewers'),
+        uptime: document.getElementById('home-stream-uptime')
+    });
+
+    const player = document.getElementById('home-radio-player');
     const video = document.getElementById('home-stream-video');
     const playOverlay = document.getElementById('home-stream-play-overlay');
     const playButton = document.getElementById('home-stream-play');
+    const controls = document.getElementById('home-stream-controls');
+    const playPauseButton = document.getElementById('home-stream-play-pause');
+    const muteButton = document.getElementById('home-stream-mute');
+    const fullscreenButton = document.getElementById('home-stream-fullscreen');
+    const PLAY_ICON = '<svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M4 2l10 6-10 6z"/></svg>';
+    const PAUSE_ICON = '<svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M3 2h4v12H3zm6 0h4v12H9z"/></svg>';
+    const VOLUME_ICON = '<svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M2 5v6h3l5 4V1L5 5H2z"/><path d="M11.5 5.5a4 4 0 0 1 0 5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>';
+    const MUTED_ICON = '<svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M2 5v6h3l5 4V1L5 5H2z"/><path d="m11 5 4 4m0-4-4 4" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>';
+    const FULLSCREEN_ICON = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"/></svg>';
+    const FULLSCREEN_EXIT_ICON = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 2v4H2M14 6h-4V2M10 14v-4h4M2 10h4v4"/></svg>';
     const HLS_URL = 'https://api-core.zap.stream/537a365c-f1ec-44ac-af10-22d14a7319fb/hls/live.m3u8';
     const FALLBACK = '/assets/img/radio-bg.mp4';
     function useFallback() {
@@ -266,12 +315,89 @@ bodyColor: bg-highlight
         video.loop = true;
         video.play().catch(() => {});
     }
+    function updatePlayPauseButton() {
+        playPauseButton.innerHTML = video.paused ? PLAY_ICON : PAUSE_ICON;
+        playPauseButton.setAttribute('aria-label', video.paused ? 'Play' : 'Pause');
+    }
+    function updateMuteButton() {
+        muteButton.innerHTML = video.muted ? MUTED_ICON : VOLUME_ICON;
+        muteButton.setAttribute('aria-label', video.muted ? 'Unmute' : 'Mute');
+    }
+    function updateFullscreenButton() {
+        const isFullscreen = Boolean(document.fullscreenElement || document.webkitFullscreenElement);
+        fullscreenButton.innerHTML = isFullscreen ? FULLSCREEN_EXIT_ICON : FULLSCREEN_ICON;
+        fullscreenButton.setAttribute('aria-label', isFullscreen ? 'Exit fullscreen' : 'Fullscreen');
+    }
+    function buildQualitySelector(hls) {
+        const selector = document.getElementById('home-quality-selector');
+        const toggle = document.getElementById('home-quality-toggle');
+        const menu = document.getElementById('home-quality-menu');
+        const label = document.getElementById('home-quality-label');
+        const levels = hls.levels;
+        if (!levels || levels.length <= 1 || menu.children.length) return;
+
+        selector.hidden = false;
+        const options = [{ label: 'Auto', level: -1 }, ...levels.map((level, index) => ({
+            label: `${level.height}p`,
+            level: index
+        }))];
+        for (const option of options) {
+            const button = document.createElement('button');
+            button.className = `home-radio-quality-option pixel-font uppercase${option.level === -1 ? ' is-active' : ''}`;
+            button.textContent = option.label;
+            button.dataset.level = String(option.level);
+            menu.appendChild(button);
+        }
+        toggle.addEventListener('click', event => {
+            event.stopPropagation();
+            menu.classList.toggle('is-open');
+        });
+        menu.addEventListener('click', event => {
+            const button = event.target.closest('.home-radio-quality-option');
+            if (!button) return;
+            const level = Number(button.dataset.level);
+            hls.currentLevel = level;
+            label.textContent = level === -1 ? 'Auto' : levels[level].height + 'p';
+            menu.querySelectorAll('.home-radio-quality-option').forEach(option => option.classList.remove('is-active'));
+            button.classList.add('is-active');
+            menu.classList.remove('is-open');
+        });
+        selector.addEventListener('click', event => event.stopPropagation());
+        document.addEventListener('click', () => menu.classList.remove('is-open'));
+    }
     video.addEventListener('playing', () => {
         playOverlay.hidden = true;
+        controls.hidden = false;
+        player.classList.add('has-started');
+        updatePlayPauseButton();
     });
+    video.addEventListener('pause', updatePlayPauseButton);
+    video.addEventListener('volumechange', updateMuteButton);
     playButton.addEventListener('click', () => {
         video.play().catch(() => {});
     });
+    playPauseButton.addEventListener('click', () => {
+        if (video.paused) video.play().catch(() => {});
+        else video.pause();
+    });
+    muteButton.addEventListener('click', () => {
+        video.muted = !video.muted;
+    });
+    fullscreenButton.addEventListener('click', () => {
+        const fullscreenElement = document.fullscreenElement || document.webkitFullscreenElement;
+        if (!fullscreenElement) {
+            const requestFullscreen = player.requestFullscreen || player.webkitRequestFullscreen;
+            if (requestFullscreen) Promise.resolve(requestFullscreen.call(player)).catch(() => {});
+        } else {
+            const exitFullscreen = document.exitFullscreen || document.webkitExitFullscreen;
+            if (exitFullscreen) Promise.resolve(exitFullscreen.call(document)).catch(() => {});
+        }
+    });
+    document.addEventListener('fullscreenchange', updateFullscreenButton);
+    document.addEventListener('webkitfullscreenchange', updateFullscreenButton);
+    updatePlayPauseButton();
+    updateMuteButton();
+    updateFullscreenButton();
     async function initStream() {
         if (video.canPlayType('application/vnd.apple.mpegurl')) {
             video.src = HLS_URL;
@@ -288,6 +414,7 @@ bodyColor: bg-highlight
             hls.attachMedia(video);
             hls.on(Hls.Events.MANIFEST_PARSED, () => {
                 video.play().catch(() => {});
+                buildQualitySelector(hls);
             });
             hls.on(Hls.Events.ERROR, (_e, data) => {
                 if (data.fatal) { hls.destroy(); useFallback(); }

@@ -3,6 +3,7 @@ import { initNostr, subscribeStreamInfo, subscribeZaps, subscribeChat, subscribe
 import { initZapButtons, configureZap } from './zap.js';
 import { initLastFm } from './lastfm.js';
 import { NOGOOD_NOSTR_RELAYS } from '/assets/js/nostr/config.js';
+import { bindStreamInfo, RADIO_NADDR } from './stream-info.js';
 import { createChatSpamFilter } from '/assets/js/nostr/chat-moderation.js';
 import { renderChatContent } from '/assets/js/nostr/chat-content.js';
 import { createChatFeed } from '/assets/js/nostr/chat-feed.js';
@@ -11,7 +12,7 @@ const BOT_PUBKEY = 'c0434367d3e598555e930db7d54eb5e2b4013c0b7673c8f668475fc76b6a
 
 const CONFIG = {
   hlsUrl: 'https://api-core.zap.stream/537a365c-f1ec-44ac-af10-22d14a7319fb/hls/live.m3u8',
-  naddr: 'naddr1qqjr2vehvyenvdtr94nrzetr956rgctr94skvvfs95eryep3x3snwve389nxyqgwwaehxw309ahx7uewd3hkctczyr85tf46zd366lkjzws83ecs6fq3ttnjrjd500g7haz936h0knp22qcyqqq8vecjrlda8',
+  naddr: RADIO_NADDR,
   fallbackImage: 'https://blossom.nogood.studio/6d5bb489e87c2f2db2a0fa61fd2bfca9f6d4f50e05b7caf1784644886c0e4ff6.jpg',
   relays: NOGOOD_NOSTR_RELAYS,
 };
@@ -61,39 +62,10 @@ initStream(CONFIG.hlsUrl, CONFIG.fallbackImage);
 const nostrCtx = initNostr(CONFIG.naddr, CONFIG.relays);
 
 if (nostrCtx) {
-  subscribeStreamInfo((info) => {
-    const descEl = document.getElementById('stream-description');
-    const viewersEl = document.getElementById('stream-viewers');
-    const uptimeEl = document.getElementById('stream-uptime');
-    if (descEl) descEl.textContent = info.summary;
-    if (viewersEl) {
-      if (info.viewers !== null && info.viewers > 0) {
-        viewersEl.textContent = `${info.viewers} listening`;
-        viewersEl.style.display = 'inline';
-      } else {
-        viewersEl.style.display = 'none';
-      }
-    }
-    if (uptimeEl && info.starts) {
-      const updateUptime = () => {
-        const secs = Math.floor(Date.now() / 1000) - info.starts;
-        if (secs < 0) { uptimeEl.style.display = 'none'; return; }
-        const months = Math.floor(secs / (30 * 24 * 3600));
-        const days = Math.floor(secs / 86400);
-        const h = Math.floor(secs / 3600);
-        const m = Math.floor((secs % 3600) / 60);
-        const s = secs % 60;
-        let label;
-        if (months >= 1) label = `uptime ${months} month${months > 1 ? 's' : ''}`;
-        else if (days >= 1) label = `uptime ${days} day${days > 1 ? 's' : ''}`;
-        else if (h >= 1) label = `uptime ${h}h ${String(m).padStart(2, '0')}m`;
-        else label = `uptime ${m}m ${String(s).padStart(2, '0')}s`;
-        uptimeEl.textContent = label;
-        uptimeEl.style.display = 'inline';
-      };
-      updateUptime();
-      if (!uptimeEl._interval) uptimeEl._interval = setInterval(updateUptime, 1000);
-    }
+  bindStreamInfo(subscribeStreamInfo, {
+    description: document.getElementById('stream-description'),
+    viewers: document.getElementById('stream-viewers'),
+    uptime: document.getElementById('stream-uptime'),
   });
 
   initTicker();

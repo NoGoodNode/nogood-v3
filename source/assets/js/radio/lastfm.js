@@ -53,3 +53,37 @@ export function initLastFm() {
   setInterval(refresh, REFRESH_MS);
   document.addEventListener('visibilitychange', refresh);
 }
+
+async function updateCurrentTrack(containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  try {
+    const resp = await fetch(ENDPOINT, { cache: 'no-store', signal: AbortSignal.timeout(5000) });
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const tracks = await resp.json();
+    const current = tracks.find((track) => !track.playedAt);
+
+    if (!current) {
+      container.hidden = true;
+      return;
+    }
+
+    const link = container.querySelector('[data-current-track]');
+    link.href = current.url;
+    link.querySelector('[data-current-artist]').textContent = current.artist;
+    link.querySelector('[data-current-title]').textContent = current.name;
+    container.hidden = false;
+  } catch (err) {
+    console.error('Could not refresh current Last.fm track:', err);
+  }
+}
+
+export function initCurrentTrack(containerId) {
+  const refresh = () => {
+    if (!document.hidden) updateCurrentTrack(containerId);
+  };
+  refresh();
+  setInterval(refresh, REFRESH_MS);
+  document.addEventListener('visibilitychange', refresh);
+}
