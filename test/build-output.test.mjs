@@ -109,3 +109,20 @@ test("book stock only exposes the remaining standard edition", () => {
 		assert.doesNotMatch(readFileSync(file, "utf8"), /\/print-sales/);
 	}
 });
+
+test("only purchase and Patreon clicks use custom Umami events", () => {
+	const events = new Set();
+	for (const file of walk(buildDir).filter(path => path.endsWith(".html"))) {
+		const html = readFileSync(file, "utf8");
+		for (const match of html.matchAll(/data-umami-event="([^"]+)"/g)) events.add(match[1]);
+	}
+	assert.deepEqual([...events].sort(), ["add-to-cart", "patreon-click"]);
+
+	const home = outputHtml("/");
+	assert.equal((home.match(/patreon\.com\/nogood_studio/g) || []).length, 5);
+	assert.equal((home.match(/data-umami-event="patreon-click"/g) || []).length, 5);
+	assert.deepEqual(
+		[...home.matchAll(/data-umami-event="patreon-click" data-umami-event-location="([^"]+)"/g)].map(match => match[1]).sort(),
+		["badge", "footer", "heading", "homepage", "paragraph"],
+	);
+});

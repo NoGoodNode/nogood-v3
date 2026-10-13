@@ -7,7 +7,7 @@
         <div></div>
         {% endif %}
         <div class="clipping-podcast-info">
-            <a href="{{ item.url }}" target="_blank" rel="noopener"data-umami-event="clipping-click" data-umami-event-title="{{ item.title }}">{{ item.episode }}</a>
+            <a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.episode }}</a>
             {% if item.show %}<p class="text-small">{{ item.show }}</p>{% endif %}
         </div>
     </div>
@@ -22,7 +22,7 @@
         <div></div>
         {% endif %}
         <div class="clipping-book-info">
-            <a href="{{ item.url }}" target="_blank" rel="noopener"data-umami-event="clipping-click" data-umami-event-title="{{ item.title }}">{{ item.title }}</a>
+            <a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.title }}</a>
             {% if item.author or item.bookGenre %}
             <p class="text-small">{% if item.author %}{{ item.author }}{% endif %}{% if item.author and item.bookGenre %} • {% endif %}{% if item.bookGenre %}{{ item.bookGenre }}{% endif %}</p>
             {% endif %}
@@ -32,7 +32,7 @@
     <p>{{ item.intro }}</p>
     {% endif %}
     {% else %}
-    <div><a href="{{ item.url }}" target="_blank" rel="noopener"data-umami-event="clipping-click" data-umami-event-title="{{ item.title }}">{{ item.title }}</a>{% if item.domain and item.renderAs != "video" %} <span class="clipping-domain">— {{ item.domain }}</span>{% endif %}</div>
+    <div><a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.title }}</a>{% if item.domain and item.renderAs != "video" %} <span class="clipping-domain">— {{ item.domain }}</span>{% endif %}</div>
     {% if item.embed and not hideCover %}
     <div class="embed-facade" data-src="{{ item.embed }}"{% if item.embed_thumb %} style="background-image: url('{{ item.embed_thumb }}')"{% endif %}>
         <button class="embed-play" aria-label="Load embed"></button>
@@ -52,6 +52,6 @@
             {% if item.category %}<span class="tag tag-dark pixel-font uppercase">{{ item.category }}</span>{% endif %}
             <span class="text-small text-tabular">{{ item.date | postDate }}</span>
         </div>
-        <span class="text-small">source:&nbsp;<a href="{{ item.url }}" target="_blank" rel="noopener" data-umami-event="clipping-click" data-umami-event-title="{{ item.title }}">{% if item.domain %}{{ item.domain }}{% else %}link{% endif %}</a></span>
+        <span class="text-small">source:&nbsp;<a href="{{ item.url }}" target="_blank" rel="noopener">{% if item.domain %}{{ item.domain }}{% else %}link{% endif %}</a></span>
     </div>
 </div>
