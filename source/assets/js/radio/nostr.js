@@ -3,7 +3,9 @@ import { NOGOOD_PUBKEY } from '/assets/js/nostr/config.js';
 import { parseZapReceipt } from '/assets/js/nostr/zaps.js';
 import * as nip19 from '/assets/js/vendor/nostr-nip19.js';
 
-const PROFILE_CACHE = new Map();
+const BOT_PUBKEY = 'c0434367d3e598555e930db7d54eb5e2b4013c0b7673c8f668475fc76b6a6606';
+const BOT_PROFILE = { name: 'NGBot', lud16: null, picture: null, emojis: {} };
+const PROFILE_CACHE = new Map([[BOT_PUBKEY, BOT_PROFILE]]);
 const profileFetchQueue = new Map();
 let profileFetchTimer = null;
 let activeRadioNostr = null;
