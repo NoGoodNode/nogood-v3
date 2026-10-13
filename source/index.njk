@@ -193,7 +193,7 @@ bodyColor: bg-highlight
     </div>
 </div>
 {# PATREON #}
-<div class="section large-grid patreon-section">
+<div class="section medium-grid patreon-section">
     <div class="section-column sticky-two-rows">
         <div class="sticky-wrapper">
             <div class="sticky">
@@ -209,19 +209,39 @@ bodyColor: bg-highlight
         </div>
     </div>
     <div class="section-column">
-        <div class="patreon-illustration image-square bg-muted no-blend image-padding">
+        <div class="patreon-illustration bg-dark no-blend image-padding">
             {% image "source/assets/img/NoGood_Selfpotrait.png", "NoGood self portrait" %}
-            <a href="https://patreon.com/nogood_studio" target="_blank" rel="noopener" class="header-badge patreon-badge flex-center no-blend hide-small fade-in" aria-label="Support NoGood on Patreon" data-umami-event="patreon-click" data-umami-event-location="badge">
-                {% image "source/assets/img/nogood_sign.png", "" %}
-                <svg class="header-badge-text" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                    <defs>
-                        <path id="patreon-circle-path" d="M 50,50 m -35,0 a 35,35 0 1,1 70,0 a 35,35 0 1,1 -70,0" />
-                    </defs>
-                    <text>
-                        <textPath href="#patreon-circle-path" class="uppercase pixel-font">SUPPORT NOGOOD ⚡ ON PATREON ⚡</textPath>
-                    </text>
-                </svg>
-            </a>
+        </div>
+    </div>
+    <div class="section-column hide-small">
+        <div id="patreon-posts" class="inner-column sticky">
+            <h5 class="uppercase pixel-font">Latest on Patreon</h5>
+            <div class="spacer"></div>
+            <div class="media-list">
+                {% for post in patreonPosts %}
+                    <article class="outline padding-small">
+                        {% if loop.first %}
+                            <a href="{{ post.url }}" target="_blank" rel="noopener" class="no-blend" data-umami-event="patreon-click" data-umami-event-location="latest-post-image">
+                                {% image post.image, post.title, [360, 720], "(min-width: 769px) 25vw, 100vw" %}
+                            </a>
+                            <a href="{{ post.url }}" target="_blank" rel="noopener" data-umami-event="patreon-click" data-umami-event-location="latest-post-title">{{ post.title }}</a>
+                            <p>{{ post.intro }}</p>
+                            <span class="text-small text-tabular">{{ post.publishedAt | postDate }}</span>
+                        {% else %}
+                            <div class="patreon-post-compact">
+                                <a href="{{ post.url }}" target="_blank" rel="noopener" class="patreon-post-thumbnail no-blend" data-umami-event="patreon-click" data-umami-event-location="latest-post-image">
+                                    {% image post.image, post.title, [96], "48px" %}
+                                </a>
+                                <div class="patreon-post-info">
+                                    <a href="{{ post.url }}" target="_blank" rel="noopener" data-umami-event="patreon-click" data-umami-event-location="latest-post-title">{{ post.title }}</a>
+                                    <div class="spacer-small"></div>
+                                    <span class="text-small text-tabular">{{ post.publishedAt | postDate }}</span>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </article>
+                {% endfor %}
+            </div>
         </div>
     </div>
 </div>

@@ -70,17 +70,34 @@ HOME
 PATREON
 ---------------- */
 .patreon-section {
-    grid-template-columns: 2fr 3fr;
+    grid-template-columns: 40fr 35fr 25fr;
 }
 
 .patreon-illustration {
     position: relative;
 }
 
-.patreon-badge {
-    top: 20%;
-    right: auto;
-    left: 80px;
+.patreon-post-compact {
+    display: grid;
+    grid-template-columns: 3rem 1fr;
+    gap: 0.75rem;
+    align-items: start;
+}
+
+.patreon-post-thumbnail,
+.patreon-post-thumbnail picture,
+.patreon-post-thumbnail img {
+    width: 3rem;
+    height: 3rem;
+}
+
+.patreon-post-thumbnail img {
+    object-fit: cover;
+}
+
+.patreon-post-info {
+    display: flex;
+    flex-direction: column;
 }
 
 /* ----------------
