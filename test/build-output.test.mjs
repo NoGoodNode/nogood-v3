@@ -94,3 +94,18 @@ test("homepage defers HLS until the Radio stream enters view", () => {
 test("Radio uses its adapter instead of a second zap-feed module", () => {
 	assert.doesNotMatch(outputHtml("/radio"), /src="\/assets\/js\/zap-feed\.js"/);
 });
+
+test("book stock only exposes the remaining standard edition", () => {
+	const product = outputHtml("/the-nogood-book");
+	assert.match(product, /Collectors edition/);
+	assert.match(product, /Sold out/);
+	assert.match(product, /data-item-id="book-regular-edition"/);
+	assert.match(product, /data-book-inventory="265"/);
+	assert.match(product, /\/ 400 available/);
+	assert.doesNotMatch(product, /book-regular-edition-print|The NoGood Book \+ print/);
+
+	const generatedStockFiles = walk(buildDir).filter(path => path.endsWith(".html") || path.endsWith(".js"));
+	for (const file of generatedStockFiles) {
+		assert.doesNotMatch(readFileSync(file, "utf8"), /\/print-sales/);
+	}
+});

@@ -108,25 +108,12 @@ intro: >
                     Buy now
                 </a>
             </div>
-            <p class="text-small">Limited run of 400 / <span id="book-sales-total-context"></span> in stock</p>
+            <p class="text-small">Limited run of {{ booksales.edition_size }} / <span data-book-stock data-book-inventory="{{ booksales.regular_inventory }}"></span> in stock</p>
         </div>
     </div>
 </div>
 
-<script>
-    const bookRun = {{ booksales.book_run }};
-    const printRun = {{ booksales.print_run }};
-    const presales = {{ booksales.presales }};
-    Promise.all([
-        fetch('https://book-stats.hello-5b9.workers.dev/book-sales').then(r => r.json()),
-        fetch('https://book-stats.hello-5b9.workers.dev/print-sales').then(r => r.json()),
-    ]).then(([book, print]) => {
-        const available = (bookRun - (book.total ?? 0)) + (printRun - ((print.total ?? 0) + presales));
-        document.getElementById('book-sales-total-context').textContent = available;
-    }).catch(() => {
-        document.getElementById('book-sales-total-context').textContent = bookRun + (printRun - presales);
-    });
-</script>
+<script type="module" src="/assets/js/book-stock.js"></script>
 
 <script>
 (function () {

@@ -26,13 +26,6 @@ snipcart:
   size_variant_name:
   size_variant_options:
 
-snipcart_print:
-  id: "book-regular-edition-print"
-  price: "90"
-  short_description: "The NoGood Book + print — first edition"
-  snipcartimage: "/assets/img/shop/snipcart/Snipcart_NoGoodBook_Regular.png"
-  weight: "500"
-
 gallery: # on Single Product page
   - url: "source/assets/img/shop/NoGoodBook_Main.jpg"
     alt: "Illustration of the NoGood Book"
@@ -152,119 +145,12 @@ shirt_model:
             </p>
             <div class="spacer-large"></div>
             {# ORDER VARIATIONS #}
-            {# COLLECTORS EDITION #}
-            <div class="order-option inner-column padding-small outline bg-offwhite">
-              <div class="grid large-grid">
-                <h3 class="text-large">
-                  <s>Collectors edition</s>
-                </h3>
-                <h3 class="text-large align-right">Sold out</h3>
-              </div>
-            </div>
-            <div class="spacer-small"></div>
-            {# REGULAR EDITION #}
-            <div class="order-option inner-column outline padding-small">
-              <div class="flex-space-between flex-align-start">
-                <div class="flex-align-center gap-small">
-                  <div class="circle-thumb-group">
-                    <div class="circle-thumb">
-                      {% image "source/assets/img/shop/NoGoodBook_Cover_Square.jpg", "The NoGood Book cover" %}
-                    </div>
-                  </div>
-                  <h3 class="text-large nowrap">The NoGood Book</h3>
-                </div>
-                <div class="align-right">
-                  <h3 class="text-large pixel-font uppercase">€{{ snipcart.price }}</h3>
-                  <p class="text-small">+ shipping</p>
-                </div>
-              </div>
-              <div class="spacer"></div>
-              {# ORDER BUTTON #}
-              {% include "source/snippets/order-button.njk" %}
-              <div class="item-description text-small">
-                <span class="book-sales-total"></span>
-                / <span class="book-run-total">{{ booksales.book_run }}</span> available
-              </div>
-            </div>
-            <div class="spacer-small"></div>
-            {# REGULAR EDITION + PRINT #}
-            <div class="book-print-option order-option inner-column outline padding-small">
-              <div class="flex-space-between flex-align-start">
-                <div class="flex-align-center gap-small">
-                  <div class="circle-thumb-group">
-                    <div class="circle-thumb">
-                      {% image "source/assets/img/shop/NoGoodBook_Cover_Square.jpg", "The NoGood Book cover" %}
-                    </div>
-                    <div class="circle-thumb">
-                      {% image "source/assets/img/shop/NoGoodBook_Print_Icon.jpg", "Included print" %}
-                    </div>
-                  </div>
-                  <h3 class="text-large nowrap">The NoGood Book + print</h3>
-                </div>
-                <div class="align-right">
-                  <h3 class="text-large pixel-font uppercase">€{{ snipcart_print.price }}</h3>
-                  <p class="text-small">+ shipping</p>
-                </div>
-              </div>
-              <div class="spacer"></div>
-              <div class="button-wrapper">
-                <a class="snipcart-add-item button pixel-font uppercase" data-item-id="{{ snipcart_print.id }}" data-item-price="{{ snipcart_print.price }}" data-item-url="{{ page.url }}" data-item-description="{{ snipcart_print.short_description }}" data-item-image="{{ snipcart_print.snipcartimage }}" data-item-name="{{ title }} + print" data-item-weight="{{ snipcart_print.weight }}" data-umami-event="add-to-cart" data-umami-event-product="{{ title }} + print">
-                  Purchase
-                </a>
-              </div>
-              <div class="spacer-small"></div>
-              <div class="item-description text-small">
-                <span class="print-sales-total"></span>
-                / {{ booksales.print_run }} available
-              </div>
-            </div>
+            {% include "source/snippets/book-order-options.njk" %}
           </div>
         </div>
       </div>
     </div>
-    <script>
-      const bookRun = {{ booksales.book_run }};
-      const printRun = {{ booksales.print_run }};
-      const presales = {{ booksales.presales }};
-      fetch('https://book-stats.hello-5b9.workers.dev/book-sales')
-        .then(r => r.json())
-        .then(data => {
-          document.querySelectorAll('.book-sales-total').forEach(element => {
-            element.textContent = bookRun - (data.total ?? 0);
-          });
-        })
-        .catch(() => {
-          document.querySelectorAll('.book-sales-total').forEach(element => {
-            element.textContent = bookRun;
-          });
-        });
-      fetch('https://book-stats.hello-5b9.workers.dev/print-sales')
-        .then(r => {
-          if (!r.ok) throw new Error(`Print sales request failed: ${r.status}`);
-          return r.json();
-        })
-        .then(data => {
-          const remaining = Math.max(printRun - ((data.total ?? 0) + presales), 0);
-
-          document.querySelectorAll('.print-sales-total').forEach(element => {
-            element.textContent = remaining;
-          });
-
-          if (remaining === 0) {
-            document.querySelectorAll('.book-print-option').forEach(option => {
-              const spacer = option.previousElementSibling;
-              if (spacer?.classList.contains('spacer-small')) spacer.remove();
-              option.remove();
-            });
-            document.querySelectorAll('.book-run-total').forEach(element => {
-              element.textContent = bookRun + printRun;
-            });
-          }
-        })
-        .catch(error => {
-          console.error('[book-print-stock]', error);
-        });
-    </script>
+    <script type="module" src="/assets/js/book-stock.js"></script>
 
 
 <section class="section large-grid bg-dark text-light">
@@ -372,68 +258,7 @@ shirt_model:
           within which my work was created.
         </p>
         <div class="spacer-large"></div>
-        <div class="order-option inner-column padding-small outline bg-offwhite">
-          <div class="grid large-grid">
-            <h3 class="text-large">
-              <s>Collectors edition</s>
-            </h3>
-            <h3 class="text-large align-right">Sold out</h3>
-          </div>
-        </div>
-        <div class="spacer-small"></div>
-        <div class="order-option inner-column outline padding-small">
-          <div class="flex-space-between flex-align-start">
-            <div class="flex-align-center gap-small">
-              <div class="circle-thumb-group">
-                <div class="circle-thumb">
-                  {% image "source/assets/img/shop/NoGoodBook_Cover_Square.jpg", "The NoGood Book cover" %}
-                </div>
-              </div>
-              <h3 class="text-large nowrap">The NoGood Book</h3>
-            </div>
-            <div class="align-right">
-              <h3 class="text-large pixel-font uppercase">€{{ snipcart.price }}</h3>
-              <p class="text-small">+ shipping</p>
-            </div>
-          </div>
-          <div class="spacer"></div>
-          {% include "source/snippets/order-button.njk" %}
-          <div class="item-description text-small">
-            <span class="book-sales-total"></span>
-            / <span class="book-run-total">{{ booksales.book_run }}</span> available
-          </div>
-        </div>
-        <div class="spacer-small"></div>
-        <div class="book-print-option order-option inner-column outline padding-small">
-          <div class="flex-space-between flex-align-start">
-            <div class="flex-align-center gap-small">
-              <div class="circle-thumb-group">
-                <div class="circle-thumb">
-                  {% image "source/assets/img/shop/NoGoodBook_Cover_Square.jpg", "The NoGood Book cover" %}
-                </div>
-                <div class="circle-thumb">
-                  {% image "source/assets/img/shop/NoGoodBook_Print_Icon.jpg", "Included print" %}
-                </div>
-              </div>
-              <h3 class="text-large nowrap">The NoGood Book + print</h3>
-            </div>
-            <div class="align-right">
-              <h3 class="text-large pixel-font uppercase">€{{ snipcart_print.price }}</h3>
-              <p class="text-small">+ shipping</p>
-            </div>
-          </div>
-          <div class="spacer"></div>
-          <div class="button-wrapper">
-            <a class="snipcart-add-item button pixel-font uppercase" data-item-id="{{ snipcart_print.id }}" data-item-price="{{ snipcart_print.price }}" data-item-url="{{ page.url }}" data-item-description="{{ snipcart_print.short_description }}" data-item-image="{{ snipcart_print.snipcartimage }}" data-item-name="{{ title }} + print" data-item-weight="{{ snipcart_print.weight }}" data-umami-event="add-to-cart" data-umami-event-product="{{ title }} + print">
-              Purchase
-            </a>
-          </div>
-          <div class="spacer-small"></div>
-          <div class="item-description text-small">
-            <span class="print-sales-total"></span>
-            / {{ booksales.print_run }} available
-          </div>
-        </div>
+        {% include "source/snippets/book-order-options.njk" %}
       </div>
     </div>
   </div>

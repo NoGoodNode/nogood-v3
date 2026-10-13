@@ -1,0 +1,24 @@
+{# COLLECTORS EDITION — permanently sold out #}
+<div class="order-option inner-column padding-small outline bg-offwhite">
+  <div class="grid large-grid">
+    <h3 class="text-large"><s>Collectors edition</s></h3>
+    <h3 class="text-large align-right">Sold out</h3>
+  </div>
+</div>
+<div class="spacer-small"></div>
+{# THE NOGOOD BOOK #}
+<div class="order-option inner-column outline padding-small">
+  <div class="flex-space-between flex-align-start">
+    <div>
+      <h3 class="text-large nowrap">The NoGood Book</h3>
+      <p class="text-small">Signed &amp; numbered — <span data-book-stock data-book-inventory="{{ booksales.regular_inventory }}"></span> / {{ booksales.edition_size }} available</p>
+    </div>
+    <div class="align-right">
+      <h3 class="text-large pixel-font uppercase">€{{ snipcart.price }}</h3>
+      <p class="text-small">+ shipping</p>
+    </div>
+  </div>
+  <div class="spacer"></div>
+  {% set order_button_spacer = false %}
+  {% include "source/snippets/order-button.njk" %}
+</div>

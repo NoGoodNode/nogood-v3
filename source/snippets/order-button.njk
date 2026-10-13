@@ -25,7 +25,7 @@
 </div>
 {% endif %}
 
-<div class="spacer-small"></div>
+{% if order_button_spacer !== false %}<div class="spacer-small"></div>{% endif %}
 
 {# EXTERNAL LINK #}
 {% if site.external_product === true %}

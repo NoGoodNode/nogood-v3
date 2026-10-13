@@ -1179,8 +1179,8 @@ eleventyExcludeFromCollections: true
   // ----------------
   // BOOK SALES
   // ----------------
-  const PRESALES  = {{ booksales.presales }};
-  const PRINT_RUN = {{ booksales.book_run + booksales.print_run }};
+  const EDITION_SIZE = {{ booksales.edition_size }};
+  const REGULAR_INVENTORY = {{ booksales.regular_inventory }};
   const bookBar         = document.getElementById('book-sale-bar');
   const bookSaleCounter = document.getElementById('book-sale-counter');
   let lastBookOrderDate = null;
@@ -1193,7 +1193,7 @@ eleventyExcludeFromCollections: true
     const bookPicture = bookBar.querySelector('img');
     const bookLabel   = document.getElementById('book-sale-label');
     if (sold !== null) {
-      bookSaleCounter.textContent = sold + ' / ' + PRINT_RUN + ' sold';
+      bookSaleCounter.textContent = sold + ' / ' + EDITION_SIZE + ' sold';
       bookSaleCounter.style.display = '';
     } else {
       bookSaleCounter.style.display = 'none';
@@ -1233,12 +1233,11 @@ eleventyExcludeFromCollections: true
   }
 
   async function fetchTotalSold() {
-    const [bookData, printData] = await Promise.all([
-      fetchWithTimeout('https://book-stats.hello-5b9.workers.dev/book-sales').then(r => r.json()),
-      fetchWithTimeout('https://book-stats.hello-5b9.workers.dev/print-sales').then(r => r.json()),
-    ]);
-    const sold = (bookData.total ?? 0) + (printData.total ?? 0) + PRESALES;
-    return { sold, lastOrderDate: bookData.lastOrderDate };
+    const response = await fetchWithTimeout('https://book-stats.hello-5b9.workers.dev/book-sales');
+    if (!response.ok) throw new Error(`Book sales request failed: ${response.status}`);
+    const bookData = await response.json();
+    const available = Math.max(REGULAR_INVENTORY - (bookData.total ?? 0), 0);
+    return { sold: EDITION_SIZE - available, lastOrderDate: bookData.lastOrderDate };
   }
 
   async function waitForUpdatedCount(knownSold) {
@@ -1247,7 +1246,7 @@ eleventyExcludeFromCollections: true
       try {
         const { sold: freshSold } = await fetchTotalSold();
         if (freshSold > knownSold) {
-          bookSaleCounter.textContent = freshSold + ' / ' + PRINT_RUN + ' sold';
+          bookSaleCounter.textContent = freshSold + ' / ' + EDITION_SIZE + ' sold';
           showBookSale(freshSold);
           return;
         }
@@ -1259,7 +1258,7 @@ eleventyExcludeFromCollections: true
   async function pollBookSales() {
     try {
       const { sold, lastOrderDate } = await fetchTotalSold();
-      bookSaleCounter.textContent = sold + ' / ' + PRINT_RUN + ' sold';
+      bookSaleCounter.textContent = sold + ' / ' + EDITION_SIZE + ' sold';
       if (lastBookOrderDate !== null && lastOrderDate !== lastBookOrderDate) {
         lastBookOrderDate = lastOrderDate;
         window.__addOverlayNotification?.('', 'sale');

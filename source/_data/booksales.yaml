@@ -1,6 +1,5 @@
-# Regular book copies available for purchase
-book_run: 280
-# Book + print bundle copies available for purchase
-print_run: 120
-# Pre-orders not sold through Snipcart (Geyser + WordPress combined)
-presales: 100
+# Total size of the first edition
+edition_size: 400
+# Copies assigned to the standard book SKU before its Snipcart sales
+# (135 copies were sold through retired editions and presales)
+regular_inventory: 265
