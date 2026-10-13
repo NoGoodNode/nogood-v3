@@ -18,7 +18,8 @@ SNIPCART CART
     margin-bottom: 20px;
 }
 
-.snipcart-summary-fees > .snipcart-summary-fees__item:nth-child(2) {
+/* Taxes are included in product prices; keep the calculation but hide its summary row. */
+.snipcart-summary-fees > .snipcart-summary-fees__item:nth-last-child(2) {
     display: none !important;
 }
 
