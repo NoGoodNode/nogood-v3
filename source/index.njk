@@ -69,6 +69,11 @@ bodyColor: bg-highlight
             </div>
             <div class="spacer line"></div>
             <div class="flex-space-between flex-align-center">
+                <span class="text-small uppercase pixel-font offset-down-2">PATREON</span>
+                <a href="{{ patreonPosts[0].url }}" target="_blank" rel="noopener" data-umami-event="patreon-click" data-umami-event-location="system-log">{{ patreonPosts[0].title }}</a>
+            </div>
+            <div class="spacer line"></div>
+            <div class="flex-space-between flex-align-center">
                 <span class="text-small uppercase pixel-font offset-down-2">CLIPPING</span>
                 {% for item in collections.clippingsAll %}
                     {% if loop.first %}<a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.title | truncate(30, true, "…") }}</a>{% endif %}
@@ -221,16 +226,18 @@ bodyColor: bg-highlight
                 {% for post in patreonPosts %}
                     <article class="outline padding-small">
                         {% if loop.first %}
-                            <a href="{{ post.url }}" target="_blank" rel="noopener" class="no-blend" data-umami-event="patreon-click" data-umami-event-location="latest-post-image">
-                                {% image post.image, post.title, [360, 720], "(min-width: 769px) 25vw, 100vw" %}
-                            </a>
+                            <div class="zoom no-blend">
+                                <a href="{{ post.url }}" target="_blank" rel="noopener" data-umami-event="patreon-click" data-umami-event-location="latest-post-image">
+                                    {% image post.image, post.title, [720, 1400], "(min-width: 769px) 25vw, 100vw" %}
+                                </a>
+                            </div>
                             <a href="{{ post.url }}" target="_blank" rel="noopener" data-umami-event="patreon-click" data-umami-event-location="latest-post-title">{{ post.title }}</a>
                             <p>{{ post.intro }}</p>
                             <span class="text-small text-tabular">{{ post.publishedAt | postDate }}</span>
                         {% else %}
                             <div class="patreon-post-compact">
                                 <a href="{{ post.url }}" target="_blank" rel="noopener" class="patreon-post-thumbnail no-blend" data-umami-event="patreon-click" data-umami-event-location="latest-post-image">
-                                    {% image post.image, post.title, [96], "48px" %}
+                                    {% image post.image, post.title, [256], "48px" %}
                                 </a>
                                 <div class="patreon-post-info">
                                     <a href="{{ post.url }}" target="_blank" rel="noopener" data-umami-event="patreon-click" data-umami-event-location="latest-post-title">{{ post.title }}</a>
