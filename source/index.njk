@@ -197,6 +197,79 @@ bodyColor: bg-highlight
         {% endfor %}
     </div>
 </div>
+{# BOOK MARQUEE #}
+<div class="section book-marquee bg-dark text-light">
+    <div class="marquee pixel-font header-large uppercase">
+        <ul class="marquee-content">
+            <li>The NoGood Book</li>
+            <li>The NoGood Book</li>
+            <li>The NoGood Book</li>
+            <li>The NoGood Book</li>
+        </ul>
+        <ul aria-hidden="true" class="marquee-content">
+            <li>The NoGood Book</li>
+            <li>The NoGood Book</li>
+            <li>The NoGood Book</li>
+            <li>The NoGood Book</li>
+        </ul>
+    </div>
+</div>
+{# THE NOGOOD BOOK #}
+<div class="section large-grid home-book bg-dark text-light">
+    <div class="section-column sticky-two-rows">
+        <div class="sticky-wrapper">
+            <div class="sticky">
+                <p class="text-extra-large">A self-published monograph bringing together five years of illustration projects, outlining the backdrop for and context within which my work was created.</p>
+                <div class="spacer-large"></div>
+            </div>
+        </div>
+        <div class="place-bottom">
+            <div class="order-option inner-column padding-small outline bg-offwhite">
+                <div class="grid large-grid">
+                    <h3 class="text-large"><s>Collectors edition</s></h3>
+                    <h3 class="text-large align-right">Sold out</h3>
+                </div>
+            </div>
+            <div class="spacer-small"></div>
+            <div class="order-option inner-column outline padding-small">
+                <div class="flex-space-between flex-align-start">
+                    <div>
+                        <h3 class="text-large nowrap">The NoGood Book</h3>
+                        <p class="text-small">Signed &amp; numbered — <span data-book-stock data-book-inventory="{{ booksales.regular_inventory }}"></span> / {{ booksales.edition_size }} available</p>
+                    </div>
+                    <div class="align-right">
+                        <h3 class="text-large pixel-font uppercase">€70</h3>
+                        <p class="text-small">+ shipping</p>
+                    </div>
+                </div>
+                <div class="spacer"></div>
+                <div class="button-wrapper">
+                    <a class="snipcart-add-item button pixel-font uppercase"
+                        data-item-id="book-regular-edition" data-item-price="70"
+                        data-item-url="/the-nogood-book/" data-item-description="The NoGood Book — first edition"
+                        data-item-image="/assets/img/shop/snipcart/Snipcart_NoGoodBook_Regular.png" data-item-name="The NoGood Book"
+                        data-item-weight="500" data-item-has-taxes-included="true"
+                        data-umami-event="add-to-cart" data-umami-event-product="The NoGood Book">Purchase</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="section-column">
+        <div class="zoom no-blend">
+            <a href="/the-nogood-book/" aria-label="Explore The NoGood Book">
+                <div class="slideshow slideshow-3">
+                    {% image "source/assets/img/book/NG_Shoot_Spread_002.jpg", "An illustrated spread from The NoGood Book", [720, 1400], "(min-width: 769px) 60vw, 100vw" %}
+                    {% image "source/assets/img/book/NG_Shoot_Spread_004.jpg", "An illustrated spread from The NoGood Book", [720, 1400], "(min-width: 769px) 60vw, 100vw" %}
+                    {% image "source/assets/img/book/NG_Shoot_Spread_006.jpg", "A process spread from The NoGood Book", [720, 1400], "(min-width: 769px) 60vw, 100vw" %}
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+<script type="module" src="/assets/js/book-stock.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => window.LoadSnipcart?.(), { once: true });
+</script>
 {# PATREON #}
 <div class="section medium-grid patreon-section">
     <div class="section-column sticky-two-rows">
@@ -488,25 +561,6 @@ bodyColor: bg-highlight
     </div>
     {# GRID #}
     <div class="section-column large-grid">
-        {# BOOK FEATURE #}
-        <div id="shop-header" class="no-blend fade-in">
-            <a href="/the-nogood-book/">
-                <video autoplay muted loop playsinline preload="metadata">
-                    <source src="/assets/img/book/book-shoot.mp4" type="video/mp4">
-                </video>
-            </a>
-        </div>
-        <div class="item-info">
-            <h4 class="pixel-font uppercase">
-                <a href="/the-nogood-book/">The NoGood Book — €70</a>
-            </h4>
-            <div class="spacer-small hide-medium hide-large"></div>
-            <p class="text-large">A monograph bringing together five years worth of NoGood illustration
-                projects, outlining the backdrop for and context within which my work was created.</p>
-        </div>
-        <div class="inner-column hide-small"></div>
-        <div class="grid-span-full border-bottom"></div>
-        {# REGULAR ITEMS #}
         {% include "source/snippets/product-grid.njk" %}
     </div>
 </div>

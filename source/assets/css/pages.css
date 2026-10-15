@@ -50,20 +50,26 @@ HOME
     object-fit: contain;
 }
 
-#shop-header {
-    overflow: hidden;
-    grid-column: 1 / -1;
-}
-
-#shop-header img,
-#shop-header picture {
-    height: auto;
-    object-fit: unset;
-}
-
 .home-shop .border-bottom {
     margin: 0 -10px;
     width: calc(100% + 20px);
+}
+
+/* ----------------
+THE NOGOOD BOOK
+---------------- */
+.home-book {
+    grid-template-columns: 2fr 3fr;
+}
+
+.home-book .button {
+    color: var(--primary-dark);
+    background-color: var(--primary-light);
+}
+
+.home-book .button:hover {
+    color: var(--primary-dark);
+    background-color: var(--highlight);
 }
 
 /* ----------------
