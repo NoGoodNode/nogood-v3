@@ -171,7 +171,7 @@ bodyColor: bg-highlight
                         {% if item.type === "image" %}
                             {% image item.src, item.alt %}
                         {% elif item.type === "slideshow" %}
-                            <div class="slideshow slideshow-{{ item.slides | length }}">
+                            <div class="slideshow slideshow-{{ item.slides | length }}{% if item.homepage_slideshow_slow %} slideshow-home-slow{% endif %}">
                                 {% for slide in item.slides %}
                                     {% image slide.src, slide.alt %}
                                 {% endfor %}

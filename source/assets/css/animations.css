@@ -255,3 +255,14 @@ SLIDESHOWS
 .slideshow-8 picture:nth-of-type(6), .slideshow-8 img:nth-of-type(6) { animation-delay: 15s; }
 .slideshow-8 picture:nth-of-type(7), .slideshow-8 img:nth-of-type(7) { animation-delay: 18s; }
 .slideshow-8 picture:nth-of-type(8), .slideshow-8 img:nth-of-type(8) { animation-delay: 21s; }
+
+/* Homepage-only slow slideshow: 5 seconds per slide */
+.slideshow-home-slow picture,
+.slideshow-home-slow img {
+    animation-duration: 10s;
+}
+
+.slideshow-home-slow picture:nth-of-type(2),
+.slideshow-home-slow img:nth-of-type(2) {
+    animation-delay: 5s;
+}

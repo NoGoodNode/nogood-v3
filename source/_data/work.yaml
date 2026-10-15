@@ -99,15 +99,19 @@ work:
     category: "animation"
     bg:
 
-  - type: image
+  - type: slideshow
     featured: true
-    src: "source/assets/img/projects/TABConf_Poster_05.jpg"
-    alt: "TABConf 2025 poster illustration"
     span: false
     title: "Quantum Resistance"
     featured_order: 3
+    homepage_slideshow_slow: true
     client: "TABConf"
     category: "event poster"
+    slides:
+      - src: "source/assets/img/projects/TABConf_Poster_05.jpg"
+        alt: "TABConf 7 poster illustration"
+      - src: "source/assets/img/projects/TABConf_Poster_06.jpg"
+        alt: "TABConf 8 poster illustration"
 
   - type: image
     featured: false
