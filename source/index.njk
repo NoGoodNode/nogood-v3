@@ -297,29 +297,31 @@ bodyColor: bg-highlight
             <div class="spacer"></div>
             <div class="media-list">
                 {% for post in patreonPosts %}
-                    <article class="outline padding-small">
-                        {% if loop.first %}
-                            <div class="zoom no-blend">
-                                <a href="{{ post.url }}" target="_blank" rel="noopener" data-umami-event="patreon-click" data-umami-event-location="latest-post-image">
-                                    {% image post.image, post.title, [720, 1400], "(min-width: 769px) 25vw, 100vw" %}
-                                </a>
-                            </div>
-                            <a href="{{ post.url }}" target="_blank" rel="noopener" data-umami-event="patreon-click" data-umami-event-location="latest-post-title">{{ post.title }}</a>
-                            <p>{{ post.intro }}</p>
-                            <span class="text-small text-tabular">{{ post.publishedAt | postDate }}</span>
-                        {% else %}
-                            <div class="patreon-post-compact">
-                                <a href="{{ post.url }}" target="_blank" rel="noopener" class="patreon-post-thumbnail no-blend" data-umami-event="patreon-click" data-umami-event-location="latest-post-image">
-                                    {% image post.image, post.title, [256], "48px" %}
-                                </a>
-                                <div class="patreon-post-info">
-                                    <a href="{{ post.url }}" target="_blank" rel="noopener" data-umami-event="patreon-click" data-umami-event-location="latest-post-title">{{ post.title }}</a>
-                                    <div class="spacer-small"></div>
-                                    <span class="text-small text-tabular">{{ post.publishedAt | postDate }}</span>
+                    {% if loop.index <= 3 %}
+                        <article class="outline padding-small">
+                            {% if loop.first %}
+                                <div class="zoom no-blend">
+                                    <a href="{{ post.url }}" target="_blank" rel="noopener" data-umami-event="patreon-click" data-umami-event-location="latest-post-image">
+                                        {% image post.image, post.title, [720, 1400], "(min-width: 769px) 25vw, 100vw" %}
+                                    </a>
                                 </div>
-                            </div>
-                        {% endif %}
-                    </article>
+                                <a href="{{ post.url }}" target="_blank" rel="noopener" data-umami-event="patreon-click" data-umami-event-location="latest-post-title">{{ post.title }}</a>
+                                <p>{{ post.intro }}</p>
+                                <span class="text-small text-tabular">{{ post.publishedAt | postDate }}</span>
+                            {% else %}
+                                <div class="patreon-post-compact">
+                                    <a href="{{ post.url }}" target="_blank" rel="noopener" class="patreon-post-thumbnail no-blend" data-umami-event="patreon-click" data-umami-event-location="latest-post-image">
+                                        {% image post.image, post.title, [256], "48px" %}
+                                    </a>
+                                    <div class="patreon-post-info">
+                                        <a href="{{ post.url }}" target="_blank" rel="noopener" data-umami-event="patreon-click" data-umami-event-location="latest-post-title">{{ post.title }}</a>
+                                        <div class="spacer-small"></div>
+                                        <span class="text-small text-tabular">{{ post.publishedAt | postDate }}</span>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </article>
+                    {% endif %}
                 {% endfor %}
             </div>
         </div>
