@@ -197,33 +197,19 @@ bodyColor: bg-highlight
         {% endfor %}
     </div>
 </div>
-{# BOOK MARQUEE #}
-<div class="section book-marquee bg-dark text-light">
-    <div class="marquee pixel-font header-large uppercase">
-        <ul class="marquee-content">
-            <li>The NoGood Book</li>
-            <li>The NoGood Book</li>
-            <li>The NoGood Book</li>
-            <li>The NoGood Book</li>
-        </ul>
-        <ul aria-hidden="true" class="marquee-content">
-            <li>The NoGood Book</li>
-            <li>The NoGood Book</li>
-            <li>The NoGood Book</li>
-            <li>The NoGood Book</li>
-        </ul>
-    </div>
-</div>
 {# THE NOGOOD BOOK #}
 <div class="section large-grid home-book bg-dark text-light">
     <div class="section-column sticky-two-rows">
         <div class="sticky-wrapper">
             <div class="sticky">
-                <p class="text-extra-large">A self-published monograph bringing together five years of illustration projects, outlining the backdrop for and context within which my work was created.</p>
+                <div class="spacer"></div>
+                <h1 class="press-book-title header-extra-large mono uppercase">The<br>NoGood<br>Book</h1>
                 <div class="spacer-large"></div>
             </div>
         </div>
         <div class="place-bottom">
+            <p class="text-extra-large">A self-published monograph bringing together five years of illustration projects, outlining the backdrop for and context within which my work was created.</p>
+            <div class="spacer"></div>
             <div class="order-option inner-column padding-small outline bg-offwhite">
                 <div class="grid large-grid">
                     <h3 class="text-large"><s>Collectors edition</s></h3>
@@ -257,10 +243,9 @@ bodyColor: bg-highlight
     <div class="section-column">
         <div class="zoom no-blend">
             <a href="/the-nogood-book/" aria-label="Explore The NoGood Book">
-                <div class="slideshow slideshow-3">
-                    {% image "source/assets/img/book/NG_Shoot_Spread_002.jpg", "An illustrated spread from The NoGood Book", [720, 1400], "(min-width: 769px) 60vw, 100vw" %}
-                    {% image "source/assets/img/book/NG_Shoot_Spread_004.jpg", "An illustrated spread from The NoGood Book", [720, 1400], "(min-width: 769px) 60vw, 100vw" %}
-                    {% image "source/assets/img/book/NG_Shoot_Spread_006.jpg", "A process spread from The NoGood Book", [720, 1400], "(min-width: 769px) 60vw, 100vw" %}
+                <div class="slideshow slideshow-2 image-square home-book-slideshow">
+                    {% image "source/assets/img/book/NG_Shoot_Book_Cover.jpg", "The NoGood Book cover", [720, 1400], "(min-width: 769px) 60vw, 100vw" %}
+                    {% image "source/assets/img/book/NG_Shoot_Close_002.jpg", "Detail shot of The NoGood Book", [720, 1400], "(min-width: 769px) 60vw, 100vw" %}
                 </div>
             </a>
         </div>
