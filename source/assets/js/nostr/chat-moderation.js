@@ -8,6 +8,7 @@ import * as nip19 from '../vendor/nostr-nip19.js';
 const MANUAL_MUTED_NPUBS = [
   'npub1gjdw8nwepju7uj2dra58x946zd3l7ytd7wkkl3ck2vkar63ytpcstgr3wy',
   'npub15zv2gq80fl6q4ysrzjfhxfwxkyuf4a6e7k3sfxpw2ucfcgyyen6q7xf2w4', // CashDragon
+  'npub1hznmntyj254kqhr079a5gt2wvhyll6rz6q67pyjres4lfkql22kq5ml6zh', // besoeasy
 ];
 
 const MANUAL_MUTED_PUBKEYS = new Set(MANUAL_MUTED_NPUBS.flatMap(npub => {
