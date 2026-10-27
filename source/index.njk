@@ -72,13 +72,6 @@ bodyColor: bg-highlight
                 <span class="text-small uppercase pixel-font offset-down-2">PATREON</span>
                 <a href="{{ patreonPosts[0].url }}" target="_blank" rel="noopener" data-umami-event="patreon-click" data-umami-event-location="system-log">{{ patreonPosts[0].title }}</a>
             </div>
-            <div class="spacer line"></div>
-            <div class="flex-space-between flex-align-center">
-                <span class="text-small uppercase pixel-font offset-down-2">CLIPPING</span>
-                {% for item in collections.clippingsAll %}
-                    {% if loop.first %}<a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.title | truncate(30, true, "…") }}</a>{% endif %}
-                {% endfor %}
-            </div>
         </div>
     </div>
     {# STATUS #}
