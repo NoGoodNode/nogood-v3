@@ -110,6 +110,17 @@ test("book stock only exposes the remaining standard edition", () => {
 	}
 });
 
+test("Now shows five Patreon posts with headers on the latest two", () => {
+	const now = outputHtml("/now");
+	const posts = [...now.matchAll(/class="outline padding-small now-patreon-post"/g)];
+	const availablePosts = JSON.parse(readFileSync(join(process.cwd(), "source/_data/patreonPosts.json"), "utf8"));
+	assert.equal(posts.length, Math.min(availablePosts.length, 5));
+	assert.ok(posts.length <= 5);
+	assert.equal((now.match(/now-patreon-post-header/g) || []).length, Math.min(posts.length, 2));
+	assert.equal((now.match(/data-umami-event-location="now-post-image"/g) || []).length, posts.length);
+	assert.doesNotMatch(now, /<h4 class="uppercase pixel-font">Clippings<\/h4>/);
+});
+
 test("only purchase and Patreon clicks use custom Umami events", () => {
 	const events = new Set();
 	for (const file of walk(buildDir).filter(path => path.endsWith(".html"))) {
