@@ -130,7 +130,7 @@ test("only purchase and Patreon clicks use custom Umami events", () => {
 	assert.deepEqual([...events].sort(), ["add-to-cart", "patreon-click"]);
 
 	const home = outputHtml("/");
-	assert.equal((home.match(/patreon\.com\/nogood_studio/g) || []).length, 11);
+	assert.equal((home.match(/patreon\.com\/bynogood/g) || []).length, 11);
 	assert.equal((home.match(/data-umami-event="patreon-click"/g) || []).length, 11);
 	assert.deepEqual(
 		[...home.matchAll(/data-umami-event="patreon-click" data-umami-event-location="([^"]+)"/g)].map(match => match[1]).sort(),
