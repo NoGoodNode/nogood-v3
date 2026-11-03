@@ -37,6 +37,12 @@ downloads:
     format: "Shared folder"
     provider: "Proton Drive"
     credit: "See individual asset credits"
+  instagram_collection:
+    title: "Instagram-ready images"
+    url: "https://drive.proton.me/urls/0RMWQXVH4G#yc3Zp9iPCSSi"
+    format: "JPG"
+    provider: "Proton Drive"
+    credit: "NoGood / Lilia Luganskaia"
 
 assets:
   preview_source: "source/assets/img/press/book-vol1"

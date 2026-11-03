@@ -545,6 +545,22 @@ PRESS KIT
     color: var(--primary-dark);
 }
 
+.press-actions__downloads--image-bank {
+    flex-wrap: wrap;
+}
+
+.press-actions--dark .press-actions__downloads .button.press-actions__button--new {
+    background: var(--radio);
+    color: var(--primary-light);
+    border-color: var(--radio);
+}
+
+.press-actions--dark .press-actions__downloads .button.press-actions__button--new:hover {
+    background: var(--primary-light);
+    color: var(--radio);
+    border-color: var(--radio);
+}
+
 .press-copyright {
     font-family: 'UntitledSans-Bold', sans-serif;
     font-weight: 700;

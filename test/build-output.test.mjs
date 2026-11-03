@@ -110,6 +110,13 @@ test("book stock only exposes the remaining standard edition", () => {
 	}
 });
 
+test("book press kit links the Instagram-ready image collection", () => {
+	const press = outputHtml("/press/the-nogood-book");
+	const instagramUrl = "https://drive.proton.me/urls/0RMWQXVH4G?ref=nogood.studio#yc3Zp9iPCSSi";
+	assert.equal(press.split(instagramUrl).length - 1, 1);
+	assert.match(press, /class="button icon external-icon pixel-font uppercase press-actions__button--new"[^>]*>New: Instagram-ready images<\/a>/);
+});
+
 test("Now shows five Patreon posts with headers on the latest two", () => {
 	const now = outputHtml("/now");
 	const posts = [...now.matchAll(/class="outline padding-small now-patreon-post"/g)];
