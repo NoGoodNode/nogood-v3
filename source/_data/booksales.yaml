@@ -3,3 +3,5 @@ edition_size: 400
 # Copies assigned to the standard book SKU before its Snipcart sales
 # (135 copies were sold through retired editions and presales)
 regular_inventory: 265
+# Complimentary copies removed from available stock outside Snipcart
+promotional_copies: 1

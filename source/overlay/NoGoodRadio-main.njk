@@ -1181,6 +1181,7 @@ eleventyExcludeFromCollections: true
   // ----------------
   const EDITION_SIZE = {{ booksales.edition_size }};
   const REGULAR_INVENTORY = {{ booksales.regular_inventory }};
+  const PROMOTIONAL_COPIES = {{ booksales.promotional_copies }};
   const bookBar         = document.getElementById('book-sale-bar');
   const bookSaleCounter = document.getElementById('book-sale-counter');
   let lastBookOrderDate = null;
@@ -1236,7 +1237,7 @@ eleventyExcludeFromCollections: true
     const response = await fetchWithTimeout('https://book-stats.hello-5b9.workers.dev/book-sales');
     if (!response.ok) throw new Error(`Book sales request failed: ${response.status}`);
     const bookData = await response.json();
-    const available = Math.max(REGULAR_INVENTORY - (bookData.total ?? 0), 0);
+    const available = Math.max(REGULAR_INVENTORY - (bookData.total ?? 0) - PROMOTIONAL_COPIES, 0);
     return { sold: EDITION_SIZE - available, lastOrderDate: bookData.lastOrderDate };
   }
 
