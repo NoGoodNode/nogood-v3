@@ -101,14 +101,14 @@ test("book stock only exposes the remaining standard edition", () => {
 	assert.match(product, /Sold out/);
 	assert.match(product, /data-item-id="book-regular-edition"/);
 	assert.match(product, /data-book-inventory="265"/);
-	assert.match(product, /data-book-promotional="1"/);
+	assert.match(product, /data-book-promotional="2"/);
 	assert.match(product, /\/ 400 available/);
 	assert.doesNotMatch(product, /book-regular-edition-print|The NoGood Book \+ print/);
 
 	const stockScript = readFileSync(join(buildDir, "assets/js/book-stock.js"), "utf8");
 	assert.match(stockScript, /regularInventory - regularSales - promotionalCopies/);
 	const radioOverlay = outputHtml("/overlay/NoGoodRadio-main");
-	assert.match(radioOverlay, /const PROMOTIONAL_COPIES = 1;/);
+	assert.match(radioOverlay, /const PROMOTIONAL_COPIES = 2;/);
 	assert.match(radioOverlay, /REGULAR_INVENTORY - \(bookData\.total \?\? 0\) - PROMOTIONAL_COPIES/);
 
 	const generatedStockFiles = walk(buildDir).filter(path => path.endsWith(".html") || path.endsWith(".js"));
